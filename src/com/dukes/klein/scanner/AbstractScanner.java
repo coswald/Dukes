@@ -1,12 +1,36 @@
+/*
+ * Copyright (C) 2017 Coved W Oswald
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  
+ */
 package com.dukes.klein.scanner;
 
+import com.dukes.klein.scanner.AbstractToken;
 import com.dukes.klein.scanner.Inputter;
 import com.dukes.klein.scanner.LexicalScanningException;
-import com.dukes.klein.scanner.AbstractToken;
 
 import java.lang.Object;
 import java.lang.String;
 
+/**
+ * Represents an object that can produce {@code AbstractToken}s from a given
+ * {@code Inputter}.
+ * @since 1.0
+ * @author Coved W Oswald
+ * @version 1.0
+ */
 public abstract class AbstractScanner<E extends AbstractToken> extends Object
 {
   private E nextToken;
@@ -22,12 +46,12 @@ public abstract class AbstractScanner<E extends AbstractToken> extends Object
   {
     if(nextToken == null)
     {
-      this.nextToken = this.nextToken();
+      this.nextToken = this.next();
     }
     return this.nextToken;
   }
   
-  public E nextToken() throws LexicalScanningException
+  public E next() throws LexicalScanningException
   {
     if(nextToken != null)
     {
