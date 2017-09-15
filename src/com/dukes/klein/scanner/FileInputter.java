@@ -33,7 +33,7 @@ public class FileInputter extends Inputter
 {
   
   private FileInputStream fis;
-  
+  private char nextChar;
   /**
    * Creates a {@code FileInputter} that reads it's input from the
    * {@code FileInputStream} provided. This object will not close the stream,
@@ -44,6 +44,18 @@ public class FileInputter extends Inputter
   public FileInputter(FileInputStream fis)
   {
     this.fis = fis;
+    this.next();
+    this.nextChar = 0;
+  }
+  
+  /**
+   *
+   */
+  @Override
+  public void next()
+  {
+    super.next();
+    this.nextChar = 0;
   }
   
   /**
@@ -73,7 +85,9 @@ public class FileInputter extends Inputter
   {
     try
     {
-      return (char)fis.read();
+      if(this.nextChar == 0)
+        this.nextChar = (char)fis.read();
+      return this.nextChar;
     }
     catch(IOException io)
     {
