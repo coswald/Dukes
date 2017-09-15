@@ -290,7 +290,8 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     String s = "";
     while(this.input.hasNext() &&
           (KleinScanner.isLetter(this.input.currentChar()) ||
-           KleinScanner.isDigit(this.input.currentChar())))
+           KleinScanner.isDigit(this.input.currentChar()) ||
+           this.input.currentChar() == "_"))
     {
       s += this.input.currentChar();
       this.input.next();
