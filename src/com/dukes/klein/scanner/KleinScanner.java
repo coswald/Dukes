@@ -162,7 +162,12 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       else if(word.equals("not"))
         return new KleinToken(KleinTokenType.NOT);
       else
+      {
+        if(word.length() > 256)
+          throw new LexicalAnalysisException("An Identifier can not be any " + 
+                                             "longer than 256 character!");
         return new KleinToken(KleinTokenType.IDENTIFIER, word);
+      }
     }
     //Unrecognized character/tokentype.
     else
@@ -284,7 +289,8 @@ public class KleinScanner extends AbstractScanner<KleinToken>
   {
     String s = "";
     while(this.input.hasNext() &&
-          KleinScanner.isLetter(this.input.currentChar()))
+          (KleinScanner.isLetter(this.input.currentChar()) ||
+           KleinScanner.isDigit(this.input.currentChar())))
     {
       s += this.input.currentChar();
       this.input.next();

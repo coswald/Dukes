@@ -112,6 +112,6 @@ public abstract class AbstractToken<E extends Enum<E>, V> extends Object
   public String toString()
   {
     return "Token Type: " + this.tokenType.toString() + (tokenValue != null ?
-           "\tToken Value: " + this.tokenValue.toString() : "");
+           "\t\tToken Value: " + this.tokenValue.toString() : "");
   }
 }
