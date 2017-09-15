@@ -65,7 +65,6 @@ public abstract class AbstractToken<E extends Enum<E>, V> extends Object
   /**
    * Constructs an {@code AbstractToken} with the token type. The value of the
    * token is {@code null}
-   * @see #AbstractToken(E, V)
    */
   protected AbstractToken(E tokenType)
   {

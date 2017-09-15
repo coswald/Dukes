@@ -38,7 +38,7 @@ public abstract class Inputter extends Object
   
   /**
    * Returns the character at the current position of the parser.
-   * @return
+   * @return The current character.
    */
   public char currentChar()
   {
