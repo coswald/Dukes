@@ -94,7 +94,8 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       return new KleinToken(KleinTokenType.RIGHTPARENTHESIS);
     }
     //Single-char SimpleExpression
-    else if(KleinScanner.isSimpleExpression(current))
+    else if(KleinScanner.isSimpleExpression(current) &&
+            !(current == '-' && KleinScanner.isDigit(this.input.lookAhead())))
     {
       this.input.next();
       return new KleinToken(KleinTokenType.SIMPLEEXPRESSION,
@@ -122,7 +123,7 @@ public class KleinScanner extends AbstractScanner<KleinToken>
                             Character.toString(current));
     }
     //Integer
-    else if(KleinScanner.isDigit(current))
+    else if(KleinScanner.isDigit(current) || current == '-')
     {
       String num = this.getNumber();
       long t = Long.parseLong(num);
@@ -256,7 +257,20 @@ public class KleinScanner extends AbstractScanner<KleinToken>
   
   private String getNumber()
   {
+    //this still allows for negative zero to be a thing.
     String s = "";
+    if(this.input.currentChar() == '-')
+    {
+      s += Character.toString(this.input.currentChar());
+      this.input.next();
+    }
+    
+    if(this.input.currentChar() == '0' && 
+       KleinScanner.isDigit(this.input.lookAhead()))
+    {
+      throw new LexicalAnalysisException("Number cannot start with 0!");
+    }
+    
     while(this.input.hasNext() &&
           KleinScanner.isDigit(this.input.currentChar()))
     {
