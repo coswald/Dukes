@@ -12,7 +12,7 @@ public class kleins
     KleinToken currentToken = null;
     while(!(ks.peek()).isTokenType(KleinTokenType.EOF))
     {
-      System.out.println(ks.nextToken());
+      System.out.println(ks.next());
     }
     System.out.println(ks.peek());
   }

@@ -69,7 +69,7 @@ public class StringInputter extends Inputter
    * @return The next character in the stream.
    */
   @Override
-  protected char lookAhead()
+  public char lookAhead()
   {
     return parse.charAt(position);
   }

@@ -19,25 +19,35 @@ package com.dukes.klein.scanner;
 
 import com.dukes.klein.scanner.KleinToken;
 import com.dukes.klein.scanner.KleinTokenType;
+import com.dukes.klein.scanner.LexicalAnalysisException;
 import com.dukes.klein.scanner.LexicalScanningException;
 import com.dukes.klein.scanner.Inputter;
 
 import java.lang.Character;
+import java.lang.Long;
 import java.lang.Object;
 import java.lang.String;
+import java.math.BigInteger;
 
 public class KleinScanner extends AbstractScanner<KleinToken>
 {
+  public static final long MAX_VALUE = (1L << 32) - 1;  
+  public static final long MIN_VALUE = ~MAX_VALUE;
+  
+  private boolean inComment;
+  
   public KleinScanner(Inputter input)
   {
     super(input);
+    this.inComment = false;
   }
   
   public KleinToken generateNextToken()
-                    throws LexicalScanningException
+                    throws LexicalScanningException, LexicalAnalysisException
   {
     this.skipWhiteSpace();
-    
+    if(this.inComment)
+      this.skipUntilEndComment();
     //EOF
     if(!this.input.hasNext())
     {
@@ -51,7 +61,8 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       {
         this.input.next();
         this.input.next();
-        return new KleinToken(KleinTokenType.COMMENTSTART);
+        this.inComment = true;
+        return new KleinToken(KleinTokenType.STARTCOMMENT);
       }
       else
       {
@@ -66,52 +77,89 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       {
         this.input.next();
         this.input.next();
-        return new KleinToken(KleinTokenType.COMMENTEND);
+        this.inComment = false;
+        return new KleinToken(KleinTokenType.ENDCOMMENT);
       }
-      else
+      else //Should never happen, but just to make sure.
       {
         this.input.next();
-        return new KleinToken(KleinTokenType.OPERATOR, new String("*"));
+        return new KleinToken(KleinTokenType.TERM, new String("*"));
       }
     }
+    
     //Rightparenthesis
-    else if(current == ')')
+    if(current == ')')
     {
       this.input.next();
       return new KleinToken(KleinTokenType.RIGHTPARENTHESIS);
     }
-    //Operator
-    else if(KleinScanner.isOperator(current))
+    //Single-char SimpleExpression
+    else if(KleinScanner.isSimpleExpression(current))
     {
       this.input.next();
-      return new KleinToken(KleinTokenType.OPERATOR,
+      return new KleinToken(KleinTokenType.SIMPLEEXPRESSION,
                             Character.toString(current));
     }
-    //Seperator
-    else if(KleinScanner.isSeperator(current))
+    //Expression
+    else if(KleinScanner.isExpression(current))
     {
       this.input.next();
-      return new KleinToken(KleinTokenType.SEPERATOR,
+      return new KleinToken(KleinTokenType.EXPRESSION,
+                            Character.toString(current));
+    }
+    //Single-char Term
+    else if(KleinScanner.isTerm(current))
+    {
+      this.input.next();
+      return new KleinToken(KleinTokenType.TERM,
+                            Character.toString(current));
+    } 
+    //Seperator
+    else if(KleinScanner.isSeparator(current))
+    {
+      this.input.next();
+      return new KleinToken(KleinTokenType.SEPARATOR,
                             Character.toString(current));
     }
     //Integer
     else if(KleinScanner.isDigit(current))
     {
       String num = this.getNumber();
+      long t = Long.parseLong(num);
+      if(t > MAX_VALUE || t < MIN_VALUE)
+      {
+        throw new LexicalAnalysisException("Number " + t + " out of the " +
+                                           "range" + MAX_VALUE + " " + 
+                                           MIN_VALUE + "!");
+      }
       return new KleinToken(KleinTokenType.INTEGER, num);
     }
-    //Keyword, Identifier, Type, and Boolean
+    //Keyword, Identifier, Type, boolean, SimpleExpression, Term, If, then,
+    //not, and else
     else if(KleinScanner.isLetter(current))
     {
       String word = this.getWord();
-      if(KleinScanner.isOperator(word))
-        return new KleinToken(KleinTokenType.OPERATOR, word);//nonsinglechar ops
+      
+      //Non-single char singleexpression and term.
+      if(KleinScanner.isSimpleExpression(word))
+        return new KleinToken(KleinTokenType.SIMPLEEXPRESSION, word);
+      else if(KleinScanner.isTerm(word))
+        return new KleinToken(KleinTokenType.TERM, word);
+      
       if(KleinScanner.isKeyword(word))
         return new KleinToken(KleinTokenType.KEYWORD, word);
       else if(KleinScanner.isType(word))
         return new KleinToken(KleinTokenType.TYPE, word);
       else if(word.equals("true") || word.equals("false"))
         return new KleinToken(KleinTokenType.BOOLEAN, word);
+      else if(word.equals("if"))
+        return new KleinToken(KleinTokenType.IF);
+      else if(word.equals("then"))
+        return new KleinToken(KleinTokenType.THEN);
+      else if(word.equals("else"))
+        return new KleinToken(KleinTokenType.ELSE);
+      else if(word.equals("not"))
+        return new KleinToken(KleinTokenType.NOT);
       else
         return new KleinToken(KleinTokenType.IDENTIFIER, word);
     }
@@ -124,36 +172,39 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     }
   }
   
-  private static boolean isOperator(char c)
+  private static boolean isSimpleExpression(char c)
   {
     switch(c)
     {
       case '+':
       case '-':
-      case '*':
-      case '/':
-      case '<':
-      case '=':
         return true;
       default:
         return false;
     }
   }
   
-  private static boolean isOperator(String s)
+  private static boolean isSimpleExpression(String s)
   {
-    switch(s)
-    {
-      case "not":
-      case "and":
-      case "or":
-        return true;
-      default:
-        return false;
-    }
+    return s.equals("or");
   }
   
-  private static boolean isSeperator(char c)
+  private static boolean isExpression(char c)
+  {
+    return c == '<' || c == '=';
+  }
+  
+  private static boolean isTerm(char c)
+  {
+    return c == '*' || c == '/';
+  }
+  
+  private static boolean isTerm(String s)
+  {
+    return s.equals("and");
+  }
+  
+  private static boolean isSeparator(char c)
   {
     return c == ',' || c == ':';
   }
@@ -170,17 +221,7 @@ public class KleinScanner extends AbstractScanner<KleinToken>
   
   private static boolean isKeyword(String s)
   {
-    switch(s)
-    {
-      case "if":
-      case "then":
-      case "function":
-      case "main":
-      case "print":
-        return true;
-      default:
-        return false;
-    }
+    return s.equals("function");
   }
   
   private static boolean isType(String s)
@@ -199,6 +240,15 @@ public class KleinScanner extends AbstractScanner<KleinToken>
   {
     while(this.input.hasNext() &&
           Character.isWhitespace(this.input.currentChar()))
+    {
+      this.input.next();
+    }
+  }
+  
+  private void skipUntilEndComment()
+  {
+    while(this.input.hasNext() &&
+          !(this.input.lookAhead() == ')' && this.input.currentChar() == '*'))
     {
       this.input.next();
     }

@@ -69,7 +69,7 @@ public class FileInputter extends Inputter
    * {@inheritDoc}
    */
   @Override
-  protected char lookAhead()
+  public char lookAhead()
   {
     try
     {
