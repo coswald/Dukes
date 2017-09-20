@@ -1,0 +1,77 @@
+﻿--- klein_grammar.txt
++++ klein_grammar_reduced.txt
+@@ -9,8 +9,10 @@
+             <FORMALS> ::= ε
+                         | <NONEMPTYFORMALS>
+
+-    <NONEMPTYFORMALS> ::= <FORMAL>
+-                        | <FORMAL> , <NONEMPTYFORMALS>
++    <NONEMPTYFORMALS> ::= <FORMAL> <NONEMPTYFORMALS'>
++
++   <NONEMPTYFORMALS'> ::= ε
++                        | , <NONEMPTYFORMALS>
+
+              <FORMAL> ::= <IDENTIFIER> : <TYPE>
+
+@@ -20,35 +22,48 @@
+                <TYPE> ::= integer
+                         | boolean
+
+-               <EXPR> ::= <EXPR> < <SIMPLE-EXPR>
+-                        | <EXPR> = <SIMPLE-EXPR>
++               <EXPR> ::= <SIMPLE-EXPR> <EXPR-SYMBOL> <EXPR>
+                         | <SIMPLE-EXPR>
+
+-        <SIMPLE-EXPR> ::= <SIMPLE-EXPR> or <TERM>
+-                        | <SIMPLE-EXPR> + <TERM>
+-                        | <SIMPLE-EXPR> - <TERM>
++        <SIMPLE-EXPR> ::= <TERM> <SIMPLE-EXPR-SYMBOL> <SIMPLE-EXPR> 
+                         | <TERM>
+
+-               <TERM> ::= <TERM> and <FACTOR>
+-                        | <TERM> * <FACTOR>
+-                        | <TERM> / <FACTOR>
++               <TERM> ::= <FACTOR> <TERM-SYMBOL> <TERM>
+                         | <FACTOR>
+
+              <FACTOR> ::= if <EXPR> then <EXPR> else <EXPR>
+-                        | not <FACTOR>
++                        | <FACTOR-SYMBOL> <FACTOR>
+                         | <IDENTIFIER> ( <ACTUALS> )
+                         | <IDENTIFIER>
+                         | <LITERAL>
+-                        | - <FACTOR>
+                         | ( <EXPR> )
++
++      <FACTOR-SYMBOL> ::= not
++                        | -
++
++        <EXPR-SYMBOL> ::= < 
++                        | =
++
++ <SIMPLE-EXPR-SYMBOL> ::= or
++                        | +
++                        | -
++
++      <TERM-SYMBOL> ::= and
++                        | *
++                        | /
+
+             <ACTUALS> ::= ε
+                         | <NONEMPTYACTUALS>
+
+-    <NONEMPTYACTUALS> ::= <EXPR>
+-                        | <EXPR> , <NONEMPTYACTUALS>
++    <NONEMPTYACTUALS> ::= <EXPR> , <NONEMPTYACTUALS'>
++
++   <NONEMPTYACTUALS'> ::= ε
++                        | , <NONEMPTYACTUALS>
+
+             <LITERAL> ::= <NUMBER>
+
+                         | <BOOLEAN>
+
++         <IDENTIFIER> ::= <STRING>
++
+
+     <PRINT-STATEMENT> ::= print ( <EXPR> )
