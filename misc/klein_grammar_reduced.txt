@@ -1,0 +1,70 @@
+
+            <PROGRAM> ::= <DEFINITIONS>
+
+        <DEFINITIONS> ::= ε
+                        | <DEF> <DEFINITIONS>
+
+                <DEF> ::= function <IDENTIFIER> ( <FORMALS> ) : <TYPE>
+                             <BODY>
+
+            <FORMALS> ::= ε
+                        | <NONEMPTYFORMALS>
+
+    <NONEMPTYFORMALS> ::= <FORMAL> <NONEMPTYFORMALS'>
+
+   <NONEMPTYFORMALS'> ::= ε
+   						| , <NONEMPTYFORMALS>
+
+             <FORMAL> ::= <IDENTIFIER> : <TYPE>
+
+               <BODY> ::= <PRINT-STATEMENT> <BODY>
+                        | <EXPR>
+
+               <TYPE> ::= integer
+                        | boolean
+
+               <EXPR> ::= <SIMPLE-EXPR> <EXPR-SYMBOL> <EXPR>
+                        | <SIMPLE-EXPR>
+
+        <SIMPLE-EXPR> ::= <TERM> <SIMPLE-EXPR-SYMBOL> <SIMPLE-EXPR> 
+                        | <TERM>
+
+               <TERM> ::= <FACTOR> <TERM-SYMBOL> <TERM>
+                        | <FACTOR>
+
+             <FACTOR> ::= if <EXPR> then <EXPR> else <EXPR>
+                        | <FACTOR-SYMBOL> <FACTOR>
+                        | <IDENTIFIER> ( <ACTUALS> )
+                        | <IDENTIFIER>
+                        | <LITERAL>
+                        | <FACTOR-SYMBOL> <FACTOR>
+                        | ( <EXPR> )
+
+	  <FACTOR-SYMBOL> ::= not
+	  					| -
+
+		<EXPR-SYMBOL> ::= < 
+						| =
+
+ <SIMPLE-EXPR-SYMBOL> ::= or
+ 						| +
+ 						| -
+
+		<TERM-SYMBOL> ::= and
+						| *
+						| /
+
+            <ACTUALS> ::= ε
+                        | <NONEMPTYACTUALS>
+
+    <NONEMPTYACTUALS> ::= <EXPR> , <NONEMPTYACTUALS'>
+
+   <NONEMPTYACTUALS'> ::= ε
+   						| , <NONEMPTYACTUALS>
+
+            <LITERAL> ::= <NUMBER>
+                        | <BOOLEAN>
+
+		 <IDENTIFIER> ::= <STRING>
+
+    <PRINT-STATEMENT> ::= print ( <EXPR> )
