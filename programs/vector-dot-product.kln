@@ -2,16 +2,16 @@
    FILE  : vector-dot-product.kln
    AUTHOR: Dan Holland
    DATE  : 9/25/2017
-   TASK  : Print the result of the dot prodcut of two 2-vectors.
+   TASK  : Print the result of the dot product of two 2-vectors.
 
-   FAILURE: The function sum has a return type of boolean when it should be integer
+   ERROR : The function sum is missing a colon before its return type declaration
 *)
 
 
 function main( x1 : integer, y1 : integer, x2 : integer, y2 : integer ) : integer
 	sum(product(x1, x2), product(y1, y2))
 
-function sum( n1 : integer, n2 : integer ) : boolean
+function sum( n1 : integer, n2 : integer ) integer
 	n1 + n2
 
 function product( n1 : integer, n2 : integer ) : integer

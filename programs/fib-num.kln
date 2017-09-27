@@ -4,12 +4,12 @@
    DATE  : 9/25/2017
    TASK  : Determine if the input number is a part of the fibonacci sequence
 
-   FAILURE: There is no main function
+   ERROR : In the main function the if statement has duplicate or statements.
 *)
 
 
-function is_fib( num : integer ) : boolean
-	if ((num = 0) or (num = 1) ) then
+function main( num : integer ) : boolean
+	if ((num = 0) or or (num = 1)) then
 		true
 	else
 		check_fib(1, 1, num)
