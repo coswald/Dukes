@@ -1,0 +1,49 @@
+# ------ First Functions ------ #
+First(PROGRAM) = {ε, function}
+First(DEFINITIONS) = {ε, function}
+First(DEF) = {function}
+First(FORMALS) = {ε, STRING}
+First(NONEMPTYFORMALS) = {STRING}
+First(NONEMPTYFORMALS') = {ε, ','}
+First(FORMAL) = {STRING}
+First(BODY) = {print, if, (, not, -, STRING, NUMBER, BOOLEAN}
+First(TYPE) = {integer, boolean}
+First(EXPR) = {if, (, not, -, STRING, NUMBER, BOOLEAN}
+First(SIMPLE-EXPR) = {if, (, not, -, STRING, NUMBER, BOOLEAN}
+First(TERM) = {if, (, not, -, STRING, NUMBER, BOOLEAN}
+First(FACTOR) = {if, (, not, -, STRING, NUMBER, BOOLEAN}
+First(FACTOR-SYMBOL) = {not, -}
+First(EXPR-SYMBOL) = {<, =}
+First(SIMPLE-EXPR-SYMBOL) = {or, +, -}
+First(TERM-SYMBOL) = {and, *, /}
+First(ACTUALS) = {ε, if, (, not, -, STRING, NUMBER, BOOLEAN}
+First(NONEMPTYACTUALS) = {if, (, not, -, STRING, NUMBER, BOOLEAN}
+First(NONEMPTYACTUALS') = {ε, ','}
+First(LITERAL) = {NUMBER, BOOLEAN}
+First(IDENTIFIER) = {STRING}
+First(PRINT-STATEMENT) = {print}
+
+# ------ Follow Functions ------ #
+Follow(PROGRAM) = {$}
+Follow(DEFINITIONS) = {$}
+Follow(DEF) = {$, function}
+Follow(FORMALS) = {)}
+Follow(NONEMPTYFORMALS) = {)}
+Follow(NONEMPTYFORMALS') = {)}
+Follow(FORMAL) = {',', )}
+Follow(BODY) = {$, function}
+Follow(TYPE) = {print, if, (, not, -, NUMBER, BOOLEAN, STRING, ',', )}
+Follow(EXPR) = {$, ), ',', then, else, and, *, /, function, or, +, -, <, =}
+Follow(SIMPLE-EXPR) = {$, <, =, ), ',', then, else, and, *, /, function, or, +, -}
+Follow(TERM) = {$, or, +, -, <, =, ), ',', then, else, and, *, /, function}
+Follow(FACTOR) = {$, and, *, /, or, +, -, <, =, ), ',', then, else, function}
+Follow(FACTOR-SYMBOL) = {if, (, not, -, STRING, NUMBER, BOOLEAN}
+Follow(EXPR-SYMBOL) = {if, (, not, -, STRING, NUMBER, BOOLEAN}
+Follow(SIMPLE-EXPR-SYMBOL) = {if, (, not, -, STRING, NUMBER, BOOLEAN}
+Follow(TERM-SYMBOL) = {if, (, not, -, STRING, NUMBER, BOOLEAN}
+Follow(ACTUALS) = {)}
+Follow(NONEMPTYACTUALS) = {)}
+Follow(NONEMPTYACTUALS') = {)}
+Follow(LITERAL) = {$, and, *, /, or, +, -, <, =, ), ',', then, else, function}
+Follow(IDENTIFIER) = {$, (, :, and, *, /, or, +, -, <, =, ), ',', then, else, function}
+Follow(PRINT-STATEMENT) = {print, if, (, not, -, STRING, NUMBER, BOOLEAN}
