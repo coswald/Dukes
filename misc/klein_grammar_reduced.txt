@@ -55,7 +55,7 @@
             <ACTUALS> ::= ε
                         | <NONEMPTYACTUALS>
 
-    <NONEMPTYACTUALS> ::= <EXPR> , <NONEMPTYACTUALS'>
+    <NONEMPTYACTUALS> ::= <EXPR> <NONEMPTYACTUALS'>
 
    <NONEMPTYACTUALS'> ::= ε
                         | , <NONEMPTYACTUALS>
