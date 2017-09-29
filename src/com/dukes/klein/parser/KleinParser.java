@@ -15,47 +15,45 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
 
     public KleinParser(KleinScanner ks) {
         ParseTable pt = new ParseTable();
-        pt.addRule(NonTerminalType.PROGRAM, TerminalType.FUNCTION, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.PROGRAM, KleinTokenType.KEYWORD, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                    NonTerminalType.DEFINITIONS))));
-        pt.addRule(NonTerminalType.DEFINITIONS, TerminalType.$, new KleinRule(new ArrayList<Enum>(Arrays.asList(
-                   TerminalType.$))));
-        pt.addRule(NonTerminalType.DEFINITIONS, TerminalType.FUNCTION, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.DEFINITIONS, KleinTokenType.EOF, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+                   KleinTokenType.EOF))));
+        pt.addRule(NonTerminalType.DEFINITIONS, KleinTokenType.KEYWORD, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                    NonTerminalType.DEF, NonTerminalType.DEFINITIONS))));
-        pt.addRule(NonTerminalType.DEF, TerminalType.FUNCTION, new KleinRule(new ArrayList<Enum>(Arrays.asList(
-                   TerminalType.FUNCTION, KleinTokenType.IDENTIFIER, KleinTokenType.LEFTPARENTHESIS,
+        pt.addRule(NonTerminalType.DEF, KleinTokenType.KEYWORD, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+                   KleinTokenType.KEYWORD, KleinTokenType.IDENTIFIER, KleinTokenType.LEFTPARENTHESIS,
                    NonTerminalType.FORMALS, KleinTokenType.RIGHTPARENTHESIS, KleinTokenType.SEPARATOR,
                    NonTerminalType.TYPE, NonTerminalType.BODY))));
-        pt.addRule(NonTerminalType.FORMALS, TerminalType.LEFTPAREN, new KleinRule(new ArrayList<Enum>(Arrays.asList(
-                   TerminalType.EMPTY))));
-        pt.addRule(NonTerminalType.FORMALS, TerminalType.STRING, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.FORMALS, KleinTokenType.LEFTPARENTHESIS, new KleinRule());
+        pt.addRule(NonTerminalType.FORMALS, KleinTokenType.IDENTIFIER, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                    NonTerminalType.NONEMPTYFORMALS))));
-        pt.addRule(NonTerminalType.NONEMPTYFORMALS, TerminalType.STRING, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.NONEMPTYFORMALS, KleinTokenType.IDENTIFIER, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                    NonTerminalType.FORMAL, NonTerminalType.NONEMPTYFORMALS_PRIME))));
-        pt.addRule(NonTerminalType.NONEMPTYFORMALS_PRIME, TerminalType.RIGHTPAREN, new KleinRule(new ArrayList<Enum>(Arrays.asList(
-                   TerminalType.EMPTY))));
-        pt.addRule(NonTerminalType.NONEMPTYFORMALS_PRIME, TerminalType.COMMA, new KleinRule(new ArrayList<Enum>(Arrays.asList(
-                   TerminalType.COMMA, NonTerminalType.NONEMPTYFORMALS))));
-        pt.addRule(NonTerminalType.FORMAL, TerminalType.STRING, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.NONEMPTYFORMALS_PRIME, KleinTokenType.RIGHTPARENTHESIS, new KleinRule());
+        pt.addRule(NonTerminalType.NONEMPTYFORMALS_PRIME, KleinTokenType.SEPARATOR, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+                   KleinTokenType.SEPARATOR, NonTerminalType.NONEMPTYFORMALS))));
+        pt.addRule(NonTerminalType.FORMAL, KleinTokenType.IDENTIFIER, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                    NonTerminalType.IDENTIFIER, KleinTokenType.SEPARATOR, NonTerminalType.TYPE))));
-        pt.addRule(NonTerminalType.BODY, TerminalType.PRINT, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        // <BODY> → <PRINT-STATEMENT> <BODY> ** print should probably be a keyword token **
+        pt.addRule(NonTerminalType.BODY, KleinTokenType.IDENTIFIER, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                    NonTerminalType.PRINT_STATEMENT, NonTerminalType.BODY))));
-        // <BODY> Rules
-        pt.addRule(NonTerminalType.BODY, TerminalType.STRING, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        // <BODY> → <EXPR>
+        pt.addRule(NonTerminalType.BODY, KleinTokenType.IDENTIFIER, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.EXPR))));
-        pt.addRule(NonTerminalType.BODY, TerminalType.NUMBER, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.BODY, KleinTokenType.INTEGER, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.EXPR))));
-        pt.addRule(NonTerminalType.BODY, TerminalType.BOOLEAN, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.BODY, KleinTokenType.BOOLEAN, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.EXPR))));
-        pt.addRule(NonTerminalType.BODY, TerminalType.IF, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.BODY, KleinTokenType.IF, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.EXPR))));
-        pt.addRule(NonTerminalType.BODY, TerminalType.LEFTPAREN, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.BODY, KleinTokenType.LEFTPARENTHESIS, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.EXPR))));
-        pt.addRule(NonTerminalType.BODY, TerminalType.NOT, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.BODY, KleinTokenType.NOT, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.EXPR))));
-        pt.addRule(NonTerminalType.BODY, TerminalType.MINUS, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        pt.addRule(NonTerminalType.BODY, KleinTokenType.SIMPLEEXPRESSION, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.EXPR))));
-
-
+        
         this.scanner = ks;
         this.PARSETABLE = pt;
         this.stack = new Stack<>();

@@ -12,6 +12,12 @@ public class KleinRule {
 
     public KleinRule(ArrayList<Enum> rule){
         this.rule = rule;
+        this.exists = true;
+    }
+
+    public KleinRule(){
+        this.rule = null;
+        this.exists = false;
 
     }
 
@@ -20,9 +26,11 @@ public class KleinRule {
     }
 
     public void pushRule(Stack stack){
-        ListIterator ri = this.rule.listIterator(this.rule.size());
-        while(ri.hasPrevious()){
-            stack.push(ri.previous());
+        if (this.exists) {
+            ListIterator ri = this.rule.listIterator(this.rule.size());
+            while (ri.hasPrevious()) {
+                stack.push(ri.previous());
+            }
         }
     }
 

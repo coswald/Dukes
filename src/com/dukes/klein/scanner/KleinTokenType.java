@@ -53,22 +53,32 @@ package com.dukes.klein.scanner;
  */
 public enum KleinTokenType
 {
-  STARTCOMMENT,
-  ENDCOMMENT,
-  EOF,
-  KEYWORD,
-  IDENTIFIER,
-  LEFTPARENTHESIS,
-  RIGHTPARENTHESIS,
-  SEPARATOR,
-  TYPE,
-  SIMPLEEXPRESSION,
-  EXPRESSION,
-  TERM,
-  INTEGER,
-  BOOLEAN,
-  IF,
-  THEN,
-  ELSE,
-  NOT;
+  STARTCOMMENT(0),
+  ENDCOMMENT(1),
+  EOF(2),
+  KEYWORD(3),
+  IDENTIFIER(4),
+  LEFTPARENTHESIS(5),
+  RIGHTPARENTHESIS(6),
+  SEPARATOR(7),
+  TYPE(8),
+  SIMPLEEXPRESSION(9),
+  EXPRESSION(10),
+  TERM(11),
+  INTEGER(12),
+  BOOLEAN(13),
+  IF(14),
+  THEN(15),
+  ELSE(16),
+  NOT(17);
+
+  private final int id;
+
+  KleinTokenType(int id){
+    this.id = id;
+  }
+  public int getId(){
+    return id;
+  }
+
 }
