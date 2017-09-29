@@ -1,9 +1,37 @@
 package com.dukes.klein.parser;
 
-/**
- * @author Daniel J. Holland
- * @version 1.0
- *          Created on 9/28/2017.
- */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Stack;
+
 public class KleinRule {
+
+    private ArrayList<Enum> rule;
+    private boolean exists;
+
+    public KleinRule(ArrayList<Enum> rule){
+        this.rule = rule;
+        this.exists = true;
+    }
+
+    public KleinRule(){
+        this.rule = null;
+        this.exists = false;
+
+    }
+
+    public ArrayList<Enum> getRule(){
+        return this.rule;
+    }
+
+    public void pushRule(Stack stack){
+        if (this.exists) {
+            ListIterator ri = this.rule.listIterator(this.rule.size());
+            while (ri.hasPrevious()) {
+                stack.push(ri.previous());
+            }
+        }
+    }
+
 }
