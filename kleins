@@ -1,3 +1,0 @@
-#!/bin/sh
-
-java -cp compiler-tools/klein.jar com.dukes.tests.kleins $@
