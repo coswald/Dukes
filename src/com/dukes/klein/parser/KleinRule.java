@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Stack;
 
+@SuppressWarnings("unchecked")
 public class KleinRule {
 
     private ArrayList<Enum> rule;

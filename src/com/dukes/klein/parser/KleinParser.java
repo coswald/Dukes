@@ -267,6 +267,7 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
                     this.stack.pop();
                 } else {
                     // ERROR: TOKEN MISMATCH ERROR (sToken,kToken)
+		    throw new ParsingException("Token mismatch!");
                 }
             }
             if (sToken instanceof NonTerminalType) {
@@ -278,6 +279,7 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
                 }
                 else{
                     // ERROR: Invalid item in stack (sToken)
+		    throw new ParsingException("Invalid item in stack!");
                 }
             }
         }

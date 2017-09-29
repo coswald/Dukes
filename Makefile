@@ -6,7 +6,7 @@ JC=javac
 #The flags to create a jar file
 JFLAGS=cf
 #The flags for compiling source
-JCFLAGS=-d bin
+JCFLAGS=-d bin -Xlint:none 
 
 all: jar clean
 	@mv klein.jar compiler-tools/
