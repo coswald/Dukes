@@ -27,7 +27,11 @@ public enum NonTerminalType {
     NONEMPTYACTUALS_PRIME(19),
     LITERAL(20),
     IDENTIFIER(21),
-    PRINT_STATEMENT(22);
+    PRINT_STATEMENT(22),
+    EXPR_END(23),
+    SIMPLE_EXPR_END(24),
+    TERM_END(25),
+    FACTOR_END(26);
 
     private final int id;
 
