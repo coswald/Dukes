@@ -34,4 +34,8 @@ public class KleinRule {
         }
     }
 
+    public boolean exists(){
+        return this.exists;
+    }
+
 }

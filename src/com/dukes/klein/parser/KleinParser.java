@@ -272,7 +272,7 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
             if (sToken instanceof NonTerminalType) {
                 kToken = this.scanner.peek();
                 kRule = this.PARSETABLE.getRule((NonTerminalType) sToken, kToken.getTokenType());
-                if (kRule != null){
+                if (kRule.exists()){
                     this.stack.pop();
                     kRule.pushRule(this.stack);
                 }
