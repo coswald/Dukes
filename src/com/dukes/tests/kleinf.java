@@ -22,18 +22,20 @@ import java.io.FileNotFoundException;
 import java.lang.Exception;
 import java.lang.Object;
 
+import com.dukes.klein.parser.KleinParser;
 import com.dukes.klein.scanner.FileInputter;
 import com.dukes.klein.scanner.KleinScanner;
 import com.dukes.klein.scanner.KleinToken;
 import com.dukes.klein.scanner.KleinTokenType;
 //import com.dukes.klein.scanner.StringInputter;
 
-public class kleins extends Object
+public class kleinf extends Object
 {
-  public static final String HELP       = "Usage: kleins [-chw] [file]\n" + 
-                                          "Generates klein tokens from a " + 
-                                          "given file.\n\nWith no file, this" +
-                                          " help message is generated.\n" + 
+  public static final String HELP       = "Usage: kleinf [-chw] [file]\n" + 
+                                          "Tests whether a klein program is " +
+                                          "has valid syntax.\n\nWith no file" +
+                                          ", this help message is " +
+                                          "generated.\n" + 
                                           "  -c\t\tShows conditions\n" +
                                           "  -h\t\tShows this help " + 
                                           "message\n  -w\t\tShows the" +
@@ -89,12 +91,8 @@ public class kleins extends Object
     {
       FileInputter fi = new FileInputter(new FileInputStream(fileName));
       KleinScanner ks = new KleinScanner(fi);
-      KleinToken currentToken = null;
-      while(!(ks.peek()).isTokenType(KleinTokenType.EOF))
-      {
-        System.out.println(ks.next());
-      }
-      System.out.println(ks.peek());
+      KleinParser kp = new KleinParser(ks);
+      System.out.println((kp.isValid() ? "Valid Program" : "Invalid Program"));
     }
     catch(Exception fnfe)
     {
