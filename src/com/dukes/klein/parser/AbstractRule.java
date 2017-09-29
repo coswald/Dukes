@@ -2,6 +2,7 @@ package com.dukes.klein.parser;
 
 import com.dukes.klein.scanner.AbstractToken;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractRule<E extends AbstractToken> {
