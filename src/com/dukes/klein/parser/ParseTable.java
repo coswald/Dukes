@@ -12,6 +12,12 @@ public class ParseTable {
 
     public ParseTable(){
         this.PARSETABLE = new ArrayList<>();
+        for (int i = 0; i <= 26; i++){
+            this.PARSETABLE.add(new ArrayList<>());
+            for (int j = 0; j <= 17; j++){
+                this.PARSETABLE.get(i).add(new KleinRule());
+            }
+        }
     }
 
     public KleinRule getRule(NonTerminalType nt, KleinTokenType tk){
@@ -19,12 +25,7 @@ public class ParseTable {
     }
 
     public void addRule(NonTerminalType t1, KleinTokenType t2, KleinRule kr){
-        this.PARSETABLE.get(t1.getId()).add(t2.getId(), kr);
+        this.PARSETABLE.get(t1.getId()).set(t2.getId(), kr);
     }
-
-    public void addRule(int t1, int t2, KleinRule kr){
-        this.PARSETABLE.get(t1).add(t2, kr);
-    }
-
 
 }

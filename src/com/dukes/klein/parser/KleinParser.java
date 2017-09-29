@@ -3,7 +3,6 @@ package com.dukes.klein.parser;
 import com.dukes.klein.scanner.KleinScanner;
 import com.dukes.klein.scanner.KleinToken;
 import com.dukes.klein.scanner.KleinTokenType;
-import com.sun.deploy.security.MozillaJSSDSASignature;
 
 import java.util.ArrayList;
 import java.util.Arrays;
