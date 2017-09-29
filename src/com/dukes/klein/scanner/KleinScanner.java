@@ -51,6 +51,8 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     //EOF
     if(!this.input.hasNext())
     {
+      if(this.inComment)
+        throw new LexicalAnalysisException("Comment started but not ended!");
       return new KleinToken(KleinTokenType.EOF);
     }
     //CommentsStart or LeftParenthesis
@@ -123,7 +125,7 @@ public class KleinScanner extends AbstractScanner<KleinToken>
                             Character.toString(current));
     }
     //Integer
-    else if(KleinScanner.isDigit(current) || current == '-')
+    else if(KleinScanner.isDigit(current))
     {
       String num = this.getNumber();
       long t = Long.parseLong(num);
@@ -264,12 +266,13 @@ public class KleinScanner extends AbstractScanner<KleinToken>
   {
     //this still allows for negative zero to be a thing.
     String s = "";
+    /*
     if(this.input.currentChar() == '-')
     {
       s += Character.toString(this.input.currentChar());
       this.input.next();
     }
-    
+    */
     if(this.input.currentChar() == '0' && 
        KleinScanner.isDigit(this.input.lookAhead()))
     {
@@ -279,6 +282,10 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     while(this.input.hasNext() &&
           KleinScanner.isDigit(this.input.currentChar()))
     {
+      if(!KleinScanner.isDigit(this.input.currentChar()))
+        throw new LexicalAnalysisException("Non-numeric character " +
+                                           this.input.currentChar() + 
+                                          " received when parsing number!");
       s += this.input.currentChar();
       this.input.next();
     }
