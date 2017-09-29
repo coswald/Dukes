@@ -1,9 +1,6 @@
 # Duke's Klein Compiler
 
-Hello and welcome to Duke's Klein Compiler! This is a class project written for CS 4550: Translation of Programming Languages, provided
-at the University of Northern Iowa. Our task as a team is to develop a compiler for a language developed by our professor, Dr. Walllingford,
-called Klein. This compiler will take Klein code as input, and produce TM (developed by [Kenneth Louden](http://www.cs.sjsu.edu/faculty/louden/))
-assembly as output. We chose Java as our implementing language, and an Object-Oriented design principle.
+Hello and welcome to Duke's Klein Compiler! This is a class project written for CS 4550: Translation of Programming Languages, provided at the University of Northern Iowa. Our task as a team is to develop a compiler for a language developed by our professor, Dr. Walllingford, called Klein. This compiler will take Klein code as input, and produce TM (developed by [Kenneth Louden](http://www.cs.sjsu.edu/faculty/louden/)) assembly as output. We chose Java as our implementing language, and an Object-Oriented design principle.
 
 ## Getting Started
 
@@ -16,54 +13,32 @@ Once that's done, you are ready to look at, edit, and use the code!
 
 ### Prerequisites
 
-You will need a Java Development kit, at least 1.7 or higher. We're not going to delve into how to install that, as you can use Google to
-find that out yourself. You'll also need Git; again, we're not going to tell you how to install that.
+You will need a Java Development kit, at least 1.7 or higher. We're not going to delve into how to install that, as you can use Google to find that out yourself. You'll also need Git; again, we're not going to tell you how to install that either. In order to compile the source, you will need a Unix system such as Mac or Linux, or a version of make compatible with windows. The tests scripts are written for .sh executables, so they will not execute natively on Windows.
 
 ### Installing
 
-Once you clone the git repository, you should be able to compile the source code. To do so, create a file that contains all of the `.java`
-paths within it, and we'll call this file `sources`. This is done on Windows by typing in the command prompt:
-
+Once you clone the git repository, you should be able to compile the source code. To do so, simply run the make command like such:
 ```
-dir *.java /s/b > sources
+make
 ```
-
-This is done on Linux/Mac by typing in the Terminal:
-
-```
-find . -iname *.java > sources
-```
-**Note: this hasn't been tested on a Mac**
-
-Once this is done, you should be able to compile the java sources by creating a directory called bin and placing the .class files there.
-This is done as such:
-
-```
-mkdir bin
-javac @sources -d bin
-```
-
-After this step, you should have a running version of the code. You can generate a .jar for compiler tools, but this should be done
-for you within the `compiler-tools` directory. Success will be acheived if you can run the following command:
-
-```
-cd bin
-java com.dukes.tests.KleinTest
-```
+However, as of now, this will only create a `.jar` file. In order to do more, see the section labeled `Running the tests`.
 
 ## Running the tests
 
-All of the compiler tools are provided within the `compiler-tools` directory. However, you can run incremental tests on certain aspects
-of the compiler by running the `KleinTest` program found in the `com\dukes\tests` executable path.
+All of the compiler tools are provided within the `compiler-tools` directory. However, they will not run in their current directory. Luckily, running a special `make` command will move them to where you need them to be. Simply type:
+```
+make tools
+```
+This will move the `kleins`, `kleinf`, `kleinv`, and `kleinp` into the project directory.
 
 ### Break down into end to end tests
 
-Currently, the only test is for the `KleinScanner` class. This test is found in `KleinScannerTest.java` This will generate tokens for
-a simple Klein program.
+The first test is for the `KleinScanner` class. This test is found in `kleins.java`, as well as the `kleins` executable. This will generate tokens for a simple Klein program.
+The second test is for the `KleinParser` class. This tests is found in `kleinf.java`, as well as the `kleinf` executable. This will tests whether a klein file is a valid program.
 
 ## Deployment
 
-Once you have the compiled compiler, you can generate a jar ***TODO*** EXPLAIN HOW TO GENERATE A JAR FOR COMPILER
+Once you have run the make file, you are ready to go! Using the compiler tools, you should be able to make and test Klein programs.
 
 ## Built With
 
