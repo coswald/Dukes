@@ -49,10 +49,6 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
       case RIGHTPARENTHESIS:
       case STARTCOMMENT:
       case ENDCOMMENT:
-      case IF:
-      case THEN:
-      case ELSE:
-      case NOT:
       case EOF:
         throwException = defined;
         break;

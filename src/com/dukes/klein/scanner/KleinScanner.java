@@ -79,13 +79,15 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       {
         this.input.next();
         this.input.next();
+        if(!this.inComment)
+          throw new LexicalAnalysisException("Comment ended but not started!");
         this.inComment = false;
         return new KleinToken(KleinTokenType.ENDCOMMENT);
       }
-      else //Should never happen, but just to make sure.
+      else //Should never happen
       {
         this.input.next();
-        return new KleinToken(KleinTokenType.TERM, new String("*"));
+        return new KleinToken(KleinTokenType.SYMBOL, new String("*"));
       }
     }
     
@@ -95,28 +97,12 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       this.input.next();
       return new KleinToken(KleinTokenType.RIGHTPARENTHESIS);
     }
-    //Single-char SimpleExpression
-    else if(KleinScanner.isSimpleExpression(current) &&
-            !(current == '-' && KleinScanner.isDigit(this.input.lookAhead())))
+    //Single-char Expression symbol
+    else if(KleinScanner.isSymbol(current))
     {
       this.input.next();
-      return new KleinToken(KleinTokenType.SIMPLEEXPRESSION,
-                            Character.toString(current));
+      return new KleinToken(KleinTokenType.SYMBOL, Character.toString(current));
     }
-    //Expression
-    else if(KleinScanner.isExpression(current))
-    {
-      this.input.next();
-      return new KleinToken(KleinTokenType.EXPRESSION,
-                            Character.toString(current));
-    }
-    //Single-char Term
-    else if(KleinScanner.isTerm(current))
-    {
-      this.input.next();
-      return new KleinToken(KleinTokenType.TERM,
-                            Character.toString(current));
-    } 
     //Seperator
     else if(KleinScanner.isSeparator(current))
     {
@@ -144,10 +130,8 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       String word = this.getWord();
       
       //Non-single char singleexpression and term.
-      if(KleinScanner.isSimpleExpression(word))
-        return new KleinToken(KleinTokenType.SIMPLEEXPRESSION, word);
-      else if(KleinScanner.isTerm(word))
-        return new KleinToken(KleinTokenType.TERM, word);
+      if(KleinScanner.isSymbol(word))
+        return new KleinToken(KleinTokenType.SYMBOL, word);
       
       if(KleinScanner.isKeyword(word))
         return new KleinToken(KleinTokenType.KEYWORD, word);
@@ -155,14 +139,6 @@ public class KleinScanner extends AbstractScanner<KleinToken>
         return new KleinToken(KleinTokenType.TYPE, word);
       else if(word.equals("true") || word.equals("false"))
         return new KleinToken(KleinTokenType.BOOLEAN, word);
-      else if(word.equals("if"))
-        return new KleinToken(KleinTokenType.IF);
-      else if(word.equals("then"))
-        return new KleinToken(KleinTokenType.THEN);
-      else if(word.equals("else"))
-        return new KleinToken(KleinTokenType.ELSE);
-      else if(word.equals("not"))
-        return new KleinToken(KleinTokenType.NOT);
       else
       {
         if(word.length() > 256)
@@ -180,36 +156,33 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     }
   }
   
-  private static boolean isSimpleExpression(char c)
+  private static boolean isSymbol(char c)
   {
     switch(c)
     {
       case '+':
       case '-':
+      case '<':
+      case '=':
+      case '*':
+      case '/':
         return true;
       default:
         return false;
     }
   }
   
-  private static boolean isSimpleExpression(String s)
+  private static boolean isSymbol(String s)
   {
-    return s.equals("or");
-  }
-  
-  private static boolean isExpression(char c)
-  {
-    return c == '<' || c == '=';
-  }
-  
-  private static boolean isTerm(char c)
-  {
-    return c == '*' || c == '/';
-  }
-  
-  private static boolean isTerm(String s)
-  {
-    return s.equals("and");
+    switch(s)
+    {
+      case "and":
+      case "or":
+      case "not":
+        return true;
+      default:
+        return false;
+    }
   }
   
   private static boolean isSeparator(char c)
@@ -229,7 +202,18 @@ public class KleinScanner extends AbstractScanner<KleinToken>
   
   private static boolean isKeyword(String s)
   {
-    return s.equals("function");
+    switch(s)
+    {
+      case "function":
+      case "main":
+      case "print":
+      case "if":
+      case "then":
+      case "else":
+        return true;
+      default:
+        return false;
+    }
   }
   
   private static boolean isType(String s)
@@ -289,20 +273,21 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       s += this.input.currentChar();
       this.input.next();
     }
+    
     return s;
   }
   
   private String getWord()
   {
     String s = "";
-    while(this.input.hasNext() &&
-          (KleinScanner.isLetter(this.input.currentChar()) ||
+    while((KleinScanner.isLetter(this.input.currentChar()) ||
            KleinScanner.isDigit(this.input.currentChar()) ||
-           this.input.currentChar() == '_'))
+           this.input.currentChar() == '_') && this.input.hasNext())
     {
       s += this.input.currentChar();
       this.input.next();
     }
+    
     return s;
   }
 }

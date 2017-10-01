@@ -21,7 +21,7 @@ import com.dukes.klein.scanner.Inputter;
 import com.dukes.klein.scanner.LexicalScanningException;
 
 import java.io.FileInputStream;
-import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Reads characters from a file.
@@ -32,7 +32,7 @@ import java.io.IOException;
 public class FileInputter extends Inputter
 {
   
-  private FileInputStream fis;
+  private Scanner scan;
   private char nextChar;
   /**
    * Creates a {@code FileInputter} that reads it's input from the
@@ -43,7 +43,8 @@ public class FileInputter extends Inputter
    */
   public FileInputter(FileInputStream fis)
   {
-    this.fis = fis;
+    this.scan = new Scanner(fis);
+    this.scan.useDelimiter(""); //One char at a time.
     this.next();
     this.nextChar = 0;
   }
@@ -66,15 +67,7 @@ public class FileInputter extends Inputter
   @Override
   public boolean hasNext()
   {
-    try
-    {
-      return fis.available() != 0;
-    }
-    catch(IOException io)
-    {
-      throw new LexicalScanningException("While Parsing a file, the file " +
-                                         "input stream went awry!");
-    }
+    return this.scan.hasNext();//fis.available() != 0;
   }
   
   /**
@@ -83,16 +76,8 @@ public class FileInputter extends Inputter
   @Override
   public char lookAhead()
   {
-    try
-    {
-      if(this.nextChar == 0)
-        this.nextChar = (char)fis.read();
-      return this.nextChar;
-    }
-    catch(IOException io)
-    {
-      throw new LexicalScanningException("While parsing a file, the file in" +
-                                         "put ran into an unexpected error!");
-    }
+    if(this.nextChar == 0)
+      this.nextChar = this.scan.next().charAt(0);
+    return this.nextChar;
   }
 }

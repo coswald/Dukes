@@ -11,9 +11,9 @@ public class ParseTable {
     private ArrayList<ArrayList<KleinRule>> PARSETABLE;
 
     public ParseTable(){
-        this.PARSETABLE = new ArrayList<>();
+        this.PARSETABLE = new ArrayList<ArrayList<KleinRule>>();
         for (int i = 0; i <= 26; i++){
-            this.PARSETABLE.add(new ArrayList<>());
+            this.PARSETABLE.add(new ArrayList<KleinRule>());
             for (int j = 0; j <= 17; j++){
                 this.PARSETABLE.get(i).add(new KleinRule());
             }

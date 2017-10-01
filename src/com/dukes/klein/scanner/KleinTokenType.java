@@ -62,15 +62,9 @@ public enum KleinTokenType
   RIGHTPARENTHESIS(6),
   SEPARATOR(7),
   TYPE(8),
-  SIMPLEEXPRESSION(9),
-  EXPRESSION(10),
-  TERM(11),
-  INTEGER(12),
-  BOOLEAN(13),
-  IF(14),
-  THEN(15),
-  ELSE(16),
-  NOT(17);
+  SYMBOL(9),
+  INTEGER(10),
+  BOOLEAN(11);
 
   private final int id;
 
