@@ -24,15 +24,13 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
         Enum sToken = null;
         KleinToken kToken;
         KleinRule kRule;
-        this.stack.push(NonTerminalType.PROGRAM);
         this.stack.push(KleinTokenType.EOF);
+        this.stack.push(NonTerminalType.PROGRAM);
         while (!this.stack.empty()) {
             sToken = this.stack.pop();
             if (sToken instanceof KleinTokenType) {
                 kToken = this.scanner.next();
-                if (sToken == kToken.getTokenType()) {
-                    this.stack.pop();
-                } else {
+                if (sToken != kToken.getTokenType()) {
                     // ERROR: TOKEN MISMATCH ERROR (sToken,kToken)
                     throw new ParsingException("Token mismatch!");
                 }
@@ -41,7 +39,6 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
                 kToken = this.scanner.peek();
                 kRule = this.PARSETABLE.getRule((NonTerminalType) sToken, kToken.getTokenType());
                 if (kRule.exists()){
-                    this.stack.pop();
                     kRule.pushRule(this.stack);
                 }
                 else{
