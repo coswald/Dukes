@@ -19,7 +19,7 @@ package com.dukes.klein.scanner;
 
 /**
  * <p>A {@code KlienTokenType} used as the enumeration to describe what a token
- * actually is. This is defined by the Klien Language specification, and we
+ * actually is. This is defined by the Klein Language specification, and we
  * interpreted it as follows:
  * <table width="100%"><tr>                         
  * <th>Token Types</th><th>Positive Examples</th><th>Negative Examples</th>
