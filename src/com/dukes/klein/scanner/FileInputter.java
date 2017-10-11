@@ -45,7 +45,9 @@ public class FileInputter extends Inputter
   {
     this.scan = new Scanner(fis);
     this.scan.useDelimiter(""); //One char at a time.
-    this.next();
+    if (this.hasNext()){
+      this.next();
+    }
     this.nextChar = 0;
   }
   

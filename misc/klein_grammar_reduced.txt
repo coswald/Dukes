@@ -39,18 +39,15 @@
 
              <FACTOR> ::= if <EXPR> then <EXPR> else <EXPR>
                         | <FACTOR-SYMBOL> <FACTOR>
-                        | <IDENTIFIER> <FACTOR-END>
+                        | <IDENTIFIER> ( <ACTUALS> )
                         | <LITERAL>
                         | ( <EXPR> )
 			
-         <FACTOR-END> ::= ε
-	                | ( <ACTUALS> )
-
 	  <FACTOR-SYMBOL> ::= not
                         | -
 
         <EXPR-SYMBOL> ::= < 
-		        | =
+                        | =
 
  <SIMPLE-EXPR-SYMBOL> ::= or
                         | +

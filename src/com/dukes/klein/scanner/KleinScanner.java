@@ -35,33 +35,48 @@ public class KleinScanner extends AbstractScanner<KleinToken>
   public static final long MIN_VALUE = ~MAX_VALUE;
   
   private boolean inComment;
-  
+  private boolean atEOF = false;
+
   public KleinScanner(Inputter input)
   {
     super(input);
     this.inComment = false;
   }
-  
+
+  public boolean endOfFile(){
+    if(!this.input.hasNext())
+    {
+      if (this.inComment) {
+        throw new LexicalAnalysisException("Comment started but not ended!");
+      }
+      this.atEOF = true;
+      return true;
+    }
+    return false;
+  }
+
   public KleinToken generateNextToken()
                     throws LexicalScanningException, LexicalAnalysisException
   {
     this.skipWhiteSpace();
-    if(this.inComment)
+    if(this.inComment) {
       this.skipUntilEndComment();
+    }
     //EOF
-    if(!this.input.hasNext())
+    if(this.atEOF)
     {
-      if(this.inComment)
-        throw new LexicalAnalysisException("Comment started but not ended!");
       return new KleinToken(KleinTokenType.EOF);
     }
     //CommentsStart or LeftParenthesis
+    //if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
     char current = this.input.currentChar();
     if(current == '(')
     {
+      if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
       if(this.input.lookAhead() == '*')
       {
         this.input.next();
+        if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
         this.input.next();
         this.inComment = true;
         return new KleinToken(KleinTokenType.STARTCOMMENT);
@@ -75,37 +90,42 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     //CommentEnd or *
     else if(current == '*')
     {
+      if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
       if(this.input.lookAhead() == ')')
       {
         this.input.next();
+        if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
         this.input.next();
         if(!this.inComment)
           throw new LexicalAnalysisException("Comment ended but not started!");
         this.inComment = false;
         return new KleinToken(KleinTokenType.ENDCOMMENT);
       }
-      else //Should never happen
+      else // Should never happen
       {
         this.input.next();
-        return new KleinToken(KleinTokenType.SYMBOL, new String("*"));
+        return new KleinToken(KleinTokenType.SYMBOL, "*");
       }
     }
-    
+
     //Rightparenthesis
     if(current == ')')
     {
+      if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
       this.input.next();
       return new KleinToken(KleinTokenType.RIGHTPARENTHESIS);
     }
     //Single-char Expression symbol
     else if(KleinScanner.isSymbol(current))
     {
+      if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
       this.input.next();
       return new KleinToken(KleinTokenType.SYMBOL, Character.toString(current));
     }
     //Seperator
     else if(KleinScanner.isSeparator(current))
     {
+      if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
       this.input.next();
       return new KleinToken(KleinTokenType.SEPARATOR,
                             Character.toString(current));
@@ -118,21 +138,22 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       if(t > MAX_VALUE || t < MIN_VALUE)
       {
         throw new LexicalAnalysisException("Number " + t + " out of the " +
-                                           "range" + MAX_VALUE + " " + 
+                                           "range" + MAX_VALUE + " " +
                                            MIN_VALUE + "!");
       }
       return new KleinToken(KleinTokenType.INTEGER, num);
     }
+
     //Keyword, Identifier, Type, boolean, SimpleExpression, Term, If, then,
     //not, and else
     else if(KleinScanner.isLetter(current))
     {
       String word = this.getWord();
-      
+
       //Non-single char singleexpression and term.
       if(KleinScanner.isSymbol(word))
         return new KleinToken(KleinTokenType.SYMBOL, word);
-      
+
       if(KleinScanner.isKeyword(word))
         return new KleinToken(KleinTokenType.KEYWORD, word);
       else if(KleinScanner.isType(word))
@@ -142,7 +163,7 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       else
       {
         if(word.length() > 256)
-          throw new LexicalAnalysisException("An Identifier can not be any " + 
+          throw new LexicalAnalysisException("An Identifier can not be any " +
                                              "longer than 256 character!");
         return new KleinToken(KleinTokenType.IDENTIFIER, word);
       }
@@ -263,17 +284,17 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       throw new LexicalAnalysisException("Number cannot start with 0!");
     }
     
-    while(this.input.hasNext() &&
-          KleinScanner.isDigit(this.input.currentChar()))
+    while(KleinScanner.isDigit(this.input.currentChar()))
     {
       if(!KleinScanner.isDigit(this.input.currentChar()))
         throw new LexicalAnalysisException("Non-numeric character " +
-                                           this.input.currentChar() + 
+                                           this.input.currentChar() +
                                           " received when parsing number!");
       s += this.input.currentChar();
+      if (this.endOfFile()) {break;}
       this.input.next();
     }
-    
+
     return s;
   }
   
@@ -285,7 +306,7 @@ public class KleinScanner extends AbstractScanner<KleinToken>
            this.input.currentChar() == '_'))
     {
       s += this.input.currentChar();
-      if (!this.input.hasNext()) {break;}
+      if (this.endOfFile()) {break;}
       this.input.next();
     }
     
