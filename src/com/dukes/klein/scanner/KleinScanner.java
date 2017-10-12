@@ -282,7 +282,7 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       this.input.next();
     }
     */
-    if(this.input.currentChar() == '0' && 
+    if(this.input.currentChar() == '0' && !this.endOfFile() &&
        KleinScanner.isDigit(this.input.lookAhead()))
     {
       throw new LexicalAnalysisException("Number cannot start with 0!");
