@@ -30,14 +30,9 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
                 TerminalType.FUNCTION, TerminalType.STRING, TerminalType.LEFTPAREN,
                 NonTerminalType.FORMALS, TerminalType.RIGHTPAREN, TerminalType.COLON,
                 NonTerminalType.TYPE, NonTerminalType.BODY))));
-        // <DEF> → function main ( <FORMALS> ) : <TYPE> <BODY> ::= function
-        pt.addRule(NonTerminalType.DEF, TerminalType.FUNCTION, new KleinRule(new ArrayList<Enum>(Arrays.asList(
-                TerminalType.FUNCTION, TerminalType.MAIN, TerminalType.LEFTPAREN,
-                NonTerminalType.FORMALS, TerminalType.RIGHTPAREN, TerminalType.COLON,
-                NonTerminalType.TYPE, NonTerminalType.BODY))));
         // <FORMALS> → ε ::= )
-        // <FORMALS> → <NONEMPTYFORMALS> ::= <STRING>
         pt.addRule(NonTerminalType.FORMALS, TerminalType.RIGHTPAREN, new KleinRule(new ArrayList<Enum>()));
+        // <FORMALS> → <NONEMPTYFORMALS> ::= <STRING>
         pt.addRule(NonTerminalType.FORMALS, TerminalType.STRING, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.NONEMPTYFORMALS))));
         // <NONEMPTYFORMALS> → <FORMAL> <NONEMPTYFORMALS_PRIME> ::= <STRING>
