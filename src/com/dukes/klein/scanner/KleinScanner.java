@@ -176,9 +176,8 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       if (this.endOfFile()){
         return new KleinToken(KleinTokenType.EOF);
       }
-      String error = this.getWord();
-      throw new LexicalScanningException("The characters " + error +
-                                     " are invalid.");
+      throw new LexicalScanningException("The character '" + current +
+              "' is invalid.");
     }
   }
   
