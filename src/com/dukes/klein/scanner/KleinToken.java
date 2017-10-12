@@ -117,7 +117,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
           case "main":
             return TerminalType.STRING; // ???
           case "print":
-            return TerminalType.STRING; // ???
+            return TerminalType.PRINT; // ???
           case "if":
             return TerminalType.IF;
           case "then":

@@ -173,6 +173,9 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     //Unrecognized character/tokentype.
     else
     {
+      if (this.endOfFile()){
+        return new KleinToken(KleinTokenType.EOF);
+      }
       String error = this.getWord();
       throw new LexicalScanningException("The characters " + error +
                                      " are invalid.");
