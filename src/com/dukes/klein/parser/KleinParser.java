@@ -180,9 +180,9 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
                 NonTerminalType.FACTOR_SYMBOL, NonTerminalType.FACTOR))));
         pt.addRule(NonTerminalType.FACTOR, TerminalType.MINUS, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.FACTOR_SYMBOL, NonTerminalType.FACTOR))));
-        //<FACTOR> → <IDENTIFIER> ( <ACTUALS> ) ::= <STRING>
+        //<FACTOR> → <IDENTIFIER> <FACTOR-END> ::= <STRING>
         pt.addRule(NonTerminalType.FACTOR, TerminalType.STRING, new KleinRule(new ArrayList<Enum>(Arrays.asList(
-                NonTerminalType.IDENTIFIER, TerminalType.LEFTPAREN, NonTerminalType.ACTUALS, TerminalType.RIGHTPAREN))));
+                NonTerminalType.IDENTIFIER, NonTerminalType.FACTOR_END))));
         //<FACTOR> → <LITERAL> ::= <NUMBER>, <BOOLEAN>
         pt.addRule(NonTerminalType.FACTOR, TerminalType.NUMBER, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.LITERAL))));
@@ -197,6 +197,24 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
         //<FACTOR-SYMBOL> → - ::= -
         pt.addRule(NonTerminalType.FACTOR_SYMBOL, TerminalType.MINUS, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 TerminalType.MINUS))));
+        //<FACTOR-END> → ε	::= and, *, /, or, +, -, <, =, ), ,, then, else, function, $
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.AND, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.PRODUCT, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.DIVIDE, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.OR, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.PLUS, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.MINUS, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.LESSTHAN, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.EQUAL, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.RIGHTPAREN, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.COMMA, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.THEN, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.ELSE, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.FUNCTION, new KleinRule(new ArrayList<Enum>()));
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.EOF, new KleinRule(new ArrayList<Enum>()));
+        //<FACTOR-END> → ( <ACTUALS> ) ::= (
+        pt.addRule(NonTerminalType.FACTOR_END, TerminalType.LEFTPAREN, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+                TerminalType.LEFTPAREN, NonTerminalType.ACTUALS, TerminalType.RIGHTPAREN))));
         // <EXPR-SYMBOL> → < ::= <
         pt.addRule(NonTerminalType.EXPR_SYMBOL, TerminalType.LESSTHAN, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 TerminalType.LESSTHAN))));
@@ -284,10 +302,10 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
         this.stack.push(NonTerminalType.PROGRAM);
         while (!this.stack.empty()) {
             stackTop = this.stack.peek();
-	    //System.out.println("Stack Top: " + stackTop);
+            //System.out.println("Stack Top: " + stackTop);
             if (stackTop instanceof TerminalType) {
-		scannerToken = this.scanner.next();
-		//System.out.println(scannerToken);
+                scannerToken = this.scanner.next();
+                //System.out.println(scannerToken);
                 if (scannerToken.getTokenType().equals(KleinTokenType.STARTCOMMENT) ||
                         scannerToken.getTokenType().equals(KleinTokenType.ENDCOMMENT)){
                     continue;
@@ -302,8 +320,8 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
                 }
             }
             else if (stackTop instanceof NonTerminalType) {
-		scannerToken = this.scanner.peek();
-		//System.out.println(scannerToken);
+                scannerToken = this.scanner.peek();
+                //System.out.println(scannerToken);
                 if (scannerToken.getTokenType().equals(KleinTokenType.STARTCOMMENT) ||
                         scannerToken.getTokenType().equals(KleinTokenType.ENDCOMMENT)){
                     this.scanner.next();
@@ -311,13 +329,14 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
                 }
                 kRule = this.PARSETABLE.getRule((NonTerminalType) stackTop, scannerToken.getTerminal());
                 //System.out.println("\n" + kRule + "\n");
-		if (kRule.exists()){
+		        if (kRule.exists()){
                     this.stack.pop();
                     kRule.pushRule(this.stack);
                 }
                 else{
                     throw new ParsingException(String.format(
-                            "Invalid item '%s' found on the stack!", stackTop.name()));
+                            "Invalid item '%s' found on the stack when handling %s: %s", stackTop.name(),
+                            scannerToken.getTokenType().name(), scannerToken.getTerminal().name()));
                 }
             }
         }

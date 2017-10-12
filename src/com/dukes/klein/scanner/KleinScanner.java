@@ -111,7 +111,9 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     //Rightparenthesis
     if(current == ')')
     {
-      if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
+      if(endOfFile()){
+        return new KleinToken(KleinTokenType.RIGHTPARENTHESIS);
+      }
       this.input.next();
       return new KleinToken(KleinTokenType.RIGHTPARENTHESIS);
     }
