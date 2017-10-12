@@ -38,5 +38,18 @@ public class KleinRule {
     public boolean exists(){
         return this.exists;
     }
-
+    
+    @Override
+    public String toString() {
+	String s = "";
+	if(exists) {
+	    for(Enum e : this.rule) {
+		s += e + " ";
+	    }
+	}
+	else {
+	    s = "Doesn't Exist!";
+	}
+	return s;
+    }
 }

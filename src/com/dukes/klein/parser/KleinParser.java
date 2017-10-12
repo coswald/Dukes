@@ -3,8 +3,8 @@ package com.dukes.klein.parser;
 import com.dukes.klein.scanner.KleinScanner;
 import com.dukes.klein.scanner.KleinToken;
 import com.dukes.klein.scanner.KleinTokenType;
-import com.sun.javafx.scene.control.TableColumnComparatorBase;
-import jdk.management.resource.ThrottledMeter;
+//import com.sun.javafx.scene.control.TableColumnComparatorBase;
+//import jdk.management.resource.ThrottledMeter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -284,8 +284,10 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
         this.stack.push(NonTerminalType.PROGRAM);
         while (!this.stack.empty()) {
             stackTop = this.stack.peek();
+	    //System.out.println("Stack Top: " + stackTop);
             if (stackTop instanceof TerminalType) {
-                scannerToken = this.scanner.next();
+		scannerToken = this.scanner.next();
+		//System.out.println(scannerToken);
                 if (scannerToken.getTokenType().equals(KleinTokenType.STARTCOMMENT) ||
                         scannerToken.getTokenType().equals(KleinTokenType.ENDCOMMENT)){
                     continue;
@@ -300,14 +302,16 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
                 }
             }
             else if (stackTop instanceof NonTerminalType) {
-                scannerToken = this.scanner.peek();
+		scannerToken = this.scanner.peek();
+		//System.out.println(scannerToken);
                 if (scannerToken.getTokenType().equals(KleinTokenType.STARTCOMMENT) ||
                         scannerToken.getTokenType().equals(KleinTokenType.ENDCOMMENT)){
                     this.scanner.next();
                     continue;
                 }
                 kRule = this.PARSETABLE.getRule((NonTerminalType) stackTop, scannerToken.getTerminal());
-                if (kRule.exists()){
+                //System.out.println("\n" + kRule + "\n");
+		if (kRule.exists()){
                     this.stack.pop();
                     kRule.pushRule(this.stack);
                 }
