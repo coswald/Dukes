@@ -21,21 +21,21 @@ package com.dukes.klein.scanner;
  * <p>A {@code KlienTokenType} used as the enumeration to describe what a token
  * actually is. This is defined by the Klein Language specification, and we
  * interpreted it as follows:
- * <table width="100%"><tr>                         
+ * <table width="100%"><tr>
  * <th>Token Types</th><th>Positive Examples</th><th>Negative Examples</th>
  * </tr>
  * <tr><td>Keywords</td><td>function</td><td>12, main, print</td></tr>
- * <tr><td>Identifiers</td><td>main, print, mod,  Name, NameOfFunction</td> 
- * 
+ * <tr><td>Identifiers</td><td>main, print, mod,  Name, NameOfFunction</td>
+ * <p>
  * <td>1Festival, *Hi, greater than 256 characters</td></tr>
- * 
+ * <p>
  * <tr><td>Types</td><td>integer, boolean</td><td>true, false, &lt; -2^32, &gt;
  * 2^32 - 1, Integer, Boolean, 2, 69</td></tr>
- * 
+ * <p>
  * <tr><td>SimpleExpression</td><td>+, or, -</td><td>&lt;, and, false</td></tr>
  * <tr><td>Expression</td><td>&lt;, =</td><td> +, *, &gt;, &lt;=</td></tr>
  * <tr><td>Term</td><td>*, and, /</td><td>true, =, not</td><tr>
- * <tr><td>Boolean</td><td>true, false</td><td>True, False, 1, 0</td></tr> 
+ * <tr><td>Boolean</td><td>true, false</td><td>True, False, 1, 0</td></tr>
  * <tr><td>Integer</td><td>, 0, 999, -1</td><td>"H", 2^32, 1.8, -2^32</td></tr>
  * <tr><td>StartComment</td><td>(*</td><td>*), *, (</td></tr>
  * <tr><td>EndComment</td><td>*)</td><td>(*, *, )</td></tr>
@@ -47,12 +47,12 @@ package com.dukes.klein.scanner;
  * <tr><td>Else</td><td>else</td><td>Else, ELSE, else2</td></tr>
  * <tr><td>Not</td><td>not</td><td>Not, NOT, !=</td></tr>
  * </table></p>
- * @since 1.0
+ *
  * @author Coved W Oswald
  * @version 1.0
+ * @since 1.0
  */
-public enum KleinTokenType
-{
+public enum KleinTokenType {
   STARTCOMMENT(0),
   ENDCOMMENT(1),
   EOF(2),
@@ -68,10 +68,11 @@ public enum KleinTokenType
 
   private final int id;
 
-  KleinTokenType(int id){
+  KleinTokenType(int id) {
     this.id = id;
   }
-  public int getId(){
+
+  public int getId() {
     return id;
   }
 

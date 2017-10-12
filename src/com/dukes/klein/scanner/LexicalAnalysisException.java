@@ -25,51 +25,50 @@ import java.lang.Throwable;
  * <p>An exception that is thrown when there is a potential token present that
  * is valid in the context-free environment but does not conform to the
  * language specific context.</p>
- * @since 1.0
+ *
  * @author Coved W Oswald
  * @version 1.0
+ * @since 1.0
  */
-public class LexicalAnalysisException extends RuntimeException
-{
+public class LexicalAnalysisException extends RuntimeException {
   /**
    * Creates a {@code LexicalAnalysisException} with no detailed message.
    */
-  public LexicalAnalysisException()
-  {
+  public LexicalAnalysisException() {
     this("No detailed message provided.");
   }
-  
+
   /**
    * Creates a {@code LexicalAnalysisException} with the given detailed
    * message.
+   *
    * @param s The detailed message.
    * @see java.lang.RuntimeException#RuntimeException(String)
    */
-  public LexicalAnalysisException(String s)
-  {
+  public LexicalAnalysisException(String s) {
     super(s);
   }
-  
+
   /**
    * Creates a {@code LexicalAnalysisException} with the detailed message given
    * as well as the {@code Throwable} cause.
+   *
    * @param message The detailed message.
-   * @param cause The cause.
+   * @param cause   The cause.
    * @see java.lang.RuntimeException#RuntimeException(String, Throwable)
    */
-  public LexicalAnalysisException(String message, Throwable cause)
-  {
+  public LexicalAnalysisException(String message, Throwable cause) {
     super(message, cause);
   }
-  
+
   /**
    * Creates a {@code LexicalAnalysisException} with the {@code Throwable}
    * cause.
+   *
    * @param cause The cause of the exception.
    * @see java.lang.RuntimeException#RuntimeException(String, Throwable)
    */
-  public LexicalAnalysisException(Throwable cause)
-  {
+  public LexicalAnalysisException(Throwable cause) {
     super(cause);
   }
 }

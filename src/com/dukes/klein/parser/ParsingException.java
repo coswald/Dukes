@@ -22,24 +22,20 @@ import java.lang.String;
 import java.lang.Throwable;
 
 /**
- * @since 1.0
  * @author Coved W Oswald
  * @version 1.0
+ * @since 1.0
  */
-public class ParsingException extends RuntimeException
-{
-  public ParsingException()
-  {
+public class ParsingException extends RuntimeException {
+  public ParsingException() {
     this("No detailed message provided.");
   }
-  
-  public ParsingException(String s)
-  {
+
+  public ParsingException(String s) {
     super(s);
   }
-  
-  public ParsingException(Throwable cause)
-  {
+
+  public ParsingException(Throwable cause) {
     super(cause);
   }
 }

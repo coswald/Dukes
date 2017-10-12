@@ -24,94 +24,94 @@ import java.lang.String;
 /**
  * <p>Represents a token within a given grammar. The {@code AbstractToken} can
  * be used to represent a token within <b>any</b> programming language.</p>
- * @since 1.0
+ *
  * @author Coved W Oswald
  * @version 1.0
+ * @since 1.0
  */
-public abstract class AbstractToken<E extends Enum<E>, V> extends Object
-{
+public abstract class AbstractToken<E extends Enum<E>, V> extends Object {
   /**
    * The instance of the enum that provides token types.
    */
   protected E tokenType;
-  
+
   /**
    * The value of the token. This can be {@code null} if the token type does
    * not need a value.
    */
   protected V tokenValue = null;
-  
+
   /**
    * This is needed for an empty constructor to be present. This is made
-   * protected, as sublcasses don't inherit constructors. 
+   * protected, as sublcasses don't inherit constructors.
    */
-  protected AbstractToken(){}//why the hell this has to be here I'll never know
-  
+  protected AbstractToken() {
+  }//why the hell this has to be here I'll never know
+
   /**
    * Constructs an {@code AbstractToken} with the token type describing what
    * kind of token it is, while also describing the value of that token. <b>
    * Note: This does not actually construct an object</b>. This and any other
    * constructor in this class is used as a means to help subclasses conform to
    * the standards of a Token.
-   * @param tokenType The type of token, as a value from an {@code Enum}
+   *
+   * @param tokenType  The type of token, as a value from an {@code Enum}
    * @param tokenValue The value of a token.
    */
-  protected AbstractToken(E tokenType, V tokenValue)
-  {
+  protected AbstractToken(E tokenType, V tokenValue) {
     this.tokenType = tokenType;
     this.tokenValue = tokenValue;
   }
-  
+
   /**
    * Constructs an {@code AbstractToken} with the token type. The value of the
    * token is {@code null}
    */
-  protected AbstractToken(E tokenType)
-  {
+  protected AbstractToken(E tokenType) {
     this(tokenType, null);
   }
-  
+
   /**
    * Determines whether this token is of the type provided.
+   *
    * @param tokenType The type to compare to.
    * @return {@code true} if the current token's tokenType is equivalent to the
-             parameter, {@code false} otherwise.
+   * parameter, {@code false} otherwise.
    */
-  public boolean isTokenType(E tokenType)
-  {
+  public boolean isTokenType(E tokenType) {
     return this.tokenType == tokenType;
   }
-  
-  
+
+
   /**
    * Returns this token's type.
+   *
    * @return The token type of this token.
    */
-  public E getTokenType()
-  {
+  public E getTokenType() {
     return this.tokenType;
   }
-  
+
   /**
    * Returns the value of the current token. Remember this can be {@code null}.
+   *
    * @return The token value of this token.
    */
-  public V getTokenValue()
-  {
+  public V getTokenValue() {
     return this.tokenValue;
   }
-  
+
   /**
    * Shows the programmer a {@code String} representation of the
    * {@code AbstractToken}. This is the tokentype as a string, followed by a
    * tab and then the token value. If the token value is null, this method will
    * exclude the tab and the token value.
+   *
    * @see java.lang.Object#toString()
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "Token Type: " + this.tokenType.toString() + (tokenValue != null ?
-           "\t\tToken Value: " + this.tokenValue.toString() : "");
+        "\t\tToken Value: " + this.tokenValue.toString() : "");
   }
 }

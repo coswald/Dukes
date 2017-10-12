@@ -22,27 +22,26 @@ import com.dukes.klein.parser.TerminalType;
 /**
  * <p>A {@code KleinToken} as defined by the language specification. This is
  * a {@code KleinTokenType} followed by a {@code String}.</p>
- * @since 1.0
+ *
  * @author Coved W Oswald
  * @version 1.0
+ * @since 1.0
  */
-public class KleinToken extends AbstractToken<KleinTokenType, String>
-{
+public class KleinToken extends AbstractToken<KleinTokenType, String> {
   /**
    * Creates a {@code KleinToken} with the provided token type and value.
-   * @param tokenType The token type.
+   *
+   * @param tokenType  The token type.
    * @param tokenValue The value of the token, as a string.
    * @throws IllegalTokenTypeException If data is not given or given, depending
-   *         on the token type.
+   *                                   on the token type.
    */
   public KleinToken(KleinTokenType tokenType, String tokenValue)
-                      throws IllegalTokenTypeException
-  {
+      throws IllegalTokenTypeException {
     boolean defined = (tokenValue != null);
     boolean throwException = false;
-    
-    switch(tokenType)
-    {
+
+    switch (tokenType) {
       case LEFTPARENTHESIS:
       case RIGHTPARENTHESIS:
       case STARTCOMMENT:
@@ -53,41 +52,37 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
       default:
         throwException = !defined;
     }
-    
-    if(throwException)
-    {
-      if(defined)
-      {
+
+    if (throwException) {
+      if (defined) {
         throw new IllegalTokenTypeException("The given token type, " +
-                                            tokenType +
-                                            " does not need the value " +
-                                            tokenValue + "!");
-      }
-      else
-      {
+            tokenType +
+            " does not need the value " +
+            tokenValue + "!");
+      } else {
         throw new IllegalTokenTypeException("The given token type, " +
-                                            tokenType + " is not given a " + 
-                                            "necessary value!");
+            tokenType + " is not given a " +
+            "necessary value!");
       }
     }
-    
+
     this.tokenType = tokenType;
     this.tokenValue = tokenValue;
   }
-  
+
   /**
    * Creates a token with the given token type. The default value is
    * {@code null}, and will throw an error if not handled correctly.
+   *
    * @param tokenType The token type.
    * @see #KleinToken(KleinTokenType, String)
    */
-  public KleinToken(KleinTokenType tokenType)
-  {
+  public KleinToken(KleinTokenType tokenType) {
     this(tokenType, null);
   }
 
-  public TerminalType getTerminal(){
-    switch (this.getTokenType()){
+  public TerminalType getTerminal() {
+    switch (this.getTokenType()) {
       case BOOLEAN:
         return TerminalType.BOOLEAN;
       case INTEGER:
@@ -99,7 +94,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
       case RIGHTPARENTHESIS:
         return TerminalType.RIGHTPAREN;
       case SEPARATOR:
-        switch (this.getTokenValue()){
+        switch (this.getTokenValue()) {
           case ":":
             return TerminalType.COLON;
           case ",":
@@ -108,13 +103,13 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
             //ERROR?
         }
       case KEYWORD:
-        switch (this.getTokenValue()){
+        switch (this.getTokenValue()) {
           case "function":
             return TerminalType.FUNCTION;
           case "main":
-            return TerminalType.STRING; // ???
+            return TerminalType.STRING;
           case "print":
-            return TerminalType.PRINT; // ???
+            return TerminalType.PRINT;
           case "if":
             return TerminalType.IF;
           case "then":
@@ -125,7 +120,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
             // ERROR?
         }
       case TYPE:
-        switch (this.getTokenValue()){
+        switch (this.getTokenValue()) {
           case "boolean":
             return TerminalType.BOOLEAN_STR;
           case "integer":
@@ -134,7 +129,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
             //ERROR?
         }
       case SYMBOL:
-        switch (this.getTokenValue()){
+        switch (this.getTokenValue()) {
           //+, -, <, =, *, /, and, or, not
           case "+":
             return TerminalType.PLUS;
@@ -156,7 +151,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
             return TerminalType.NOT;
           default:
             // ERROR?
-          }
+        }
       case EOF:
         return TerminalType.EOF;
       case STARTCOMMENT:

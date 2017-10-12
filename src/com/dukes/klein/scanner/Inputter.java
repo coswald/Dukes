@@ -23,50 +23,51 @@ import java.lang.Object;
  * Describes an object that iterates over an entire object for characters. Now,
  * we chose to not use the {@code Iterator} interface, as it would not allow
  * for primitive {@code char}s to be read. This is why this class is included.
- * @since 1.0
+ *
  * @author Coved W Oswald
  * @version 1.0
+ * @since 1.0
  */
-public abstract class Inputter extends Object
-{
+public abstract class Inputter extends Object {
   private char currentChar;
-  
+
   /**
    * The current position of the Inputter within the parsed object.
    */
   protected int position;
-  
+
   /**
    * Returns the character at the current position of the parser.
+   *
    * @return The current character.
    */
-  public char currentChar()
-  {
+  public char currentChar() {
     return this.currentChar;
   }
-  
+
   /**
    * Returns the next character within the inputter. <b>This is the only method
    * that should increment the position variable</b>. Making position protected
    * allows classes that need to maniuplate position available to it, but this
    * method will automatically increment the position by one.
    */
-  public void next()
-  {
+  public void next() {
     this.currentChar = this.lookAhead();
     position++;
   }
-  
+
   /**
    * Determines whether there is another character in the inputter object.
+   *
    * @return {@code true} if there is another character in the parser,
-             {@code false} otherwise.
+   * {@code false} otherwise.
    */
   public abstract boolean hasNext();
-  
+
   /**
    * Looks ahead in the inputter without consuming the current character. This
    * method has undefined behaviour at the end of the parser.
+   *
    * @return The next character in the stream, if there is one.
    */
   public abstract char lookAhead();

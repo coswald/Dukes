@@ -25,51 +25,50 @@ import java.lang.Throwable;
  * <p>An exception that is thrown when there is characters' present in a
  * {@code Inputter} that does not conform to the language grammar or would
  * otherwise cause an error in the reading of code.</p>
- * @since 1.0
+ *
  * @author Coved W Oswald
  * @version 1.0
+ * @since 1.0
  */
-public class LexicalScanningException extends RuntimeException
-{
+public class LexicalScanningException extends RuntimeException {
   /**
    * Creates a {@code LexicalScanningException} with no detailed message.
    */
-  public LexicalScanningException()
-  {
+  public LexicalScanningException() {
     this("No detailed message provided.");
   }
-  
+
   /**
    * Creates a {@code LexicalScanningException} with the given detailed
    * message.
+   *
    * @param s The detailed message.
    * @see java.lang.RuntimeException#RuntimeException(String)
    */
-  public LexicalScanningException(String s)
-  {
+  public LexicalScanningException(String s) {
     super(s);
   }
-  
+
   /**
    * Creates a {@code LexicalScanningException} with the detailed message given
    * as well as the {@code Throwable} cause.
+   *
    * @param message The detailed message.
-   * @param cause The cause.
+   * @param cause   The cause.
    * @see java.lang.RuntimeException#RuntimeException(String, Throwable)
    */
-  public LexicalScanningException(String message, Throwable cause)
-  {
+  public LexicalScanningException(String message, Throwable cause) {
     super(message, cause);
   }
-  
+
   /**
    * Creates a {@code LexicalScanningException} with the {@code Throwable}
    * cause.
+   *
    * @param cause The cause of the exception.
    * @see java.lang.RuntimeException#RuntimeException(String, Throwable)
    */
-  public LexicalScanningException(Throwable cause)
-  {
+  public LexicalScanningException(Throwable cause) {
     super(cause);
   }
 }

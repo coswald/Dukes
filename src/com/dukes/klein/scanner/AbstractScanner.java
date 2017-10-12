@@ -17,54 +17,42 @@
  */
 package com.dukes.klein.scanner;
 
-import com.dukes.klein.scanner.AbstractToken;
-import com.dukes.klein.scanner.Inputter;
-import com.dukes.klein.scanner.LexicalScanningException;
-
 import java.lang.Object;
-import java.lang.String;
 
 /**
  * Represents an object that can produce {@code AbstractToken}s from a given
  * {@code Inputter}.
- * @since 1.0
+ *
  * @author Coved W Oswald
  * @version 1.0
+ * @since 1.0
  */
-public abstract class AbstractScanner<E extends AbstractToken> extends Object
-{
+public abstract class AbstractScanner<E extends AbstractToken> extends Object {
   private E nextToken;
   protected Inputter input;
-  
-  public AbstractScanner(Inputter input)
-  {
+
+  public AbstractScanner(Inputter input) {
     this.input = input;
     this.nextToken = null;
   }
-  
-  public E peek() throws LexicalScanningException
-  {
-    if(nextToken == null)
-    {
+
+  public E peek() throws LexicalScanningException {
+    if (nextToken == null) {
       this.nextToken = this.next();
     }
     return this.nextToken;
   }
-  
-  public E next() throws LexicalScanningException
-  {
-    if(nextToken != null)
-    {
+
+  public E next() throws LexicalScanningException {
+    if (nextToken != null) {
       E currentToken = this.nextToken;
       this.nextToken = null;
       return currentToken;
-    }
-    else
-    {
+    } else {
       return this.generateNextToken();
     }
   }
-  
+
   public abstract E generateNextToken()
-                                throws LexicalScanningException;
+      throws LexicalScanningException;
 }

@@ -25,60 +25,59 @@ import java.util.Scanner;
 
 /**
  * Reads characters from a file.
- * @since 1.0
+ *
  * @author Coved W Oswald
  * @version 1.0
+ * @since 1.0
  */
-public class FileInputter extends Inputter
-{
-  
+public class FileInputter extends Inputter {
+
   private Scanner scan;
   private char nextChar;
+
   /**
    * Creates a {@code FileInputter} that reads it's input from the
    * {@code FileInputStream} provided. This object will not close the stream,
    * but future implementations may close it when {@link #hasNext()} returns
    * {@code false}.
+   *
    * @param fis The input stream to use.
    */
-  public FileInputter(FileInputStream fis)
-  {
+  public FileInputter(FileInputStream fis) {
     this.scan = new Scanner(fis);
     this.scan.useDelimiter(""); //One char at a time.
-    if (this.hasNext()){
+    if (this.hasNext()) {
       this.next();
     }
     this.nextChar = 0;
   }
-  
+
   /**
    *
    */
   @Override
-  public void next()
-  {
+  public void next() {
     super.next();
     this.nextChar = 0;
   }
-  
+
   /**
    * Determines whether the stream has any available bytes.
+   *
    * @return {@code true} if the file has any available bytes.
    * @see java.io.FileInputStream#available()
    */
   @Override
-  public boolean hasNext()
-  {
-    return (this.nextChar != 0 || this.scan.hasNext() ); //fis.available() != 0;
+  public boolean hasNext() {
+    return (this.nextChar != 0 || this.scan.hasNext()); //fis.available() != 0;
   }
-  
+
   /**
    * {@inheritDoc}
    */
   @Override
-  public char lookAhead()
-  {
-    if(this.nextChar == 0)
+  public char lookAhead() {
+    if (this.nextChar == 0)
       this.nextChar = this.scan.next().charAt(0);
     return this.nextChar;
   }
