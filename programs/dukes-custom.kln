@@ -7,4 +7,5 @@
 
 function main( n1 : integer, d1 : integer, n2 : integer, d2 : integer) : integer
 	print( n1*d2 + n2*d1 )
-	print ( d1*d2 )
+	print( d1*d2 )
+	1

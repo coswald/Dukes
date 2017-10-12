@@ -76,9 +76,9 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       if(this.input.lookAhead() == '*')
       {
         this.input.next();
+        this.inComment = true;
         if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
         this.input.next();
-        this.inComment = true;
         return new KleinToken(KleinTokenType.STARTCOMMENT);
       }
       else
@@ -94,11 +94,11 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       if(this.input.lookAhead() == ')')
       {
         this.input.next();
-        if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
-        this.input.next();
         if(!this.inComment)
           throw new LexicalAnalysisException("Comment ended but not started!");
         this.inComment = false;
+        if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
+        this.input.next();
         return new KleinToken(KleinTokenType.ENDCOMMENT);
       }
       else // Should never happen
@@ -111,7 +111,9 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     //Rightparenthesis
     if(current == ')')
     {
-      if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
+      if(endOfFile()){
+        return new KleinToken(KleinTokenType.RIGHTPARENTHESIS);
+      }
       this.input.next();
       return new KleinToken(KleinTokenType.RIGHTPARENTHESIS);
     }
@@ -171,9 +173,11 @@ public class KleinScanner extends AbstractScanner<KleinToken>
     //Unrecognized character/tokentype.
     else
     {
-      String error = this.getWord();
-      throw new LexicalScanningException("The characters " + error +
-                                     " are invalid.");
+      if (this.endOfFile()){
+        return new KleinToken(KleinTokenType.EOF);
+      }
+      throw new LexicalScanningException("The character '" + current +
+              "' is invalid.");
     }
   }
   
@@ -278,7 +282,7 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       this.input.next();
     }
     */
-    if(this.input.currentChar() == '0' && 
+    if(this.input.currentChar() == '0' && !this.endOfFile() &&
        KleinScanner.isDigit(this.input.lookAhead()))
     {
       throw new LexicalAnalysisException("Number cannot start with 0!");

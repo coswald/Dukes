@@ -64,12 +64,12 @@ public class FileInputter extends Inputter
   /**
    * Determines whether the stream has any available bytes.
    * @return {@code true} if the file has any available bytes.
-   * @see java.io.FileInputSteam#available()
+   * @see java.io.FileInputStream#available()
    */
   @Override
   public boolean hasNext()
   {
-    return this.scan.hasNext();//fis.available() != 0;
+    return (this.nextChar != 0 || this.scan.hasNext() ); //fis.available() != 0;
   }
   
   /**

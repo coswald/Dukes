@@ -18,9 +18,6 @@
 package com.dukes.klein.scanner;
 
 import com.dukes.klein.parser.TerminalType;
-import com.dukes.klein.scanner.AbstractToken;
-import com.dukes.klein.scanner.IllegalTokenTypeException;
-import com.dukes.klein.scanner.KleinTokenType;
 
 /**
  * <p>A {@code KleinToken} as defined by the language specification. This is
@@ -117,7 +114,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
           case "main":
             return TerminalType.STRING; // ???
           case "print":
-            return TerminalType.STRING; // ???
+            return TerminalType.PRINT; // ???
           case "if":
             return TerminalType.IF;
           case "then":
@@ -130,9 +127,9 @@ public class KleinToken extends AbstractToken<KleinTokenType, String>
       case TYPE:
         switch (this.getTokenValue()){
           case "boolean":
-            return TerminalType.BOOLEANSTR;
+            return TerminalType.BOOLEAN_STR;
           case "integer":
-            return TerminalType.INTEGERSTR;
+            return TerminalType.INTEGER_STR;
           default:
             //ERROR?
         }
