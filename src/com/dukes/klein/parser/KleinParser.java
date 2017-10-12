@@ -19,8 +19,7 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
         this.stack = new Stack<>();
     }
 
-    @Override
-    public boolean isValid() {
+    private void parseProgram() throws ParsingException {
         Enum sToken = null;
         KleinToken kToken;
         KleinRule kRule;
@@ -31,26 +30,30 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
             if (sToken instanceof KleinTokenType) {
                 kToken = this.scanner.next();
                 if (sToken != kToken.getTokenType()) {
-                    // ERROR: TOKEN MISMATCH ERROR (sToken,kToken)
-                    throw new ParsingException("Token mismatch!");
+                    throw new ParsingException(String.format(
+                            "Token mismatch! Expected '%s' but got '%s'", sToken.name(), kToken.getTokenType().name()));
                 }
             }
-            if (sToken instanceof NonTerminalType) {
+            else if (sToken instanceof NonTerminalType) {
                 kToken = this.scanner.peek();
                 kRule = this.PARSETABLE.getRule((NonTerminalType) sToken, kToken.getTokenType());
                 if (kRule.exists()){
                     kRule.pushRule(this.stack);
                 }
                 else{
-                    // ERROR: Invalid item in stack (sToken)
-                    throw new ParsingException("Invalid item in stack!");
+                    throw new ParsingException(String.format("Invalid item '%s' found on the stack!", sToken.name()));
                 }
             }
         }
         if (sToken != null && !sToken.equals(KleinTokenType.EOF)){
-            // ERROR: Unexpected token at end of file
+            throw new ParsingException(String.format("Unexpected token '%s' at end of file", sToken.name()));
         }
+    }
 
+
+    @Override
+    public boolean isValid() {
+        this.parseProgram();
         // If we made it to here then this program is valid.
         return true;
     }
