@@ -25,7 +25,7 @@ public abstract class AbstractSyntaxNode extends Object {
   {
     String s = "";
     for(int i = 0; i < this.children.length; i++) {
-      s += (children.get(i)).toString();
+      s += (children[i]).toString();
     }
     return s;
   }
@@ -34,7 +34,7 @@ public abstract class AbstractSyntaxNode extends Object {
                                             AbstractSyntaxNode... end) {
     AbstractSyntaxNode[] ret = new AbstractSyntaxNode[end.length + 1];
     ret[0] = frontNode;
-    System.arrayCopy(end, 0, ret, 1, end.length);
+    System.arraycopy(end, 0, ret, 1, end.length);
     return ret;
   }
 }

@@ -11,7 +11,7 @@ import com.dukes.klein.parser.node.ExpressionNode;
 public class OperatorNode extends ExpressionNode {
   private String operator;
   
-  public CallNode(String operator, ExpressionNode leftNode,
+  public OperatorNode(String operator, ExpressionNode leftNode,
                   ExpressionNode rightNode) {
     super(leftNode, rightNode);
     this.operator = operator;

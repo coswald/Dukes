@@ -1,13 +1,15 @@
 package com.dukes.klein.parser;
 
+import com.dukes.klein.parser.node.AbstractSyntaxNode;
 import com.dukes.klein.scanner.AbstractScanner;
 import com.dukes.klein.scanner.AbstractToken;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractTableParser<E extends AbstractScanner<F>, F extends AbstractToken> implements Parser {
-
+public abstract class AbstractTableParser<E extends AbstractScanner<F>,
+                                          F extends AbstractToken>
+                                          implements Parser {
     protected ParseTable PARSETABLE;
 
     protected E scanner;
@@ -25,7 +27,4 @@ public abstract class AbstractTableParser<E extends AbstractScanner<F>, F extend
 
     @Override
     public abstract AbstractSyntaxNode generateAST();
-
-    protected abstract AbstractSyntaxNode parseState();
-
 }

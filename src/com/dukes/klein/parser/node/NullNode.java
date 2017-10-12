@@ -9,7 +9,7 @@ import com.dukes.klein.parser.node.ExpressionNode;
  * @since 0.2.0
  */
 public class NullNode extends ExpressionNode {
-  public FormalNode() {
+  public NullNode() {
     super();
   }
   

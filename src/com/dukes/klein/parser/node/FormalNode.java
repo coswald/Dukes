@@ -29,7 +29,7 @@ public class FormalNode extends AbstractSyntaxNode {
   
   @Override
   public String toString() {
-    String s = "Formal: " + this.name + " : " + this.type;
+    String s = "Formal: " + this.identifier + " : " + this.type;
     return s;
   }
 }

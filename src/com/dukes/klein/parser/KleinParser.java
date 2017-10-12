@@ -1,17 +1,17 @@
 package com.dukes.klein.parser;
 
+import com.dukes.klein.parser.node.AbstractSyntaxNode;
+import com.dukes.klein.parser.AbstractTableParser;
 import com.dukes.klein.scanner.KleinScanner;
 import com.dukes.klein.scanner.KleinToken;
 import com.dukes.klein.scanner.KleinTokenType;
-//import com.sun.javafx.scene.control.TableColumnComparatorBase;
-//import jdk.management.resource.ThrottledMeter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 
 
-public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
+public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken>{
 
     private Stack<Enum> stack;
 
@@ -353,11 +353,6 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
 
     @Override
     public AbstractSyntaxNode generateAST() {
-        return null;
-    }
-
-    @Override
-    protected AbstractSyntaxNode parseState() {
         return null;
     }
 }

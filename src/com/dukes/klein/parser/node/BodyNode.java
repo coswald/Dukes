@@ -17,11 +17,13 @@ public class BodyNode extends AbstractSyntaxNode {
     super(AbstractSyntaxNode.concat(exprNode, prints));
   }
   
-  public ExpressionNode getExpression() {
+  public AbstractSyntaxNode getExpression() {
     return this.children[0];
   }
-  public PrintNode[] getPrintNodes() {
-    AbstractSyntaxNode[] ret = new AbstractSyntaxNode[this.children.length - 1];
+  public AbstractSyntaxNode[] getPrintNodes() {
+    AbstractSyntaxNode[] ret =
+      new AbstractSyntaxNode[this.children.length - 1];
+    
     System.arraycopy(this.children, 1, ret, 0, ret.length);
     return ret;
   }
