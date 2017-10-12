@@ -17,6 +17,8 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
 
     public KleinParser(KleinScanner ks) {
         ParseTable pt = new ParseTable();
+        // <PROGRAM> → $ ::= <EOF>
+        pt.addRule(NonTerminalType.PROGRAM, TerminalType.EOF, new KleinRule(new ArrayList<Enum>()));
         // <PROGRAM> → <DEFINITIONS> ::= function
         pt.addRule(NonTerminalType.PROGRAM, TerminalType.FUNCTION, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.DEFINITIONS))));
@@ -65,11 +67,11 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
         pt.addRule(NonTerminalType.BODY, TerminalType.STRING, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.EXPR))));
         //<TYPE> → integer ::= integer
-        pt.addRule(NonTerminalType.TYPE, TerminalType.INTEGERSTR, new KleinRule(new ArrayList<Enum>(Arrays.asList(
-                TerminalType.INTEGERSTR))));
+        pt.addRule(NonTerminalType.TYPE, TerminalType.INTEGER_STR, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+                TerminalType.INTEGER_STR))));
         //<TYPE> → boolean ::= boolean
-        pt.addRule(NonTerminalType.TYPE, TerminalType.BOOLEANSTR, new KleinRule(new ArrayList<Enum>(Arrays.asList(
-                TerminalType.BOOLEANSTR))));
+        pt.addRule(NonTerminalType.TYPE, TerminalType.BOOLEAN_STR, new KleinRule(new ArrayList<Enum>(Arrays.asList(
+                TerminalType.BOOLEAN_STR))));
         // <EXPR> → <SIMPLE-EXPR> <EXPR-END> ::= if, (, not, -, <NUMBER>, <BOOLEAN>, <STRING>
         pt.addRule(NonTerminalType.EXPR, TerminalType.IF, new KleinRule(new ArrayList<Enum>(Arrays.asList(
                 NonTerminalType.SIMPLE_EXPR, NonTerminalType.EXPR_END))));
@@ -302,10 +304,8 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
         this.stack.push(NonTerminalType.PROGRAM);
         while (!this.stack.empty()) {
             stackTop = this.stack.peek();
-            //System.out.println("Stack Top: " + stackTop);
             if (stackTop instanceof TerminalType) {
                 scannerToken = this.scanner.next();
-                //System.out.println(scannerToken);
                 if (scannerToken.getTokenType().equals(KleinTokenType.STARTCOMMENT) ||
                         scannerToken.getTokenType().equals(KleinTokenType.ENDCOMMENT)){
                     continue;
@@ -321,14 +321,12 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
             }
             else if (stackTop instanceof NonTerminalType) {
                 scannerToken = this.scanner.peek();
-                //System.out.println(scannerToken);
                 if (scannerToken.getTokenType().equals(KleinTokenType.STARTCOMMENT) ||
                         scannerToken.getTokenType().equals(KleinTokenType.ENDCOMMENT)){
                     this.scanner.next();
                     continue;
                 }
                 kRule = this.PARSETABLE.getRule((NonTerminalType) stackTop, scannerToken.getTerminal());
-                //System.out.println("\n" + kRule + "\n");
 		        if (kRule.exists()){
                     this.stack.pop();
                     kRule.pushRule(this.stack);

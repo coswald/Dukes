@@ -23,30 +23,30 @@
                         | boolean
 
                <EXPR> ::= <SIMPLE-EXPR> <EXPR-END>
-	   
-	   <EXPR-END> ::= ε
-	                | <EXPR-SYMBOL> <EXPR>
+
+           <EXPR-END> ::= ε
+                        | <EXPR-SYMBOL> <EXPR>
 
         <SIMPLE-EXPR> ::= <TERM> <SIPMLE-EXPR-END>
-	
+        
     <SIMPLE-EXPR-END> ::= ε
                         | <SIMPLE-EXPR-SYMBOL> <SIMPLE-EXPR> 
 
                <TERM> ::= <FACTOR> <TERM-END>
           
-	   <TERM-END> ::= ε
-	                | <TERM-SYMBOL> <TERM>
+           <TERM-END> ::= ε
+                        | <TERM-SYMBOL> <TERM>
 
              <FACTOR> ::= if <EXPR> then <EXPR> else <EXPR>
                         | <FACTOR-SYMBOL> <FACTOR>
                         | <IDENTIFIER> <FACTOR-END>
                         | <LITERAL>
                         | ( <EXPR> )
-			
+
          <FACTOR-END> ::= ε
                         | ( <ACTUALS> )
 
-	  <FACTOR-SYMBOL> ::= not
+      <FACTOR-SYMBOL> ::= not
                         | -
 
         <EXPR-SYMBOL> ::= < 

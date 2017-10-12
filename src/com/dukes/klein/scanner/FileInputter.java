@@ -69,7 +69,7 @@ public class FileInputter extends Inputter
   @Override
   public boolean hasNext()
   {
-    return (this.scan.hasNext() && this.nextChar == 0); //fis.available() != 0;
+    return (this.nextChar != 0 || this.scan.hasNext() ); //fis.available() != 0;
   }
   
   /**

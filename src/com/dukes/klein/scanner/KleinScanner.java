@@ -76,9 +76,9 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       if(this.input.lookAhead() == '*')
       {
         this.input.next();
+        this.inComment = true;
         if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
         this.input.next();
-        this.inComment = true;
         return new KleinToken(KleinTokenType.STARTCOMMENT);
       }
       else
@@ -94,11 +94,11 @@ public class KleinScanner extends AbstractScanner<KleinToken>
       if(this.input.lookAhead() == ')')
       {
         this.input.next();
-        if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
-        this.input.next();
         if(!this.inComment)
           throw new LexicalAnalysisException("Comment ended but not started!");
         this.inComment = false;
+        if(endOfFile()){return new KleinToken(KleinTokenType.EOF);}
+        this.input.next();
         return new KleinToken(KleinTokenType.ENDCOMMENT);
       }
       else // Should never happen
