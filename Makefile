@@ -24,6 +24,7 @@ sources:
 tools:
 	@cp compiler-tools/kleins .
 	@cp compiler-tools/kleinf .
+	@cp compiler-tools/kleinp .
 
 clean:
 	@echo "Cleaning up"
