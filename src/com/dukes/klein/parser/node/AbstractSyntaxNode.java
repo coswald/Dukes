@@ -18,11 +18,19 @@ public abstract class AbstractSyntaxNode extends Object {
   protected AbstractSyntaxNode[] children;
   
   protected AbstractSyntaxNode(AbstractSyntaxNode... children) {
-    this.children = children;
+    this.children = new AbstractSyntaxNode[children.length];
+    for(int i = children.length - 1, j = 0; i >= 0; i--, j++) {
+      this.children[j] = children[i];
+    }
   }
 
   public AbstractSyntaxNode[] getChildren() {
     return this.children;
+  }
+  
+  public String dataAsString()
+  {
+    return "";
   }
   
   @Override

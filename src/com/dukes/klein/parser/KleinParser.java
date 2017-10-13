@@ -23,7 +23,9 @@ public class KleinParser extends AbstractTableParser<KleinScanner, KleinToken> {
     KleinRule epsilon = new KleinRule(new ArrayList<Enum>());
 
     // <PROGRAM> → $ ::= <EOF>
-    pt.addRule(NonTerminalType.PROGRAM, TerminalType.EOF, epsilon);
+    pt.addRule(NonTerminalType.PROGRAM, TerminalType.EOF, 
+        new KleinRule(new ArrayList<Enum>(Arrays.asList(
+        SemanticActionType.MAKE_PROGRAM))));
 
     // <PROGRAM> → <DEFINITIONS> ::= function
     pt.addRule(NonTerminalType.PROGRAM, TerminalType.FUNCTION,

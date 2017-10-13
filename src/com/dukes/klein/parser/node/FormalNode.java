@@ -14,7 +14,7 @@ public class FormalNode extends AbstractSyntaxNode {
   private TerminalNode type;
   
   public FormalNode(TerminalNode identifier, TerminalNode type) {
-    super(new NullNode());
+    super();
     this.identifier = identifier;
     this.type = type;
   }
@@ -25,6 +25,12 @@ public class FormalNode extends AbstractSyntaxNode {
   
   public String getType() {
     return this.type.getValue();
+  }
+  
+  @Override
+  public String dataAsString() {
+    return "[Identifier: " + this.identifier.toString() +
+        ", Type: " + this.type.toString() + "]";
   }
   
   @Override

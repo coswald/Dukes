@@ -13,12 +13,17 @@ public class OperatorNode extends ExpressionNode {
   
   public OperatorNode(TerminalNode operator, ExpressionNode leftNode,
                   ExpressionNode rightNode) {
-    super(leftNode, rightNode);
+    super(rightNode, leftNode);
     this.operator = operator;
   }
 
   public String getOperator(){return this.operator.getValue();}
 
+  @Override
+  public String dataAsString() {
+    return "[" + operator.toString() + "]";
+  }
+  
   @Override
   public String toString() {
     return "Operator: " +

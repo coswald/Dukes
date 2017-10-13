@@ -135,8 +135,8 @@ public enum SemanticActionType {
   }
 
   private static FormalNode makeFormal(Stack<AbstractSyntaxNode> semanticStack){
-    TerminalNode id = (TerminalNode) semanticStack.pop();
     TerminalNode type = (TerminalNode) semanticStack.pop();
+    TerminalNode id = (TerminalNode) semanticStack.pop();
 
     return new FormalNode(id, type);
   }
@@ -205,7 +205,7 @@ public enum SemanticActionType {
       Stack<AbstractSyntaxNode> semanticStack){
     ExpressionNode rs = (ExpressionNode) semanticStack.pop();
     TerminalNode op = (TerminalNode) semanticStack.pop();
-    NullNode ls = (NullNode) semanticStack.pop();
+    NullNode ls = new NullNode();
 
     return new OperatorNode(op, ls, rs);
   }

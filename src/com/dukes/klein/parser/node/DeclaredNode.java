@@ -21,7 +21,7 @@ public class DeclaredNode extends ExpressionNode {
   
   public DeclaredNode(TerminalNode declared, int type)
                       throws IllegalArgumentException {
-    super(new NullNode());
+    super();
     
     if(type > 2) {
       throw new IllegalArgumentException("Invalid type given to declared " +
@@ -46,8 +46,30 @@ public class DeclaredNode extends ExpressionNode {
   }
 
   @Override
+  public String dataAsString() {
+    return "[Value: " + this.declared.toString() +
+        ", Type: " + DeclaredNode.typeToString(this.type) + "]";
+  }
+  
+  @Override
   public String toString() {
     return this.declared.toString();
   }
 
+  public static String typeToString(int type)
+  {
+    switch(type)
+    {
+      case DeclaredNode.IDENTIFIER_TYPE:
+        return "Identifier";
+      case DeclaredNode.BOOLEAN_TYPE:
+        return "Boolean";
+      case DeclaredNode.INTEGER_TYPE:
+        return "Integer";
+      default:
+        throw new IllegalArgumentException(
+            "Invalid type given to typeToString!");
+    }
+  }
+  
 }

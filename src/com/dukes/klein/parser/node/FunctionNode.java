@@ -26,6 +26,12 @@ public class FunctionNode extends AbstractSyntaxNode {
     return this.name;
   }
 
+  @Override
+  public String dataAsString() {
+    return "[Name: " + this.name.toString() +
+        ", Return Type: " + this.returnType.toString() + "]";
+  }
+  
   public String getReturnType(){return this.returnType.getValue();}
 
   @Override

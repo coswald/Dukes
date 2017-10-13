@@ -17,6 +17,13 @@ public class TerminalNode extends ExpressionNode {
     return this.value;
   }
 
+
+  @Override
+  public String dataAsString()
+  {
+    return this.toString();
+  }
+  
   @Override
   public String toString()
   {

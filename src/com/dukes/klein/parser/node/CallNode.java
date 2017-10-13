@@ -18,6 +18,14 @@ public class CallNode extends ExpressionNode {
 
   public String getIdentifier(){return this.identifier.getValue();}
 
+
+  @Override
+  public String dataAsString()
+  {
+    return "[" + identifier.toString() + "]";
+  }
+  
+  
   @Override
   public String toString() {
     return "Call: " + this.identifier + this.children[0];
