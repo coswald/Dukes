@@ -1,6 +1,10 @@
 # Duke's Klein Compiler
 
-Hello and welcome to Duke's Klein Compiler! This is a class project written for CS 4550: Translation of Programming Languages, provided at the University of Northern Iowa. Our task as a team is to develop a compiler for a language developed by our professor, Dr. Walllingford, called Klein. This compiler will take Klein code as input, and produce TM (developed by [Kenneth Louden](http://www.cs.sjsu.edu/faculty/louden/)) assembly as output. We chose Java as our implementing language, and an Object-Oriented design principle.
+Hello and welcome to Duke's Klein Compiler! This is a class project written for CS 4550: Translation of Programming Languages, provided
+at the University of Northern Iowa. Our task as a team is to develop a compiler for a language developed by our professor, Dr.
+Walllingford, called Klein. This compiler will take Klein code as input, and produce TM (developed by [Kenneth Louden]
+(http://www.cs.sjsu.edu/faculty/louden/)) assembly as output. We chose Java as our implementing language, and an Object-Oriented design
+principle.
 
 ## Getting Started
 
@@ -13,7 +17,10 @@ Once that's done, you are ready to look at, edit, and use the code!
 
 ### Prerequisites
 
-You will need a Java Development kit, at least 1.7 or higher. We're not going to delve into how to install that, as you can use Google to find that out yourself. You'll also need Git; again, we're not going to tell you how to install that either. In order to compile the source, you will need a Unix system such as Mac or Linux, or a version of make compatible with windows. The tests scripts are written for .sh executables, so they will not execute natively on Windows.
+You will need a Java Development kit, at least 1.7 or higher. We're not going to delve into how to install that, as you can use Google
+to find that out yourself. You'll also need Git; again, we're not going to tell you how to install that either. In order to compile the
+source, you will need a Unix system such as Mac or Linux, or a version of make compatible with windows. The tests scripts are written
+for .sh executables, so they will not execute natively on Windows.
 
 ### Installing
 
@@ -21,11 +28,13 @@ Once you clone the git repository, you should be able to compile the source code
 ```
 make
 ```
-However, as of now, this will only create a `.jar` file. In order to do more, see the section labeled `Running the tests`.
+However, as of now, this will only create a `.jar` file and the `kleinc` program. In order to generate other Klein compiler tools, see
+the section labeled `Running the tests`.
 
 ## Running the tests
 
-All of the compiler tools are provided within the `compiler-tools` directory. However, they will not run in their current directory. Luckily, running a special `make` command will move them to where you need them to be. Simply type:
+All of the compiler tools are provided within the `compiler-tools` directory. However, they will not run in their current directory.
+Luckily, running a special `make` command will move them to where you need them to be. Simply type:
 ```
 make tools
 ```
@@ -33,8 +42,13 @@ This will move the `kleins`, `kleinf`, `kleinv`, and `kleinp` into the project d
 
 ### Break down into end to end tests
 
-The first test is for the `KleinScanner` class. This test is found in `kleins.java`, as well as the `kleins` executable. This will generate tokens for a simple Klein program.
-The second test is for the `KleinParser` class. This tests is found in `kleinf.java`, as well as the `kleinf` executable. This will tests whether a klein file is a valid program.
+The first test is for the `KleinScanner` class. This test is found in `kleins.java`, as well as the `kleins` executable. This will
+generate tokens for a simple Klein program. For this test, we created `print-one.kln` and copied code provided to us by Dr. Wallingford.
+The second test is for the `KleinParser` class. This tests is found in `kleinf.java`, as well as the `kleinf` executable. This will
+tests whether a klein file is a valid program. For this test, we created illegal programs such as `vector-dot-product.kln`.
+The third test is also for the `KleinParser` class. This tests is found in `kleinf.java`, as well as the `kleinf` executable. This will
+tests whether a klein file is a valid program. For this test, we created a legal program called `pi.kln`, which will generate the amount
+of digits in pi specified.
 
 ## Deployment
 
@@ -46,12 +60,14 @@ Once you have run the make file, you are ready to go! Using the compiler tools, 
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the
+process for submitting pull requests to us.
 This code of conduct is borrowed without permission, and is subject to change by the current contributors.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/coswald/Dukes/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository]
+(https://github.com/coswald/Dukes/tags). 
 
 ## Authors
 
