@@ -10,21 +10,21 @@ import com.dukes.klein.parser.node.NullNode;
  * @since 0.2.0
  */
 public class FormalNode extends AbstractSyntaxNode {
-  private String identifier;
-  private String type;
+  private TerminalNode identifier;
+  private TerminalNode type;
   
-  public FormalNode(String identifier, String type) {
+  public FormalNode(TerminalNode identifier, TerminalNode type) {
     super(new NullNode());
     this.identifier = identifier;
     this.type = type;
   }
   
   public String getIdentifier() {
-    return this.identifier;
+    return this.identifier.getValue();
   }
   
   public String getType() {
-    return this.type;
+    return this.type.getValue();
   }
   
   @Override

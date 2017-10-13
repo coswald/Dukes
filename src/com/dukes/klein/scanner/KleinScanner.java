@@ -194,7 +194,7 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
     return c == ',' || c == ':';
   }
 
-  private static boolean isDigit(char c) {
+  public static boolean isDigit(char c) {
     return c >= 48 && c <= 57; //'0' through '9'
   }
 

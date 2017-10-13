@@ -9,10 +9,14 @@ import com.dukes.klein.parser.node.ExpressionNode;
  * @since 0.2.0
  */
 public class CallNode extends ExpressionNode {
-  private String identifier;
+  private TerminalNode identifier;
   
-  public CallNode(String identifier, ExpressionNode... exprNodes) {
+  public CallNode(TerminalNode identifier, ExpressionNode... exprNodes) {
     super(exprNodes);
     this.identifier = identifier;
   }
+
+  public String getIdentifier(){return this.identifier.getValue();}
+
+
 }

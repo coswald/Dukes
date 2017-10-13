@@ -16,10 +16,10 @@ public class DeclaredNode extends ExpressionNode {
   public static final int BOOLEAN_TYPE = 1;
   public static final int INTEGER_TYPE = 2;
   
-  private String declared;
+  private TerminalNode declared;
   private int type;
   
-  public DeclaredNode(String declared, int type)
+  public DeclaredNode(TerminalNode declared, int type)
                       throws IllegalArgumentException {
     super(new NullNode());
     
@@ -33,7 +33,7 @@ public class DeclaredNode extends ExpressionNode {
   }
   
   public String getDeclared() {
-    return this.declared;
+    return this.declared.getValue();
   }
   
   public boolean isType(int type) throws IllegalArgumentException {

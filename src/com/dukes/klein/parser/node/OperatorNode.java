@@ -9,11 +9,13 @@ import com.dukes.klein.parser.node.ExpressionNode;
  * @since 0.2.0
  */
 public class OperatorNode extends ExpressionNode {
-  private String operator;
+  private TerminalNode operator;
   
-  public OperatorNode(String operator, ExpressionNode leftNode,
+  public OperatorNode(TerminalNode operator, ExpressionNode leftNode,
                   ExpressionNode rightNode) {
     super(leftNode, rightNode);
     this.operator = operator;
   }
+
+  public String getOperator(){return this.operator.getValue();}
 }
