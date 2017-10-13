@@ -1,6 +1,7 @@
 package com.dukes.klein.parser;
 
 import com.dukes.klein.parser.node.AbstractSyntaxNode;
+import com.dukes.klein.parser.node.NullNode;
 import com.dukes.klein.scanner.AbstractScanner;
 import com.dukes.klein.scanner.AbstractToken;
 
@@ -13,9 +14,9 @@ public abstract class AbstractTableParser<E extends AbstractScanner<F>,
   protected ParseTable PARSETABLE;
 
   protected E scanner;
+  protected boolean hasParsed = false;
+  protected AbstractSyntaxNode ast = new NullNode();
   private boolean isValidProgram;
-  private boolean hasParsed = false;
-  private AbstractSyntaxNode ast;
 
   @Override
   public boolean isValid() {

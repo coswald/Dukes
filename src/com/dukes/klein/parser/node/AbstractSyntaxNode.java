@@ -4,12 +4,17 @@ import java.lang.Object;
 import java.lang.System;
 
 /**
- *
+ * <p>Represents an abstract syntax tree. This class is extended to allow the
+ * use of other programmers to make their own syntax.</p>
  * @author Coved W Oswald
  * @version 1.0
  * @since 0.2.0
  */
 public abstract class AbstractSyntaxNode extends Object {
+  
+  /**
+   *
+   */
   protected AbstractSyntaxNode[] children;
   
   protected AbstractSyntaxNode(AbstractSyntaxNode... children) {
