@@ -205,7 +205,6 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
   private static boolean isKeyword(String s) {
     switch (s) {
       case "function":
-      case "main":
       case "print":
       case "if":
       case "then":

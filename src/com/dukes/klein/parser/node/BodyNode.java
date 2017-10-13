@@ -27,4 +27,9 @@ public class BodyNode extends AbstractSyntaxNode {
     System.arraycopy(this.children, 1, ret, 0, ret.length);
     return ret;
   }
+
+  @Override
+  public String toString() {
+    return "Body: " + super.toString();
+  }
 }

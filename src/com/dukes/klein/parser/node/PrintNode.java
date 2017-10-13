@@ -13,4 +13,10 @@ public class PrintNode extends AbstractSyntaxNode {
   public PrintNode(ExpressionNode exprNode) {
     super(exprNode);
   }
+
+  @Override
+  public String toString()
+  {
+    return "Print: " + this.children[0].toString();
+  }
 }

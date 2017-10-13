@@ -12,4 +12,10 @@ public class ParameterizedExpressionNode extends ExpressionNode {
   public ParameterizedExpressionNode(ExpressionNode exprNode) {
     super(exprNode);
   }
+
+  @Override
+  public String toString()
+  {
+    return "Paramaterized: " + this.children[0].toString();
+  }
 }

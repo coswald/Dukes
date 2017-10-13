@@ -30,7 +30,7 @@ public abstract class AbstractSyntaxNode extends Object {
   {
     String s = "";
     for(int i = 0; i < this.children.length; i++) {
-      s += (children[i]).toString();
+      s += (children[i]).toString() + " ";
     }
     return s;
   }

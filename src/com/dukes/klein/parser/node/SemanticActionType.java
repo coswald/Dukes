@@ -32,30 +32,32 @@ public enum SemanticActionType {
     return id;
   }
 
-  public void run(Stack<AbstractSyntaxNode> semanticStack){
+  public AbstractSyntaxNode run(Stack<AbstractSyntaxNode> semanticStack){
     switch (this){
       case MAKE_PROGRAM:
-        SemanticActionType.makeProgram(semanticStack);
+        return SemanticActionType.makeProgram(semanticStack);
       case MAKE_FUNCTION:
-        SemanticActionType.makeFunction(semanticStack);
+        return SemanticActionType.makeFunction(semanticStack);
       case MAKE_BODY:
-        SemanticActionType.makeBody(semanticStack);
+        return SemanticActionType.makeBody(semanticStack);
       case MAKE_FORMAL:
-        SemanticActionType.makeFormal(semanticStack);
+        return SemanticActionType.makeFormal(semanticStack);
       case MAKE_PRINT:
-        SemanticActionType.makePrint(semanticStack);
+        return SemanticActionType.makePrint(semanticStack);
       case MAKE_DECLARED:
-        SemanticActionType.makeDeclared(semanticStack);
+        return SemanticActionType.makeDeclared(semanticStack);
       case MAKE_IF:
-        SemanticActionType.makeIF(semanticStack);
+        return SemanticActionType.makeIF(semanticStack);
       case MAKE_CALL:
-        SemanticActionType.makeCall(semanticStack);
+        return SemanticActionType.makeCall(semanticStack);
       case MAKE_PARAMETERIZED:
-        SemanticActionType.makeParameterized(semanticStack);
+        return SemanticActionType.makeParameterized(semanticStack);
       case MAKE_OPERATOR:
-        SemanticActionType.makeOperator(semanticStack);
+        return SemanticActionType.makeOperator(semanticStack);
       case MAKE_UNARYOPERATOR:
-        SemanticActionType.makeUnaryoperator(semanticStack);
+        return SemanticActionType.makeUnaryoperator(semanticStack);
+      default:
+        return new NullNode();
     }
   }
 
@@ -96,7 +98,8 @@ public enum SemanticActionType {
       Stack<AbstractSyntaxNode> semanticStack){
     ArrayList<AbstractSyntaxNode> nodes = new ArrayList<AbstractSyntaxNode>();
 
-    while(!(semanticStack.peek() instanceof FunctionNode)){
+    while(!semanticStack.empty() &&
+        semanticStack.peek() instanceof FunctionNode){
       nodes.add(semanticStack.pop());
     }
 
@@ -111,7 +114,8 @@ public enum SemanticActionType {
     TerminalNode type = (TerminalNode) semanticStack.pop();
     TerminalNode id;
 
-    while (!(semanticStack.peek() instanceof FormalNode)){
+    while (!semanticStack.empty() &&
+        semanticStack.peek() instanceof FormalNode){
       formals.add(semanticStack.pop());
     }
     id = (TerminalNode) semanticStack.pop();
@@ -123,7 +127,7 @@ public enum SemanticActionType {
     ArrayList<PrintNode> pn = new ArrayList<PrintNode>();
     ExpressionNode en = (ExpressionNode) semanticStack.pop();
 
-    while (semanticStack.peek() instanceof PrintNode){
+    while (!semanticStack.empty() && semanticStack.peek() instanceof PrintNode){
       pn.add((PrintNode) semanticStack.pop());
     }
 
@@ -139,7 +143,7 @@ public enum SemanticActionType {
 
   private static PrintNode makePrint(Stack<AbstractSyntaxNode> semanticStack){
     ExpressionNode en = (ExpressionNode) semanticStack.pop();
-
+    //semanticStack.pop();
     return new PrintNode(en);
   }
 
@@ -171,13 +175,12 @@ public enum SemanticActionType {
 
   private static CallNode makeCall(Stack<AbstractSyntaxNode> semanticStack){
     ArrayList<ExpressionNode> nodes = new ArrayList<ExpressionNode>();
-    TerminalNode id;
 
-    while (semanticStack.peek() instanceof ExpressionNode){
+    while (!semanticStack.empty() &&
+        !(semanticStack.peek() instanceof TerminalNode)){
       nodes.add((ExpressionNode) semanticStack.pop());
     }
-
-    id = (TerminalNode) semanticStack.pop();
+    TerminalNode id = (TerminalNode) semanticStack.pop();
 
     return new CallNode(id, helpExpressionNode(nodes.toArray()));
   }

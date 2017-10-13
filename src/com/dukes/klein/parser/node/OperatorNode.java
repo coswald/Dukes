@@ -18,4 +18,10 @@ public class OperatorNode extends ExpressionNode {
   }
 
   public String getOperator(){return this.operator.getValue();}
+
+  @Override
+  public String toString() {
+    return "Operator: " +
+        this.children[0] + this.getOperator() + this.children[1];
+  }
 }

@@ -17,4 +17,9 @@ public class TerminalNode extends ExpressionNode {
     return this.value;
   }
 
+  @Override
+  public String toString()
+  {
+    return this.getValue();
+  }
 }

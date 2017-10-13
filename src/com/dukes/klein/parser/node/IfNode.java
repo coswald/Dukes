@@ -13,4 +13,11 @@ public class IfNode extends ExpressionNode {
                 ExpressionNode elseExpression) {
     super(testExpression, ifExpression, elseExpression);
   }
+
+  @Override
+  public String toString() {
+    return "If: " +
+        this.children[0] + " Then " +
+        this.children[1] + " Else " + this.children[2];
+  }
 }

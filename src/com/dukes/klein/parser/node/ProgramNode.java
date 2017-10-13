@@ -13,4 +13,10 @@ public class ProgramNode extends AbstractSyntaxNode {
   public ProgramNode(FunctionNode... functions) {
     super(functions);
   }
+
+  @Override
+  public String toString()
+  {
+    return "Program: " + super.toString();
+  }
 }
