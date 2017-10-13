@@ -1,0 +1,28 @@
+(* algorithm devised from
+https://github.com/MrBlaise/learnpython/blob/master/Numbers/pi.py
+*)
+
+function main(digits : integer) : integer
+  calcPi(digits)
+
+function calcPi(limit : integer) : integer
+  calcPiHelper(0, limit, 1, 0, 1, 1, 3, 3)
+  
+function calcPiHelper(counter: integer, limit : integer, q : integer,
+                      r : integer, t : integer, k : integer, n : integer,
+                      l : integer) : integer
+  if not(counter = decimal + 1) then
+    if 4 * q + r - t < n * t then
+      reportDigit(n)
+    else
+      calcPiHelper(count, limit, q * k, (2 * q + r) * l, t * l, k + 1,
+                   (q * (7 * k) + 2 + (r * l)) / (t * l), l + 2)
+  else
+    1
+    
+
+function reportPi(counter: integer, limit : integer, q : integer, r : integer,
+                  t : integer, k : integer, n : integer, l : integer) : integer
+  print(n)
+  calcPiHelper(counter + 1, limit, q * 10, 10 * (r - n * t), t, k,
+               ((10 * (3 * q + r)) / t) - 10 * n, l)
