@@ -13,20 +13,18 @@ public class TerminalNode extends ExpressionNode {
     this.value = value;
   }
 
-  public String getValue(){
+  public String getValue() {
     return this.value;
   }
 
 
   @Override
-  public String dataAsString()
-  {
+  public String dataAsString() {
     return this.toString();
   }
-  
+
   @Override
-  public String toString()
-  {
+  public String toString() {
     return this.getValue();
   }
 }

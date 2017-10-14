@@ -26,9 +26,9 @@ public class KleinRule {
   }
 
   public void pushRule(Stack stack) {
-    if (this.exists) {
+    if(this.exists) {
       ListIterator ri = this.rule.listIterator(this.rule.size());
-      while (ri.hasPrevious()) {
+      while(ri.hasPrevious()) {
         stack.push(ri.previous());
       }
     }
@@ -41,11 +41,12 @@ public class KleinRule {
   @Override
   public String toString() {
     String s = "";
-    if (exists) {
-      for (Enum e : this.rule) {
+    if(exists) {
+      for(Enum e : this.rule) {
         s += e + " ";
       }
-    } else {
+    }
+    else {
       s = "Doesn't Exist!";
     }
     return s;

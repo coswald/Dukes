@@ -17,22 +17,17 @@
 */
 package com.dukes.tests;
 
+import com.dukes.klein.parser.KleinParser;
+import com.dukes.klein.parser.node.NullNode;
+import com.dukes.klein.scanner.KleinScanner;
+import com.dukes.lang.parser.node.AbstractSyntaxNode;
+import com.dukes.lang.scanner.FileInputter;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.Exception;
-import java.lang.Object;
-
-import com.dukes.klein.parser.node.AbstractSyntaxNode;
-import com.dukes.klein.parser.node.NullNode;
-import com.dukes.klein.parser.KleinParser;
-import com.dukes.klein.scanner.FileInputter;
-import com.dukes.klein.scanner.KleinScanner;
-import com.dukes.klein.scanner.KleinToken;
-import com.dukes.klein.scanner.KleinTokenType;
-//import com.dukes.klein.scanner.StringInputter;
 
 public class kleinp extends Object {
-  public static final String HELP       = "Usage: kleinf [-chw] [file]\n" +
+  public static final String HELP = "Usage: kleinf [-chw] [file]\n" +
       "Tests whether a klein program is has valid syntax generating it's AST." +
       "\n\nWith no file, this help message is generated.\n" +
       "  -c\t\tShows conditions\n" +
@@ -40,15 +35,9 @@ public class kleinp extends Object {
       "  -w\t\tShows the warranty.";
 
   public static final String CONDITIONS = "";
-  public static final String WARRANTY   = "";
+  public static final String WARRANTY = "";
 
   public static void main(String[] args) {
-    /*
-    String parse = "(* Hello world *) " +
-                   "function main() : integer\n  print(-1)\n  1";
-    StringInputter si = new StringInputter(parse);
-    KleinScanner ks = new KleinScanner(si);
-    */
     if(args.length <= 0) {
       System.out.println(HELP);
       System.exit(0);
@@ -85,27 +74,26 @@ public class kleinp extends Object {
       KleinParser kp = new KleinParser(ks);
       //System.out.println(kp.generateAST());
       AbstractSyntaxNode ast = kp.generateAST();
-      System.out.println(kleinp.prettyPrint(ast, 0));
-    }
-    catch(Exception fnfe) {
+      System.out.print(kleinp.prettyPrint(ast, 0));
+    } catch(Exception fnfe) {
       if(fnfe instanceof FileNotFoundException)
         System.err.println(fileName + " not found.\n" + HELP);
       else
         System.err.println(
             fnfe.getClass().getSimpleName().replaceAll("Exception", "Error") +
-            ": " + fnfe.getMessage());
+                ": " + fnfe.getMessage());
     }
   }
-  
+
   public static String prettyPrint(
       AbstractSyntaxNode ast, int indent) {
-    String ret = "\n";
+    String ret = "";
     for(int i = 0; i < indent; i++) {
       ret += "  ";
     }
     ret += (ast.getClass().getSimpleName()).replaceAll("Node", "") + " " +
-          ast.dataAsString() + "\n";
-          
+        ast.dataAsString() + "\n";
+
     if(ast.getChildren().length == 0) {
       if(ast instanceof NullNode) {
         return "";

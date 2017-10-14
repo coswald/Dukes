@@ -17,54 +17,40 @@
 */
 package com.dukes.tests;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.lang.Exception;
-import java.lang.Object;
-
-import com.dukes.klein.scanner.FileInputter;
 import com.dukes.klein.scanner.KleinScanner;
 import com.dukes.klein.scanner.KleinToken;
 import com.dukes.klein.scanner.KleinTokenType;
-//import com.dukes.klein.scanner.StringInputter;
+import com.dukes.lang.scanner.FileInputter;
 
-public class kleins extends Object
-{
-  public static final String HELP       = "Usage: kleins [-chw] [file]\n" + 
-                                          "Generates klein tokens from a " + 
-                                          "given file.\n\nWith no file, this" +
-                                          " help message is generated.\n" + 
-                                          "  -c\t\tShows conditions\n" +
-                                          "  -h\t\tShows this help " + 
-                                          "message\n  -w\t\tShows the" +
-                                          " warranty.";
-  
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+//import com.dukes.lang.scanner.StringInputter;
+
+public class kleins extends Object {
+  public static final String HELP = "Usage: kleins [-chw] [file]\n" +
+      "Generates klein tokens from a " +
+      "given file.\n\nWith no file, this" +
+      " help message is generated.\n" +
+      "  -c\t\tShows conditions\n" +
+      "  -h\t\tShows this help " +
+      "message\n  -w\t\tShows the" +
+      " warranty.";
+
   public static final String CONDITIONS = "";
-  public static final String WARRANTY   = "";
-  
-  public static void main(String[] args)
-  {
-    /*
-    String parse = "(* Hello world *) " +
-                   "function main() : integer\n  print(-1)\n  1";
-    StringInputter si = new StringInputter(parse);
-    KleinScanner ks = new KleinScanner(si);
-    */
-    if(args.length <= 0)
-    {
+  public static final String WARRANTY = "";
+
+  public static void main(String[] args) {
+    if(args.length <= 0) {
       System.out.println(HELP);
       System.exit(0);
     }
-    
+
     String fileName = null;
-    for(int i = 0; i < args.length; i++)
-    {
-      if(args[i].endsWith(".kln"))
-      {
+    for(int i = 0; i < args.length; i++) {
+      if(args[i].endsWith(".kln")) {
         if(fileName == null)
           fileName = args[i];
-        else
-        {
+        else {
           //System.out.println(fileName);
           //System.out.println(args[i]);
           System.out.println("Did not expect more than one Klein File!");
@@ -72,8 +58,7 @@ public class kleins extends Object
           System.exit(1);
         }
       }
-      else
-      {
+      else {
         if(args[i].contains("c"))
           System.out.println(CONDITIONS);
         if(args[i].contains("w"))
@@ -84,26 +69,23 @@ public class kleins extends Object
           System.out.println("Ignoring option: " + args);
       }
     }
-    
-    try
-    {
+
+    try {
       FileInputter fi = new FileInputter(new FileInputStream(fileName));
       KleinScanner ks = new KleinScanner(fi);
       KleinToken currentToken = null;
-      while(!(ks.peek()).isTokenType(KleinTokenType.EOF))
-      {
+      while(!(ks.peek()).isTokenType(KleinTokenType.EOF)) {
         System.out.println(ks.next());
       }
       System.out.println(ks.peek());
-    }
-    catch(Exception fnfe)
-    {
+    } catch(Exception fnfe) {
       if(fnfe instanceof FileNotFoundException)
         System.err.println(fileName + " not found.\n" + HELP);
       else
         System.err.println(
-      fnfe.getClass().getSimpleName().replaceAll("Exception", "Error") + ": " +
-                           fnfe.getMessage());
+            fnfe.getClass().getSimpleName().replaceAll(
+                "Exception", "Error") + ": " +
+                fnfe.getMessage());
     }
   }
 }

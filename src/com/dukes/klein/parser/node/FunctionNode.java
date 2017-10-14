@@ -1,12 +1,8 @@
 package com.dukes.klein.parser.node;
 
-import com.dukes.klein.parser.TerminalType;
-import com.dukes.klein.parser.node.AbstractSyntaxNode;
-import com.dukes.klein.parser.node.BodyNode;
-import com.dukes.klein.parser.node.FormalNode;
+import com.dukes.lang.parser.node.AbstractSyntaxNode;
 
 /**
- *
  * @author Coved W Oswald
  * @version 1.0
  * @since 0.2.0
@@ -21,7 +17,7 @@ public class FunctionNode extends AbstractSyntaxNode {
     this.name = name;
     this.returnType = returnType;
   }
-  
+
   public TerminalNode getName() {
     return this.name;
   }
@@ -31,8 +27,10 @@ public class FunctionNode extends AbstractSyntaxNode {
     return "[Name: " + this.name.toString() +
         ", Return Type: " + this.returnType.toString() + "]";
   }
-  
-  public String getReturnType(){return this.returnType.getValue();}
+
+  public String getReturnType() {
+    return this.returnType.getValue();
+  }
 
   @Override
   public String toString() {

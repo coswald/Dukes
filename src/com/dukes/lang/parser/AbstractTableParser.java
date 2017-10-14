@@ -1,12 +1,11 @@
-package com.dukes.klein.parser;
+package com.dukes.lang.parser;
 
-import com.dukes.klein.parser.node.AbstractSyntaxNode;
+import com.dukes.klein.parser.ParseTable;
+import com.dukes.klein.parser.Parser;
 import com.dukes.klein.parser.node.NullNode;
-import com.dukes.klein.scanner.AbstractScanner;
-import com.dukes.klein.scanner.AbstractToken;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.dukes.lang.parser.node.AbstractSyntaxNode;
+import com.dukes.lang.scanner.AbstractScanner;
+import com.dukes.lang.scanner.AbstractToken;
 
 public abstract class AbstractTableParser<E extends AbstractScanner<F>,
     F extends AbstractToken>
@@ -20,7 +19,7 @@ public abstract class AbstractTableParser<E extends AbstractScanner<F>,
 
   @Override
   public boolean isValid() {
-    if (!hasParsed) {
+    if(!hasParsed) {
       isValidProgram = this.generateAST() != null;
     }
     return isValidProgram;

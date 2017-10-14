@@ -18,6 +18,8 @@
 package com.dukes.klein.scanner;
 
 import com.dukes.klein.parser.TerminalType;
+import com.dukes.lang.scanner.AbstractToken;
+import com.dukes.lang.scanner.IllegalTokenTypeException;
 
 /**
  * <p>A {@code KleinToken} as defined by the language specification. This is
@@ -41,7 +43,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String> {
     boolean defined = (tokenValue != null);
     boolean throwException = false;
 
-    switch (tokenType) {
+    switch(tokenType) {
       case LEFTPARENTHESIS:
       case RIGHTPARENTHESIS:
       case STARTCOMMENT:
@@ -53,13 +55,14 @@ public class KleinToken extends AbstractToken<KleinTokenType, String> {
         throwException = !defined;
     }
 
-    if (throwException) {
-      if (defined) {
+    if(throwException) {
+      if(defined) {
         throw new IllegalTokenTypeException("The given token type, " +
             tokenType +
             " does not need the value " +
             tokenValue + "!");
-      } else {
+      }
+      else {
         throw new IllegalTokenTypeException("The given token type, " +
             tokenType + " is not given a " +
             "necessary value!");
@@ -82,7 +85,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String> {
   }
 
   public TerminalType getTerminal() {
-    switch (this.getTokenType()) {
+    switch(this.getTokenType()) {
       case BOOLEAN:
         return TerminalType.BOOLEAN;
       case INTEGER:
@@ -94,7 +97,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String> {
       case RIGHTPARENTHESIS:
         return TerminalType.RIGHTPAREN;
       case SEPARATOR:
-        switch (this.getTokenValue()) {
+        switch(this.getTokenValue()) {
           case ":":
             return TerminalType.COLON;
           case ",":
@@ -103,7 +106,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String> {
             //ERROR?
         }
       case KEYWORD:
-        switch (this.getTokenValue()) {
+        switch(this.getTokenValue()) {
           case "function":
             return TerminalType.FUNCTION;
           case "main":
@@ -120,7 +123,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String> {
             // ERROR?
         }
       case TYPE:
-        switch (this.getTokenValue()) {
+        switch(this.getTokenValue()) {
           case "boolean":
             return TerminalType.BOOLEAN_STR;
           case "integer":
@@ -129,7 +132,7 @@ public class KleinToken extends AbstractToken<KleinTokenType, String> {
             //ERROR?
         }
       case SYMBOL:
-        switch (this.getTokenValue()) {
+        switch(this.getTokenValue()) {
           //+, -, <, =, *, /, and, or, not
           case "+":
             return TerminalType.PLUS;

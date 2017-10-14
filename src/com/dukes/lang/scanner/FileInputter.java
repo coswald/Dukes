@@ -15,10 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  
 */
-package com.dukes.klein.scanner;
-
-import com.dukes.klein.scanner.Inputter;
-import com.dukes.klein.scanner.LexicalScanningException;
+package com.dukes.lang.scanner;
 
 import java.io.FileInputStream;
 import java.util.Scanner;
@@ -46,7 +43,7 @@ public class FileInputter extends Inputter {
   public FileInputter(FileInputStream fis) {
     this.scan = new Scanner(fis);
     this.scan.useDelimiter(""); //One char at a time.
-    if (this.hasNext()) {
+    if(this.hasNext()) {
       this.next();
     }
     this.nextChar = 0;
@@ -77,7 +74,7 @@ public class FileInputter extends Inputter {
    */
   @Override
   public char lookAhead() {
-    if (this.nextChar == 0)
+    if(this.nextChar == 0)
       this.nextChar = this.scan.next().charAt(0);
     return this.nextChar;
   }

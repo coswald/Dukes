@@ -15,11 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  
 */
-package com.dukes.klein.scanner;
-
-import java.lang.RuntimeException;
-import java.lang.String;
-import java.lang.Throwable;
+package com.dukes.lang.scanner;
 
 /**
  * <p>An exception that is thrown when there is a potential token present that

@@ -15,9 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  
 */
-package com.dukes.klein.scanner;
-
-import java.lang.Object;
+package com.dukes.lang.scanner;
 
 /**
  * Describes an object that iterates over an entire object for characters. Now,

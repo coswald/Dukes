@@ -1,6 +1,7 @@
 package com.dukes.klein.parser.node;
 
 import com.dukes.klein.scanner.KleinScanner;
+import com.dukes.lang.parser.node.AbstractSyntaxNode;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -32,8 +33,8 @@ public enum SemanticActionType {
     return id;
   }
 
-  public AbstractSyntaxNode run(Stack<AbstractSyntaxNode> semanticStack){
-    switch (this){
+  public AbstractSyntaxNode run(Stack<AbstractSyntaxNode> semanticStack) {
+    switch(this) {
       case MAKE_PROGRAM:
         return SemanticActionType.makeProgram(semanticStack);
       case MAKE_FUNCTION:
@@ -61,33 +62,33 @@ public enum SemanticActionType {
     }
   }
 
-  private static FunctionNode[] helpFunctionNode(Object[] nodes){
+  private static FunctionNode[] helpFunctionNode(Object[] nodes) {
     FunctionNode[] ret = new FunctionNode[nodes.length];
-    for (int i = 0; i < nodes.length; i++){
+    for(int i = 0; i < nodes.length; i++) {
       ret[i] = (FunctionNode) nodes[i];
     }
     return ret;
   }
 
-  private static FormalNode[] helpFormalNode(Object[] nodes){
+  private static FormalNode[] helpFormalNode(Object[] nodes) {
     FormalNode[] ret = new FormalNode[nodes.length];
-    for (int i = 0; i < nodes.length; i++){
+    for(int i = 0; i < nodes.length; i++) {
       ret[i] = (FormalNode) nodes[i];
     }
     return ret;
   }
 
-  private static PrintNode[] helpPrintNode(Object[] nodes){
+  private static PrintNode[] helpPrintNode(Object[] nodes) {
     PrintNode[] ret = new PrintNode[nodes.length];
-    for (int i = 0; i < nodes.length; i++){
+    for(int i = 0; i < nodes.length; i++) {
       ret[i] = (PrintNode) nodes[i];
     }
     return ret;
   }
 
-  private static ExpressionNode[] helpExpressionNode(Object[] nodes){
+  private static ExpressionNode[] helpExpressionNode(Object[] nodes) {
     ExpressionNode[] ret = new ExpressionNode[nodes.length];
-    for (int i = 0; i < nodes.length; i++){
+    for(int i = 0; i < nodes.length; i++) {
       ret[i] = (ExpressionNode) nodes[i];
     }
     return ret;
@@ -95,11 +96,11 @@ public enum SemanticActionType {
 
 
   private static ProgramNode makeProgram(
-      Stack<AbstractSyntaxNode> semanticStack){
+      Stack<AbstractSyntaxNode> semanticStack) {
     ArrayList<AbstractSyntaxNode> nodes = new ArrayList<AbstractSyntaxNode>();
 
     while(!semanticStack.empty() &&
-        semanticStack.peek() instanceof FunctionNode){
+        semanticStack.peek() instanceof FunctionNode) {
       nodes.add(semanticStack.pop());
     }
 
@@ -108,14 +109,14 @@ public enum SemanticActionType {
   }
 
   private static FunctionNode makeFunction(
-      Stack<AbstractSyntaxNode> semanticStack){
+      Stack<AbstractSyntaxNode> semanticStack) {
     ArrayList<AbstractSyntaxNode> formals = new ArrayList<AbstractSyntaxNode>();
     BodyNode bn = (BodyNode) semanticStack.pop();
     TerminalNode type = (TerminalNode) semanticStack.pop();
     TerminalNode id;
 
-    while (!semanticStack.empty() &&
-        semanticStack.peek() instanceof FormalNode){
+    while(!semanticStack.empty() &&
+        semanticStack.peek() instanceof FormalNode) {
       formals.add(semanticStack.pop());
     }
     id = (TerminalNode) semanticStack.pop();
@@ -123,39 +124,39 @@ public enum SemanticActionType {
     return new FunctionNode(id, type, bn, helpFormalNode(formals.toArray()));
   }
 
-  private static BodyNode makeBody(Stack<AbstractSyntaxNode> semanticStack){
+  private static BodyNode makeBody(Stack<AbstractSyntaxNode> semanticStack) {
     ArrayList<PrintNode> pn = new ArrayList<PrintNode>();
     ExpressionNode en = (ExpressionNode) semanticStack.pop();
 
-    while (!semanticStack.empty() && semanticStack.peek() instanceof PrintNode){
+    while(!semanticStack.empty() && semanticStack.peek() instanceof PrintNode) {
       pn.add((PrintNode) semanticStack.pop());
     }
 
     return new BodyNode(en, helpPrintNode(pn.toArray()));
   }
 
-  private static FormalNode makeFormal(Stack<AbstractSyntaxNode> semanticStack){
+  private static FormalNode makeFormal(Stack<AbstractSyntaxNode> semanticStack) {
     TerminalNode type = (TerminalNode) semanticStack.pop();
     TerminalNode id = (TerminalNode) semanticStack.pop();
 
     return new FormalNode(id, type);
   }
 
-  private static PrintNode makePrint(Stack<AbstractSyntaxNode> semanticStack){
+  private static PrintNode makePrint(Stack<AbstractSyntaxNode> semanticStack) {
     ExpressionNode en = (ExpressionNode) semanticStack.pop();
     //semanticStack.pop();
     return new PrintNode(en);
   }
 
   private static DeclaredNode makeDeclared(
-      Stack<AbstractSyntaxNode> semanticStack){
+      Stack<AbstractSyntaxNode> semanticStack) {
     TerminalNode tn = (TerminalNode) semanticStack.pop();
     int type;
 
-    if (KleinScanner.isDigit(tn.getValue().charAt(0))){
+    if(KleinScanner.isDigit(tn.getValue().charAt(0))) {
       type = DeclaredNode.INTEGER_TYPE;
     }
-    else if (tn.getValue().equals("true") || tn.getValue().equals("false")){
+    else if(tn.getValue().equals("true") || tn.getValue().equals("false")) {
       type = DeclaredNode.BOOLEAN_TYPE;
     }
     else {
@@ -165,7 +166,7 @@ public enum SemanticActionType {
     return new DeclaredNode(tn, type);
   }
 
-  private static IfNode makeIF(Stack<AbstractSyntaxNode> semanticStack){
+  private static IfNode makeIF(Stack<AbstractSyntaxNode> semanticStack) {
     ExpressionNode testExp = (ExpressionNode) semanticStack.pop();
     ExpressionNode ifExp = (ExpressionNode) semanticStack.pop();
     ExpressionNode elseExp = (ExpressionNode) semanticStack.pop();
@@ -173,11 +174,11 @@ public enum SemanticActionType {
     return new IfNode(testExp, ifExp, elseExp);
   }
 
-  private static CallNode makeCall(Stack<AbstractSyntaxNode> semanticStack){
+  private static CallNode makeCall(Stack<AbstractSyntaxNode> semanticStack) {
     ArrayList<ExpressionNode> nodes = new ArrayList<ExpressionNode>();
 
-    while (!semanticStack.empty() &&
-        !(semanticStack.peek() instanceof TerminalNode)){
+    while(!semanticStack.empty() &&
+        !(semanticStack.peek() instanceof TerminalNode)) {
       nodes.add((ExpressionNode) semanticStack.pop());
     }
     TerminalNode id = (TerminalNode) semanticStack.pop();
@@ -186,14 +187,14 @@ public enum SemanticActionType {
   }
 
   private static ParameterizedExpressionNode makeParameterized(
-      Stack<AbstractSyntaxNode> semanticStack){
+      Stack<AbstractSyntaxNode> semanticStack) {
 
     return new ParameterizedExpressionNode(
         (ExpressionNode) semanticStack.pop());
   }
 
   private static OperatorNode makeOperator(
-      Stack<AbstractSyntaxNode> semanticStack){
+      Stack<AbstractSyntaxNode> semanticStack) {
     ExpressionNode rs = (ExpressionNode) semanticStack.pop();
     TerminalNode op = (TerminalNode) semanticStack.pop();
     ExpressionNode ls = (ExpressionNode) semanticStack.pop();
@@ -202,7 +203,7 @@ public enum SemanticActionType {
   }
 
   private static OperatorNode makeUnaryoperator(
-      Stack<AbstractSyntaxNode> semanticStack){
+      Stack<AbstractSyntaxNode> semanticStack) {
     ExpressionNode rs = (ExpressionNode) semanticStack.pop();
     TerminalNode op = (TerminalNode) semanticStack.pop();
     NullNode ls = new NullNode();

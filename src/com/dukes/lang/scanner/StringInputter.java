@@ -15,9 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
-package com.dukes.klein.scanner;
-
-import java.lang.String;
+package com.dukes.lang.scanner;
 
 /**
  * <p>A {@code StringInputter} parses through a string as the program
@@ -44,7 +42,7 @@ public class StringInputter extends Inputter {
     //class. It will not read the last token unless there is whitespace at the
     //end of the file.
     this.position = 0;
-    if (this.hasNext())
+    if(this.hasNext())
       this.next(); //needed. Otherwise, it won't scan at all.
   }
 
@@ -53,11 +51,11 @@ public class StringInputter extends Inputter {
    *
    * @return {@code true} if the inputter has a character after this one,
    * {@code false} otherwise.
-   * @see com.dukes.klein.scanner.Inputter#hasNext()
+   * @see Inputter#hasNext()
    */
   @Override
   public boolean hasNext() {
-    if (position >= parse.length())
+    if(position >= parse.length())
       return false;
     return true;
   }

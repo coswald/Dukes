@@ -10,9 +10,9 @@ public class ParseTable {
 
   public ParseTable() {
     this.PARSETABLE = new ArrayList<ArrayList<KleinRule>>();
-    for (int i = 0; i <= 26; i++) {
+    for(int i = 0; i <= 26; i++) {
       this.PARSETABLE.add(new ArrayList<KleinRule>());
-      for (int j = 0; j <= 25; j++) {
+      for(int j = 0; j <= 25; j++) {
         this.PARSETABLE.get(i).add(new KleinRule());
       }
     }

@@ -1,22 +1,20 @@
-package com.dukes.klein.parser.node;
-
-import java.lang.Object;
-import java.lang.System;
+package com.dukes.lang.parser.node;
 
 /**
  * <p>Represents an abstract syntax tree. This class is extended to allow the
  * use of other programmers to make their own syntax.</p>
+ *
  * @author Coved W Oswald
  * @version 1.0
  * @since 0.2.0
  */
 public abstract class AbstractSyntaxNode extends Object {
-  
+
   /**
    *
    */
   protected AbstractSyntaxNode[] children;
-  
+
   protected AbstractSyntaxNode(AbstractSyntaxNode... children) {
     this.children = new AbstractSyntaxNode[children.length];
     for(int i = children.length - 1, j = 0; i >= 0; i--, j++) {
@@ -27,15 +25,13 @@ public abstract class AbstractSyntaxNode extends Object {
   public AbstractSyntaxNode[] getChildren() {
     return this.children;
   }
-  
-  public String dataAsString()
-  {
+
+  public String dataAsString() {
     return "";
   }
-  
+
   @Override
-  public String toString()
-  {
+  public String toString() {
     String s = "";
     for(int i = 0; i < this.children.length; i++) {
       s += (children[i]).toString() + " ";

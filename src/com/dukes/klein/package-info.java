@@ -19,6 +19,7 @@
 /**
  * Implements a parser for Klein. This is done through the {@code KleinScanner}
  * class.
+ *
  * @author Coved W Oswald
  * @version 1.0
  * @since 0.2.0

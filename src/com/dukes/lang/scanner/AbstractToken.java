@@ -15,11 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
 */
-package com.dukes.klein.scanner;
-
-import java.lang.Enum;
-import java.lang.Object;
-import java.lang.String;
+package com.dukes.lang.scanner;
 
 /**
  * <p>Represents a token within a given grammar. The {@code AbstractToken} can

@@ -15,11 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  
 */
-package com.dukes.klein.scanner;
-
-import java.lang.IllegalArgumentException;
-import java.lang.String;
-import java.lang.Throwable;
+package com.dukes.lang.scanner;
 
 //Writing this class felt like plagiarism...
 
@@ -30,8 +26,8 @@ import java.lang.Throwable;
  *
  * @author Coved W Oswald
  * @version 1.0
- * @since 0.1.0
  * @see java.lang.IllegalArgumentException
+ * @since 0.1.0
  */
 public class IllegalTokenTypeException extends IllegalArgumentException {
   /**

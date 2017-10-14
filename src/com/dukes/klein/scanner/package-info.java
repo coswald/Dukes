@@ -25,10 +25,11 @@
  * class, as it doesn't know how to read characters in a stream, but provides
  * the framework to do so. This is done so that we can reason about the
  * theoretics without the direct implementation</p>
- * <p>Exceptions provided include {@code IllegalTokenTypeException}, 
+ * <p>Exceptions provided include {@code IllegalTokenTypeException},
  * {@code LexicalScanningException}, and {@code LexicalAnalysisException}. Each
  * is explained in detail within their class. The main Scanner for the Klein
  * programming language is {@code KleinScanner}.</p>
+ *
  * @author Coved W Oswald
  * @version 1.0
  * @since 0.1.0

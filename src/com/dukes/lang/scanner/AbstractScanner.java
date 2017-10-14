@@ -15,9 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  
  */
-package com.dukes.klein.scanner;
-
-import java.lang.Object;
+package com.dukes.lang.scanner;
 
 /**
  * Represents an object that can produce {@code AbstractToken}s from a given
@@ -37,18 +35,19 @@ public abstract class AbstractScanner<E extends AbstractToken> extends Object {
   }
 
   public E peek() throws LexicalScanningException {
-    if (nextToken == null) {
+    if(nextToken == null) {
       this.nextToken = this.next();
     }
     return this.nextToken;
   }
 
   public E next() throws LexicalScanningException {
-    if (nextToken != null) {
+    if(nextToken != null) {
       E currentToken = this.nextToken;
       this.nextToken = null;
       return currentToken;
-    } else {
+    }
+    else {
       return this.generateNextToken();
     }
   }
