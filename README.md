@@ -2,8 +2,7 @@
 
 Hello and welcome to Duke's Klein Compiler! This is a class project written for CS 4550: Translation of Programming Languages, provided
 at the University of Northern Iowa. Our task as a team is to develop a compiler for a language developed by our professor, Dr.
-Walllingford, called Klein. This compiler will take Klein code as input, and produce TM (developed by [Kenneth Louden]
-(http://www.cs.sjsu.edu/faculty/louden/)) assembly as output. We chose Java as our implementing language, and an Object-Oriented design
+Walllingford, called Klein. This compiler will take Klein code as input, and produce TM (developed by [Kenneth Louden](http://www.cs.sjsu.edu/faculty/louden/)) assembly as output. We chose Java as our implementing language, and an Object-Oriented design
 principle.
 
 ## Getting Started
@@ -66,13 +65,12 @@ This code of conduct is borrowed without permission, and is subject to change by
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository]
-(https://github.com/coswald/Dukes/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/coswald/Dukes/tags). 
 
 ## Authors
 
 * **Coved W Oswald** - *Git Hoster* - [coswald](https://github.com/coswald/)
-* **Daniel Holland** - *Duke Captain* - [djholland](https://github.com/djholland/)
+* **Daniel Holland** - *Duke Captain* - [djolland](https://github.com/djolland/)
 * **Patrick Sedlacek** - *The Awesome* - [dunkhelExploit](https://github.com/dunkhelExploit/)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project. Dukes UNITE!
