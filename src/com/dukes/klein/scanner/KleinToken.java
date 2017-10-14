@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Coved W Oswald
+ * Copyright (C) 2017 Coved W Oswald, Daniel Holland, and Patrick Sedlacek
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ import com.dukes.klein.parser.TerminalType;
  *
  * @author Coved W Oswald
  * @version 1.0
- * @since 1.0
+ * @since 0.1.0
  */
 public class KleinToken extends AbstractToken<KleinTokenType, String> {
   /**

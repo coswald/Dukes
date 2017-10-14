@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Coved W Oswald
+ * Copyright (C) 2017 Coved W Oswald, Daniel Holland, and Patrick Sedlacek
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@
  * {@code LexicalScanningException}, and {@code LexicalAnalysisException}. Each
  * is explained in detail within their class. The main Scanner for the Klein
  * programming language is {@code KleinScanner}.</p>
- * @since 1.0
  * @author Coved W Oswald
  * @version 1.0
+ * @since 0.1.0
  */
 package com.dukes.klein.scanner;

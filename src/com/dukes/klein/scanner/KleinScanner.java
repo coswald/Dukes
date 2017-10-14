@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Coved W Oswald
+ * Copyright (C) 2017 Coved W Oswald, Daniel Holland, and Patrick Sedlacek
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,33 +17,64 @@
 */
 package com.dukes.klein.scanner;
 
+import com.dukes.klein.scanner.Inputter;
+import com.dukes.klein.scanner.KleinToken;
+import com.dukes.klein.scanner.KleinTokenType;
+import com.dukes.klein.scanner.LexicalAnalysisException;
+import com.dukes.klein.scanner.LexicalScanningException;
+
 import java.lang.Character;
 import java.lang.Long;
 import java.lang.String;
 
+/**
+ * Scans through an {@code Inputter} and generates {@code KleinToken}s.
+ * @author Coved W Oswald
+ * @author Daniel Holland
+ * @version 1.0
+ * @since 0.1.0
+ */
 public class KleinScanner extends AbstractScanner<KleinToken> {
+  
+  /**
+   * The max value that an integer can be in Klein. This corresponds to
+   * 2<sup>32</sup> - 1.
+   */
   public static final long MAX_VALUE = (1L << 32) - 1;
+  
+  /**
+   * The min value that an integer can be in Klein. This corresponds to
+   * 1 - 2<sup>32</sup>.
+   */
   public static final long MIN_VALUE = ~MAX_VALUE;
 
   private boolean inComment;
   private boolean atEOF = false;
 
+  /**
+   * Makes a {@code KleinScanner} object. This will call the super's
+   * constructor.
+   * @param input The {@code Inputter} class to use.
+   * @see com.dukes.klein.scanner.AbstractScanner
+   */
   public KleinScanner(Inputter input) {
     super(input);
     this.inComment = false;
   }
-
-  public boolean endOfFile() {
-    if (!this.input.hasNext()) {
-      if (this.inComment) {
-        throw new LexicalAnalysisException("Comment started but not ended!");
-      }
-      this.atEOF = true;
-      return true;
-    }
-    return false;
-  }
-
+  
+  /**
+   * Generates a {@code KleinToken} with the {@code KleinTokenType} found in
+   * the given spot in the {@code Inputter}. This, however, does not work if
+   * the {@code Inputter} finds an unknown character: this will throw an error.
+   * It also doesn't work if the EOF token is found without a comment ending,
+   * or if an integer is larger than the {@code MAX_VALUE}, or if an identifier
+   * is longer than 256.
+   * @return The next {@code KleinToken} in the {@code Inputter}.
+   * @throws LexicalScanningException If an invalid character is encountered.
+   * @throws LexicalAnalysisException If EOF is reached without a comment
+   *     ending, an integer is larger than the max value, or in an identifier
+   *     is longer than 256 characters.
+   */
   public KleinToken generateNextToken()
       throws LexicalScanningException, LexicalAnalysisException {
     this.skipWhiteSpace();
@@ -164,6 +195,24 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
           "' is invalid.");
     }
   }
+  
+  /**
+   * Determines whether a single character is a digit within Klein.
+   * @param c The character to test
+   * @return True if the character inputted is 0 through 9
+   */
+  public static boolean isDigit(char c) {
+    return c >= 48 && c <= 57; //'0' through '9'
+  }
+  
+  /**
+   * Determines whether a single character is a digit within Klein.
+   * @param c The character to test
+   * @return True fi the character is between 65 and 90 OR 97 and 122
+   */
+  public static boolean isLetter(char c) {
+    return (c >= 65 && c <= 90) || (c >= 97 && c <= 122);
+  }
 
   private static boolean isSymbol(char c) {
     switch (c) {
@@ -179,6 +228,17 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
     }
   }
 
+  private boolean endOfFile() {
+    if (!this.input.hasNext()) {
+      if (this.inComment) {
+        throw new LexicalAnalysisException("Comment started but not ended!");
+      }
+      this.atEOF = true;
+      return true;
+    }
+    return false;
+  }
+
   private static boolean isSymbol(String s) {
     switch (s) {
       case "and":
@@ -192,14 +252,6 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
 
   private static boolean isSeparator(char c) {
     return c == ',' || c == ':';
-  }
-
-  public static boolean isDigit(char c) {
-    return c >= 48 && c <= 57; //'0' through '9'
-  }
-
-  private static boolean isLetter(char c) {
-    return (c >= 65 && c <= 90) || (c >= 97 && c <= 122);
   }
 
   private static boolean isKeyword(String s) {

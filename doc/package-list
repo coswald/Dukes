@@ -1,2 +1,4 @@
+com.dukes.klein.parser
+com.dukes.klein.parser.node
 com.dukes.klein.scanner
 com.dukes.tests
