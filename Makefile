@@ -36,7 +36,7 @@ tools:
 
 docs: sources
 	@echo "Making docs..."
-	@$(JD) -sourcepath $(SRCDIR) -d doc -use -splitIndex -windowtitle $(WTITLE) -doctitle $(DTITLE) -header $(HEADER) -bottom $(BOTTOM) -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ @sources && make clean
+	@$(JD) -sourcepath $(SRCDIR) -d docs -use -splitIndex -windowtitle $(WTITLE) -doctitle $(DTITLE) -header $(HEADER) -bottom $(BOTTOM) -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ @sources && make clean
 
 clean:
 	@echo "Cleaning up"
