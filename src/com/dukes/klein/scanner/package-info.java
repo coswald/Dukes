@@ -17,18 +17,8 @@
  */
 
 /**
- * <p>Describes how to not only allow a scanner object to be created for Klien,
- * but also allows for an abstract interpretation of any scanner. This is
- * clear in classes such as {@code AbstractScanner} and {@code AbstractToken}.
- * This also allows for different implementations to have complete control over
- * how the scanning process is done. This is shown in the {@code Inputter}
- * class, as it doesn't know how to read characters in a stream, but provides
- * the framework to do so. This is done so that we can reason about the
- * theoretics without the direct implementation</p>
- * <p>Exceptions provided include {@code IllegalTokenTypeException},
- * {@code LexicalScanningException}, and {@code LexicalAnalysisException}. Each
- * is explained in detail within their class. The main Scanner for the Klein
- * programming language is {@code KleinScanner}.</p>
+ * <p>Describes how a scanner object to be created for Klien. The main Scanner
+ * for the Klein programming language is {@code KleinScanner}.</p>
  *
  * @author Coved W Oswald
  * @version 1.0

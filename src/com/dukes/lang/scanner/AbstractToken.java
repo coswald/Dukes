@@ -39,17 +39,16 @@ public abstract class AbstractToken<E extends Enum<E>, V> extends Object {
 
   /**
    * This is needed for an empty constructor to be present. This is made
-   * protected, as sublcasses don't inherit constructors.
+   * protected, as subclasses don't inherit constructors.
    */
   protected AbstractToken() {
   }//why the hell this has to be here I'll never know
 
   /**
    * Constructs an {@code AbstractToken} with the token type describing what
-   * kind of token it is, while also describing the value of that token. <b>
-   * Note: This does not actually construct an object</b>. This and any other
-   * constructor in this class is used as a means to help subclasses conform to
-   * the standards of a Token.
+   * kind of token it is, while also describing the value of that token. This
+   * and any other constructor in this class is used as a means to help
+   * subclasses conform to the standards of a {@code Token}.
    *
    * @param tokenType  The type of token, as a value from an {@code Enum}
    * @param tokenValue The value of a token.
@@ -99,7 +98,7 @@ public abstract class AbstractToken<E extends Enum<E>, V> extends Object {
 
   /**
    * Shows the programmer a {@code String} representation of the
-   * {@code AbstractToken}. This is the tokentype as a string, followed by a
+   * {@code AbstractToken}. This is the token type as a string, followed by a
    * tab and then the token value. If the token value is null, this method will
    * exclude the tab and the token value.
    *

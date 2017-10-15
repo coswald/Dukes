@@ -23,7 +23,7 @@ package com.dukes.klein.scanner;
  * interpreted it as follows:
  * <table width="100%">
  * <tr><th>Token Types</th><th>Token Values</th></tr>
- * <tr><td>Keywords</td><td>function, main, print, if then, else</td></tr>
+ * <tr><td>Keywords</td><td>function, main, print, if, then, else</td></tr>
  * <tr><td>Identifiers</td><td>Name_Of_a_Function</td></tr>
  * <tr><td>Types</td><td>integer, boolean</td></tr>
  * <tr><td>Symbol</td><td>+, -, &lt, =, *, /, and, or, not</td></tr>
@@ -42,27 +42,86 @@ package com.dukes.klein.scanner;
  * @since 0.1.0
  */
 public enum KleinTokenType {
+  /**
+   * The start of a comment. The only valid value is '(*'.
+   */
   STARTCOMMENT(0),
+  
+  /**
+   * The end of a comment. The only valid value is '*)'.
+   */
   ENDCOMMENT(1),
+  
+  /**
+   * The end of a file. The only valid value is really nothing, but for theory
+   * purposes we will say '$'.
+   */
   EOF(2),
+  
+  /**
+   * Any keyword in Klein. This can be, exactly: 'function', 'main', 'print',
+   * 'if', 'then', and 'else'.
+   */
   KEYWORD(3),
+  
+  /**
+   * Any identifier in Klein. This can be any alpha character followed by any
+   * alhpa-numeric character or an underscore that does not exceed a length of
+   * 256.
+   */
   IDENTIFIER(4),
+  
+  /**
+   * The left parenthesis. The only valid value is '('.
+   */
   LEFTPARENTHESIS(5),
+  
+  /**
+   * The right parenthesis. The only valid value is ')'.
+   */
   RIGHTPARENTHESIS(6),
+  
+  /**
+   * A seperator in Klein. The two valid values are ',' and ':'.
+   */
   SEPARATOR(7),
+  
+  /**
+   * A type in klein. The two valid values are 'integer' and 'boolean'.
+   */
   TYPE(8),
+  
+  /**
+   * A symbol in Klein. This can be, exactly: '+', '-', '&lt', '=', '*', '/', 
+   * 'and', 'or', and 'not'.
+   */
   SYMBOL(9),
+  
+  /**
+   * An integer in Klein.
+   */
   INTEGER(10),
+  
+  /**
+   * A boolean in Klein. The two valid values are 'true' and 'false'.
+   */
   BOOLEAN(11);
 
   private final int id;
-
+  
+  /**
+   * Constructs a {@code KleinTokenType} with the given Id.
+   * @param id The unique identifier.
+   */
   KleinTokenType(int id) {
     this.id = id;
   }
-
+  
+  /**
+   * Returns this token's unique identifier.
+   * @return The unique identifier this token holds.
+   */
   public int getId() {
     return id;
   }
-
 }

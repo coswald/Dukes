@@ -78,9 +78,10 @@ public class KleinToken extends AbstractToken<KleinTokenType, String> {
    * {@code null}, and will throw an error if not handled correctly.
    *
    * @param tokenType The token type.
+   * @throws IllegalTokenTypeException If the token type given needs a value.
    * @see #KleinToken(KleinTokenType, String)
    */
-  public KleinToken(KleinTokenType tokenType) {
+  public KleinToken(KleinTokenType tokenType) throws IllegalTokenTypeException{
     this(tokenType, null);
   }
 

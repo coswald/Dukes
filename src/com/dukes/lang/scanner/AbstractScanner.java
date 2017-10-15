@@ -27,21 +27,46 @@ package com.dukes.lang.scanner;
  */
 public abstract class AbstractScanner<E extends AbstractToken> extends Object {
   private E nextToken;
+  
+  /**
+   * The {@code Inputter} class used for looking through a program.
+   */
   protected Inputter input;
-
-  public AbstractScanner(Inputter input) {
+  
+  /**
+   * Constructs a scanner with the given Inputter.
+   * @param input The program inputter.
+   */
+  protected AbstractScanner(Inputter input) {
     this.input = input;
     this.nextToken = null;
   }
-
-  public E peek() throws LexicalScanningException {
+  
+  /**
+   * Looks at the next token that would be generated. This does not consume the
+   * next token, but just looks at it.
+   * @return The {@code AbstractToken} that would be generated after the
+   *     current one.
+   * @throws LexicalAnalysisException If {@link #generateNextToken()} throws an
+   *     exception.
+   * @throws LexicalScanningException If an invalid character was seen.
+   */
+  public E peek() throws LexicalAnalysisException, LexicalScanningException {
     if(nextToken == null) {
       this.nextToken = this.next();
     }
     return this.nextToken;
   }
-
-  public E next() throws LexicalScanningException {
+  
+  /**
+   * Goes to the next token. This will consume the current token, moving to
+   * the next value as predicated by {@link #generateNextToken()}.
+   * @return The {@code AbstractToken} that is generated.
+   * @throws LexicalAnalysisException If {@link #generateNextToken()} throws an
+   *     exception.
+   * @throws LexicalScanningException If an invalid character was seen.
+   */
+  public E next() throws LexicalAnalysisException, LexicalScanningException {
     if(nextToken != null) {
       E currentToken = this.nextToken;
       this.nextToken = null;
@@ -51,7 +76,18 @@ public abstract class AbstractScanner<E extends AbstractToken> extends Object {
       return this.generateNextToken();
     }
   }
-
-  public abstract E generateNextToken()
-      throws LexicalScanningException;
+  
+  /**
+   * Generates the next token. This consumes the characters found in the
+   * {@code Inputter} and generates the valid token seen by the characters.
+   * This is defined by the language specification.
+   * @return The generated next token.
+   * @throws LexicalAnalysisException If there was a valid character seen, but
+   *     did not fit the language specification. An example might be in a
+   *     language that says there is a range of numbers, whether a comment was
+   *     ended, etc.
+   * @throws LexicalScanningException If an invalid character was seen.
+   */
+  public abstract E generateNextToken() throws LexicalAnalysisException, 
+      LexicalScanningException;
 }

@@ -70,8 +70,8 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
    * @return The next {@code KleinToken} in the {@code Inputter}.
    * @throws LexicalScanningException If an invalid character is encountered.
    * @throws LexicalAnalysisException If EOF is reached without a comment
-   *                                  ending, an integer is larger than the max value, or in an identifier
-   *                                  is longer than 256 characters.
+   *     ending, an integer is larger than the max value, or in an identifier
+   *     is longer than 256 characters.
    */
   public KleinToken generateNextToken()
       throws LexicalScanningException, LexicalAnalysisException {
@@ -141,7 +141,8 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
         return new KleinToken(KleinTokenType.EOF);
       }
       this.input.next();
-      return new KleinToken(KleinTokenType.SYMBOL, Character.toString(current));
+      return new KleinToken(KleinTokenType.SYMBOL,
+          Character.toString(current));
     }
     //Seperator
     else if(KleinScanner.isSeparator(current)) {
