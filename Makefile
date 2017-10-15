@@ -5,7 +5,7 @@ JC=javac
 #The flags to create a jar file
 JFLAGS=cf
 #The flags for compiling source
-JCFLAGS=-d bin -Xlint:none 
+JCFLAGS=-d bin -Xlint:none
 
 #The following variables are used for documentation generation
 #see http://docs.oracle.com/javase/7/docs/technotes/tools/solaris/javadoc.html
