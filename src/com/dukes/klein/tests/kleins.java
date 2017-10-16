@@ -26,12 +26,27 @@ import com.dukes.lang.tests.Test;
 
 import java.io.FileInputStream;
 
+/**
+ * Makes a test that runs the scanner on a file.
+ * @author Coved W Oswald
+ * @version 1.0
+ * @since 0.1.0
+ */
 public class kleins extends Test {
+  
+  /**
+   * Constructs a scanner test with the arguments given.
+   * @param args The argument.
+   */
   public kleins(String... args) {
     super("Usage: kleins [-chw] [file]\nGenerates klein tokens from a given " +
       "file.", args);
   }
   
+  /**
+   * Runs the scanner over a file.
+   * @throws Exception When the scanner throws an exception.
+   */
   @Override
   public void doRun() throws Exception {
     FileInputter fi = new FileInputter(new FileInputStream(fileName));
@@ -43,6 +58,10 @@ public class kleins extends Test {
     System.out.println(ks.peek());
   }
   
+  /**
+   * Main function.
+   * @param args The arguments.
+   */
   public static void main(String... args) {
     kleins run = new kleins(args);
     Thread t = new Thread(run);

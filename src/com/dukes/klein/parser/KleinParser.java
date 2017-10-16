@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2017 Coved W Oswald, Daniel Holland, and Patrick Sedlacek
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ */
 package com.dukes.klein.parser;
 
 import com.dukes.klein.parser.node.SemanticActionType;
@@ -17,17 +34,12 @@ import java.util.Stack;
 public class KleinParser
     extends AbstractTableParser<KleinScanner, KleinToken, KleinParseTable> {
 
-  private Stack<Enum> stack;
-  private Stack<AbstractSyntaxNode> semanticStack;
-
   public KleinParser(KleinScanner ks) {
     super(new KleinParseTable(), ks);
-    this.stack = new Stack<Enum>();
-    this.semanticStack = new Stack<AbstractSyntaxNode>();
   }
 
-  private AbstractSyntaxNode parseProgram() {
-    this.hasParsed = true;
+  @Override
+  protected AbstractSyntaxNode parseProgram() {
     Enum stackTop = null;
     KleinToken scannerToken;
     KleinRule kRule;
@@ -95,18 +107,7 @@ public class KleinParser
       throw new ParsingException("Extra Tokens are in semantic stack: " +
           this.semanticStack.toString() + "!");
     }
-    this.ast = this.semanticStack.pop();
-
-    return ast;
+    return this.semanticStack.pop();
   }
 
-  @Override
-  public AbstractSyntaxNode generateAST() {
-    if(this.ast instanceof NullNode && !this.hasParsed) {
-      return this.parseProgram();
-    }
-    else {
-      return this.ast;
-    }
-  }
 }

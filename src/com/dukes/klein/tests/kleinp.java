@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
+ */
 package com.dukes.klein.tests;
 
 import com.dukes.klein.parser.KleinParser;
@@ -26,44 +26,41 @@ import com.dukes.lang.tests.Test;
 
 import java.io.FileInputStream;
 
+/**
+ * Runs the klein parser, and prints the AST that is generated.
+ * @author Coved W Oswald
+ * @version 1.0
+ * @since 0.3.0
+ */
 public class kleinp extends Test {
+  
+  /**
+   * Constructs the test with the given arguments.
+   * @param args The arguments.
+   */
   public kleinp(String... args) {
       super("Usage: kleinp [-chw] [file]\n" +
       "Generates a program's Abstract syntax tree.",
       args);
   }
   
+  /**
+   * Runs the test by generating an AST based off of the file given.
+   * @throws Exception If the parsing throws and exception.
+   */
   @Override
   public void doRun() throws Exception {
     FileInputter fi = new FileInputter(new FileInputStream(fileName));
     KleinScanner ks = new KleinScanner(fi);
     KleinParser kp = new KleinParser(ks);
     AbstractSyntaxNode ast = kp.generateAST();
-    System.out.print(kleinp.prettyPrint(ast, 0));
-  }
-
-  public static String prettyPrint(AbstractSyntaxNode ast, int indent) {
-    String ret = "";
-    for(int i = 0; i < indent; i++) {
-      ret += "  ";
-    }
-    ret += (ast.getClass().getSimpleName()).replaceAll("Node", "") + " " +
-        ast.dataAsString() + "\n";
-
-    if(ast.getChildren().length == 0) {
-      if(ast instanceof NullNode) {
-        return "";
-      }
-      return ret;
-    }
-    else {
-      for(int i = 0; i < ast.getChildren().length; i++) {
-        ret += kleinp.prettyPrint(ast.getChildren()[i], indent + 1);
-      }
-      return ret;
-    }
+    System.out.print(ast.toString());
   }
   
+  /**
+   * Main function.
+   * @param args The arguments.
+   */
   public static void main(String... args) {
     kleinp run = new kleinp(args);
     Thread t = new Thread(run);

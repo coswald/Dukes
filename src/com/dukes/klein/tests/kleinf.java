@@ -24,12 +24,27 @@ import com.dukes.lang.tests.Test;
 
 import java.io.FileInputStream;
 
+/**
+ * Defines a test for the parser. The test will say, "Valid Proram" if a
+ * program is valid, or throw an error and print it otherwise.
+ * @author Coved W Oswald
+ * @version 1.0
+ * @since 0.2.0
+ */
 public class kleinf extends Test {
+  /**
+   * Constructs the test with the given arguments.
+   * @param args The arguments.
+   */
   public kleinf(String... args) {
     super("Usage: kleinf [-chw] [file]\nTests whether a klein program is " +
       "has valid syntax.", args);
   }
 
+  /**
+   * Runs the parser over the file.
+   * @throws Exception If the parser throws an exception.
+   */
   @Override
   public void doRun() throws Exception {
     FileInputter fi = new FileInputter(new FileInputStream(fileName));
@@ -38,6 +53,10 @@ public class kleinf extends Test {
     System.out.println((kp.isValid() ? "Valid Program" : "Invalid Program"));
   }
   
+  /**
+   * Main function.
+   * @param args The arguments.
+   */
   public static void main(String... args) {
     kleinf run = new kleinf(args);
     Thread t = new Thread(run);

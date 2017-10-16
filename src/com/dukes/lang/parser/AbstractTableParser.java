@@ -17,11 +17,13 @@
  */
 package com.dukes.lang.parser;
 
-import com.dukes.lang.parser.node.NullNode;
 import com.dukes.lang.parser.AbstractParseTable;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
+import com.dukes.lang.parser.node.NullNode;
 import com.dukes.lang.scanner.AbstractScanner;
 import com.dukes.lang.scanner.AbstractToken;
+
+import java.util.Stack;
 
 /**
  * Represents an parser that works on a table. This is not in stark constrast
@@ -44,17 +46,60 @@ public abstract class AbstractTableParser<E extends AbstractScanner<F>,
    * reassigned after it is created.
    */
   protected final G PARSETABLE;
-  protected E scanner;
-  protected boolean hasParsed = false;
-  protected AbstractSyntaxNode ast = new NullNode();
   
+  /**
+   * The scanner that the parser uses to go through the program.
+   */
+  protected E scanner;
+  
+  /**
+   * The stack that the non-terminals, terminals, and semantic actions get put
+   * onto. Basically, the program gets put onto this stack.
+   */
+  protected Stack<Enum> stack;
+  
+  /**
+   * The stack that the semantic values get pushed to.
+   */
+  protected Stack<AbstractSyntaxNode> semanticStack;
+
+  private boolean hasParsed = false;
+  private AbstractSyntaxNode ast = new NullNode();
   private boolean isValidProgram;
   
+  /**
+   * Constructs the table parser with the given parse table and the scanner
+   * given.
+   * @param apt The abstract parse table.
+   * @param scanner The scanner.
+   */
   protected AbstractTableParser(G apt, E scanner) {
     this.PARSETABLE = apt;
     this.scanner = scanner;
+    this.stack = new Stack<Enum>();
+    this.semanticStack = new Stack<AbstractSyntaxNode>();
   }
   
+  /**
+   * Parses the table and creates an abstract syntax tree. This is
+   * implementation dependend, but should be done in an LL(1) fashion if
+   * possible. It is unclear to us if our understanding of a table driven
+   * parser would work for LL(2) or any other types of parsers. Therefore, this
+   * method would allow the programmer to expirement with a language grammar
+   * and try it out! <b>NOTE: This method should not be called more than
+   * once.</b>
+   * @return The program tree.
+   */
+  protected abstract AbstractSyntaxNode parseProgram();
+  
+  /**
+   * Returns whether a given program parses correctly or not. This does not
+   * mean that the program is completely <b>correct</b>; however, it does mean
+   * a valid syntax tree can be generated. This handles the fact that the
+   * {@link #parseProgram()} can't be called more than once.
+   * @return {@code true} if the program generates an ast, {@code false}
+   *     otherwise.
+   */
   @Override
   public boolean isValid() {
     if(!hasParsed) {
@@ -62,7 +107,23 @@ public abstract class AbstractTableParser<E extends AbstractScanner<F>,
     }
     return isValidProgram;
   }
-
+  
+  /**
+   * Generates the ast for the program. This handles the fact that the 
+   * {@link #parseProgram()} cannot be called more than once.
+   * @return The program's AST.
+   */
   @Override
-  public abstract AbstractSyntaxNode generateAST();
+  public AbstractSyntaxNode generateAST() {
+    if(this.ast instanceof NullNode && !this.hasParsed) {
+      ast = this.parseProgram();
+      if(!(ast instanceof NullNode)) {
+        this.hasParsed = true;
+      }
+      return this.ast;
+    }
+    else {
+      return this.ast;
+    }
+  }
 }

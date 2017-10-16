@@ -14,18 +14,47 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.  
-*/
+ */
 package com.dukes.lang.tests;
 
 import java.io.FileNotFoundException;
 
+/**
+ * Describes a generic testing class to be overriden and modified.
+ * @author Coved W Oswald
+ * @version 1.0
+ * @since 0.3.0
+ */
 public abstract class Test extends Object implements Runnable
 {
+  /**
+   * The GNU Intro string.
+   */
   public final String INTRO;
+  
+  /**
+   * The help message to be printed.
+   */
   public final String HELP;
+  
+  /**
+   * The GNU Conditions string.
+   */
   public static final String CONDITIONS = 
-      "Everyone is permitted to copy and distribute verbatim copies of this " +
-      "license\ndocument, but changing it is not allowed.";
+      "You may convey verbatim copies of the Program's source code as you " + 
+      "receive it,\nin any medium, provided that you conspicuously and " +
+      "appropriately publish on\neach copy an appropriate copyright notice; " +
+      "keep intact all notices stating that\nthis License and any " +
+      "non-permissive terms added in accord with section 7 apply\nto the " +
+      "code; keep intact all notices of the absence of any warranty; and " +
+      "give\nall recipients a copy of this License along with the " +
+      "Program.\n\nYou may charge any price or no price for each copy that " +
+      "you convey, and you may\n offer support or warranty protection for a " +
+      "fee.\n";
+  
+  /**
+   * The GNU Warranty string.
+   */
   public static final String WARRANTY =
       "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY " + 
       "APPLICABLE\nLAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE " +
@@ -37,11 +66,20 @@ public abstract class Test extends Object implements Runnable
       "THE PROGRAM PROVE\nDEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY " +
       "SERVICING, REPAIR OR\nCORRECTION.";
   
+  /**
+   * The file to work on.
+   */
+  protected String fileName;
+  
   private String[] args;
   private int exitStatus = -1;
   
-  protected String fileName;
   
+  /**
+   * Makes a test program with the given help message and the arguments.
+   * @param help The help message.
+   * @param args The args to pass on.
+   */
   protected Test(String help, String... args) {
     this.INTRO = this.getClass().getSimpleName() + " Copyright (C) 2017 " + 
         "Coved W Oswald, Dan Holland, and Patrick Sedlacek\n" +
@@ -56,6 +94,11 @@ public abstract class Test extends Object implements Runnable
     this.args = args;
   }
   
+  /**
+   * Runs the program. This will parse through the arguments and then call the
+   * {@link #doRun()} method. An exit code is generated at the end.
+   */
+  @Override
   public void run() {
     if(this.args.length <= 0) {
       System.out.println(HELP);
@@ -106,9 +149,17 @@ public abstract class Test extends Object implements Runnable
     }
   }
   
+  /**
+   * Gets the exit status of the program. If the program has not yet run, the
+   * exit status is -1.
+   * @return The exit status of the program.
+   */
   public int getExitStatus() {
     return this.exitStatus;
   }
-
+  
+  /**
+   * Actaully does the test.
+   */
   public abstract void doRun() throws Exception;
 }
