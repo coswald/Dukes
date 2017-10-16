@@ -26,6 +26,7 @@
  * {@code InvalidStackValueException}. Each is explain in detail within their
  * class.  
  * @author Coved W Oswald
+ * @author Dan Holland
  * @version 2.0
  * @since 0.2.0
  */

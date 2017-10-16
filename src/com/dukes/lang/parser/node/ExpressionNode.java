@@ -1,6 +1,4 @@
-package com.dukes.klein.parser.node;
-
-import com.dukes.lang.parser.node.AbstractSyntaxNode;
+package com.dukes.lang.parser.node;
 
 /**
  * @author Coved W Oswald

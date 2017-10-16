@@ -2,6 +2,8 @@ package com.dukes.klein.parser.node;
 
 import com.dukes.klein.scanner.KleinScanner;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
+import com.dukes.lang.parser.node.ExpressionNode;
+import com.dukes.lang.parser.node.NullNode;
 
 import java.util.ArrayList;
 import java.util.Stack;

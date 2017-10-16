@@ -5,4 +5,4 @@
  * @version 1.0
  * @since 0.1.0
  */
-package com.dukes.kleins.tests;
+package com.dukes.klein.tests;

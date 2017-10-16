@@ -18,9 +18,9 @@
 package com.dukes.klein.tests;
 
 import com.dukes.klein.parser.KleinParser;
-import com.dukes.klein.parser.node.NullNode;
 import com.dukes.klein.scanner.KleinScanner;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
+import com.dukes.lang.parser.node.NullNode;
 import com.dukes.lang.scanner.FileInputter;
 import com.dukes.lang.tests.Test;
 
@@ -28,8 +28,8 @@ import java.io.FileInputStream;
 
 public class kleinp extends Test {
   public kleinp(String... args) {
-      super("Usage: kleinf [-chw] [file]\n" +
-      "Tests whether a klein program is has valid syntax generating it's AST.",
+      super("Usage: kleinp [-chw] [file]\n" +
+      "Generates a program's Abstract syntax tree.",
       args);
   }
   

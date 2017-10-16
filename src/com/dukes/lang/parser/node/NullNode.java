@@ -1,4 +1,4 @@
-package com.dukes.klein.parser.node;
+package com.dukes.lang.parser.node;
 
 /**
  * @author Coved W Oswald

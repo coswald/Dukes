@@ -17,16 +17,32 @@
  */
 package com.dukes.lang.parser;
 
-import com.dukes.klein.parser.node.NullNode;
+import com.dukes.lang.parser.node.NullNode;
 import com.dukes.lang.parser.AbstractParseTable;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.scanner.AbstractScanner;
 import com.dukes.lang.scanner.AbstractToken;
 
+/**
+ * Represents an parser that works on a table. This is not in stark constrast
+ * to a recursive decent algorithm, as this type uses a stack to construct the
+ * necessary AST. However, this algorithm works by manually containing a stack
+ * and pushing values to it as a {@code AbstractScanner} works through a
+ * program.
+ * 
+ * @author Coved W Oswald
+ * @version 1.0
+ * @since 0.2.0
+ */
 public abstract class AbstractTableParser<E extends AbstractScanner<F>,
     F extends AbstractToken, G extends AbstractParseTable> extends Object
     implements Parser {
   
+  /**
+   * The parse table for the language grammar. This is constructed using the
+   * first and follow sets of a grammar, and is final as it should not be
+   * reassigned after it is created.
+   */
   protected final G PARSETABLE;
   protected E scanner;
   protected boolean hasParsed = false;

@@ -1,7 +1,8 @@
 com.dukes.klein.parser
 com.dukes.klein.parser.node
 com.dukes.klein.scanner
+com.dukes.klein.tests
 com.dukes.lang.parser
 com.dukes.lang.parser.node
 com.dukes.lang.scanner
-com.dukes.tests
+com.dukes.lang.tests

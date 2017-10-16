@@ -1,5 +1,7 @@
 package com.dukes.klein.parser.node;
 
+import com.dukes.lang.parser.node.ExpressionNode;
+
 /**
  * @author Coved W Oswald
  * @version 1.0
