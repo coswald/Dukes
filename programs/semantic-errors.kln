@@ -1,0 +1,28 @@
+(* semantic-checker.kln by The Dukes *)
+(* Exemplifies all the semantic errors that can be checked by our klein compiler *)
+
+function main ( ) : integer
+	incorrectNumberOfArguments(5, 5)
+	wrongArgumentType(5)
+	missingVariable(5)
+	wrongOperands(true, false)
+	wrongOperands(5,3)
+
+function incorrectNumberOfArguments(firstArgument : integer,
+									secondArgument : integer) : integer
+		if firstArgument < 5
+			then -firstArgument
+			else true
+
+function wrongArgumentType(firstArgument : integer) : bool
+		if firstArgument < 2
+			then 5
+			else 2
+function missingVariable(firstArgument : integer) : integer	
+		firstArgument + secondArgument 
+
+function wrongOperands(firstArgument : bool, secondArgument : bool) : bool	
+				firstArgument / secondArgument
+
+function wrongOperands(firstArgument : integer, secondArgument : integer) : integer		
+				firstArgument * secondArgument
