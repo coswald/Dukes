@@ -21,11 +21,20 @@ import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.parser.node.ExpressionNode;
 
 /**
+ * A node representing a print statement in Klein. This is more than a function
+ * call, as a print statement can either consist of a integer or a boolean.
+ * This seperates it from other functions, and is therefore seperated. Another
+ * reason it is special is that a function can contain only one expression, but
+ * many print statements.
  * @author Coved W Oswald
  * @version 1.0
- * @since 0.2.0
+ * @since 0.3.0
  */
 public class PrintNode extends AbstractSyntaxNode {
+  /**
+   * Creates a print statement with the given expression.
+   * @param exprNode The expression to print.
+   */
   public PrintNode(ExpressionNode exprNode) {
     super(exprNode);
   }

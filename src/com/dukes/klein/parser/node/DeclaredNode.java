@@ -20,23 +20,43 @@ package com.dukes.klein.parser.node;
 import com.dukes.lang.parser.node.ExpressionNode;
 
 /**
+ * Describes any declared value, such as an identifier, an integer, and a
+ * boolean. 
  * @author Coved W Oswald
  * @version 1.0
- * @since 0.2.0
+ * @since 0.3.0
  */
 public class DeclaredNode extends ExpressionNode {
-  public static final int IDENTIFIER_TYPE = 0;
-  public static final int BOOLEAN_TYPE = 1;
-  public static final int INTEGER_TYPE = 2;
+  
+  /**
+   * Tells the compiler that this is an identifier.
+   */
+  public static final int IDENTIFIER_TYPE = 1;
+  
+  /**
+   * Tells the compiler that this is a boolean.
+   */
+  public static final int BOOLEAN_TYPE = 2;
+
+  /**
+   * Tells the compiler that this is an integer.
+   */
+  public static final int INTEGER_TYPE = 4;
 
   private TerminalNode declared;
   private int type;
-
+  
+  /**
+   * Constructs a declared value in Klein.
+   * @param declared The value that is declared.
+   * @param type The type of the declared value.
+   * @throws IllegalArumentException If the given value isn't a valid value. 
+   */
   public DeclaredNode(TerminalNode declared, int type)
       throws IllegalArgumentException {
     super();
 
-    if(type > 2) {
+    if(type > 5) {
       throw new IllegalArgumentException("Invalid type given to declared " +
           "Node!");
     }
@@ -44,26 +64,44 @@ public class DeclaredNode extends ExpressionNode {
     this.declared = declared;
     this.type = type;
   }
-
+  
+  /**
+   * Returns the value of the declared node.
+   * @return The value of the declared node.
+   */
   public String getDeclared() {
     return this.declared.getValue();
   }
-
+  
+  /**
+   * Tests whether the given type is the type of this node.
+   * @param type The type to test.
+   * @throws IllegalArgumentException If the type lies outside the type range.
+   */
   public boolean isType(int type) throws IllegalArgumentException {
-    if(type > 2) {
+    if(type > 5) {
       throw new IllegalArgumentException("Invalid type asked of declared " +
           "node!");
     }
 
     return this.type == type;
   }
-
+  
+  /**
+   * Returns the comma seperated value and type between two brackets.
+   * @return The value and type.
+   */
   @Override
   public String dataAsString() {
     return "[Value: " + this.declared.toString() +
         ", Type: " + DeclaredNode.typeToString(this.type) + "]";
   }
-
+  
+  /**
+   * Returns a string representation of the type.
+   * @param type The type to convert to a string.
+   * @return A string that represents the type.
+   */
   public static String typeToString(int type) {
     switch(type) {
       case DeclaredNode.IDENTIFIER_TYPE:
@@ -72,10 +110,13 @@ public class DeclaredNode extends ExpressionNode {
         return "Boolean";
       case DeclaredNode.INTEGER_TYPE:
         return "Integer";
+      case DeclaredNode.IDENTIFIER_TYPE | DeclaredNode.BOOLEAN_TYPE:
+	return "Boolean Identifier";
+      case DeclaredNode.IDENTIFIER_TYPE | DeclaredNode.INTEGER_TYPE:
+	return "Integer Identifier";
       default:
         throw new IllegalArgumentException(
             "Invalid type given to typeToString!");
     }
   }
-
 }

@@ -20,25 +20,39 @@ package com.dukes.klein.parser.node;
 import com.dukes.lang.parser.node.ExpressionNode;
 
 /**
+ * Defines a function call in Klein. This contains the identifier and a number
+ * of arguments.
  * @author Coved W Oswald
  * @version 1.0
- * @since 0.2.0
+ * @since 0.3.0
  */
 public class CallNode extends ExpressionNode {
   private TerminalNode identifier;
 
+  /**
+   * Creates a call node.
+   * @return identifier The identifier
+   * @return exprNodes The expression list within the calling node.
+   */
   public CallNode(TerminalNode identifier, ExpressionNode... exprNodes) {
     super(exprNodes);
     this.identifier = identifier;
   }
-
+  
+  /**
+   * Gets the identifier.
+   * @return The identifier.
+   */
   public String getIdentifier() {
     return this.identifier.getValue();
   }
 
-
+  /**
+   * Gets the identifier between two brackets.
+   * @return The {@link #getIdentifier()} function.
+   */
   @Override
   public String dataAsString() {
-    return "[" + identifier.toString() + "]";
+    return "[" + this.getIdentifier() + "]";
   }
 }

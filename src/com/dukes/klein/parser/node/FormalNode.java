@@ -20,31 +20,50 @@ package com.dukes.klein.parser.node;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 
 /**
+ * Ascertains a formal within the Klein language. A formal consists of an
+ * identifier followed by a type.
  * @author Coved W Oswald
  * @version 1.0
- * @since 0.2.0
+ * @since 0.3.0
  */
 public class FormalNode extends AbstractSyntaxNode {
   private TerminalNode identifier;
   private TerminalNode type;
-
+  
+  /**
+   * Constructs a formal node.
+   * @param identifier The identifier.
+   * @param type The type of the identifier.
+   */
   public FormalNode(TerminalNode identifier, TerminalNode type) {
     super();
     this.identifier = identifier;
     this.type = type;
   }
 
+  /**
+   * Returns the identifier.
+   * @return The identifier.
+   */
   public String getIdentifier() {
     return this.identifier.getValue();
   }
 
+  /**
+   * Returns the type.
+   * @return The type.
+   */
   public String getType() {
     return this.type.getValue();
   }
-
+  
+  /**
+   * Returns the data seperated by two brackets.
+   * @return The identifier and type of the formal.
+   */
   @Override
   public String dataAsString() {
-    return "[Identifier: " + this.identifier.toString() +
-        ", Type: " + this.type.toString() + "]";
+    return "[Identifier: " + this.getIdentifier() +
+        ", Type: " + this.getType() + "]";
   }
 }

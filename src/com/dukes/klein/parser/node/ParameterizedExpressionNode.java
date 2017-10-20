@@ -20,11 +20,19 @@ package com.dukes.klein.parser.node;
 import com.dukes.lang.parser.node.ExpressionNode;
 
 /**
+ * Describes an expression within a left and right parenthesis, respectively.
+ * This should indicate that it is executed first, although the class is
+ * basically a wrapper. The tree structure should take care of the execution
+ * cycle.
  * @author Coved W Oswald
  * @version 1.0
- * @since 0.2.0
+ * @since 0.3.0
  */
 public class ParameterizedExpressionNode extends ExpressionNode {
+  /**
+   * Constructs a parameterized expression.
+   * @param exprNode The expression found between two parenthesis.
+   */
   public ParameterizedExpressionNode(ExpressionNode exprNode) {
     super(exprNode);
   }

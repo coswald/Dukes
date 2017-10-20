@@ -1,28 +1,73 @@
-(* semantic-checker.kln by The Dukes *)
-(* Exemplifies all the semantic errors that can be checked by our klein compiler *)
+(*
+ * FILE        : semantic-errors.kln
+ * AUTHOR      : Coved W Oswald
+ * DESCRIPTION : Contains all of the semantic errors as well as the warnings
+ *               for the Klein programming language.
+ *)
 
-function main ( ) : integer
-	incorrectNumberOfArguments(5, 5)
-	wrongArgumentType(5)
-	missingVariable(5)
-	wrongOperands(true, false)
-	wrongOperands(5,3)
+(* semantic warning: a is never used. *)
+function mai(a : integer) : integer
+  run(2)
 
-function incorrectNumberOfArguments(firstArgument : integer,
-									secondArgument : integer) : integer
-		if firstArgument < 5
-			then -firstArgument
-			else true
+(* semantic warning: function callMe is never called *)
+function callMe() : boolean
+  print(1497454881)
+  (* Why this number?
+   * It's binary value is        01011001 01000001 01011001 00100001
+   * The values in decimcal:           89       65       89       33
+   * The values as a charaacter:        Y        A        Y        !
+   * I had fun doing this.
+   *)
+  true
 
-function wrongArgumentType(firstArgument : integer) : bool
-		if firstArgument < 2
-			then 5
-			else 2
-function missingVariable(firstArgument : integer) : integer	
-		firstArgument + secondArgument 
+(* semantic error: function main is not defined *)
 
-function wrongOperands(firstArgument : bool, secondArgument : bool) : bool	
-				firstArgument / secondArgument
+(* semantic error: function mai is already defined *)
+function mai(b : integer) : boolean
+  if b < 0 then
+    onNegative()
+  else
+    run(b)
 
-function wrongOperands(firstArgument : integer, secondArgument : integer) : integer		
-				firstArgument * secondArgument
+(* semantic error: function cannot be called print )
+function print() : boolean
+  true *)
+
+(* semantic error: function refers to formals not defined *)
+function calc() : boolean
+  print(a)
+  true
+
+(* semantic error: function refers to undefined function *)
+(* semantic error: calc is not of correct type *)
+function run(a : integer) : integer
+  if mai(a) then
+    calc()
+  else
+    calc2(a)
+
+(* semantic error: function call with incorrect amount of parameters *)
+function onNegative() : boolean
+  negativeExample(1, 1) = 0
+
+(* semantic error: operator applied to wrong type, 17 times *)
+(* semantic error: incorrect return type. *)
+function negativeExample(i : integer, j : integer, a : boolean, b : boolean) :
+    integer
+  if a < b then
+    if i < a then
+      if a = b then
+        if i = b then
+          if i and j then
+            if a and i then
+              if i or j then
+                if a or j then
+                  not i
+                else -a
+              else i * b
+            else a * b
+          else i / b
+        else i - b
+      else a + b
+    else i * a
+  else a * b

@@ -20,31 +20,53 @@ package com.dukes.klein.parser.node;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 
 /**
+ * Discerns a function in Klein. This contains an identifier, a return type, a
+ * body, and a variable amount of formals.
  * @author Coved W Oswald
  * @version 1.0
- * @since 0.2.0
+ * @since 0.3.0
  */
 public class FunctionNode extends AbstractSyntaxNode {
   private TerminalNode name;
   private TerminalNode returnType;
 
+  /**
+   * Constructs a function.
+   * @param name The name of the function.
+   * @param returnType The return type of the function.
+   * @param bodyNode The body of the function.
+   * @param formals The paramaters of the function.
+   */
   public FunctionNode(TerminalNode name, TerminalNode returnType,
                       BodyNode bodyNode, FormalNode... formals) {
     super(AbstractSyntaxNode.concat(bodyNode, formals));
     this.name = name;
     this.returnType = returnType;
   }
-
+  
+  /**
+   * Returns the identifier of the function. Also known as the name of the
+   * function. 
+   * @return The name of the function.
+   */
   public TerminalNode getName() {
     return this.name;
   }
 
+  /**
+   * Gets the name and return type between two brackets.
+   * @return The name and the return type.
+   */
   @Override
   public String dataAsString() {
-    return "[Name: " + this.name.toString() +
-        ", Return Type: " + this.returnType.toString() + "]";
+    return "[Name: " + this.getName() +
+        ", Return Type: " + this.getReturnType() + "]";
   }
 
+  /**
+   * Gets the return type.
+   * @return The return type.
+   */
   public String getReturnType() {
     return this.returnType.getValue();
   }

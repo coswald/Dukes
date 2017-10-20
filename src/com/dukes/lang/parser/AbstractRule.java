@@ -22,6 +22,9 @@ import java.util.ListIterator;
 import java.util.Stack;
 
 /**
+ * Describes a rule that would be found within a parse table. The rule is
+ * represented as a {@code List}, as this would allow an implementation to
+ * supply the type of the rule that would fit the implementation the best.
  * @author Coved W Oswald
  * @author Daniel Holland
  * @version 1.0

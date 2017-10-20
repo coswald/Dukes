@@ -18,27 +18,59 @@
 package com.dukes.klein.parser.node;
 
 import com.dukes.lang.parser.node.ExpressionNode;
+import com.dukes.lang.parser.node.NullNode;
 
 /**
+ * This class describes an operation in Klein. This can be either a binary or
+ * unary operation. If the left side is a {@code NullNode}, then the expression
+ * is a unary operation; otherwise, it is a binary expression. No {@code null}
+ * values should be added to the operator node. The operation should be a valid
+ * Klein operation; however, this is not checked within this class.
  * @author Coved W Oswald
  * @version 1.0
- * @since 0.2.0
+ * @since 0.3.0
  */
 public class OperatorNode extends ExpressionNode {
   private TerminalNode operator;
 
+  /**
+   * Constructs an operation withe the given operator, left hand side, and
+   * right hand side. Note that this operation is unary if the left side is a
+   * {@code NullNode}.
+   * @param operator The operator of the operation.
+   * @param leftNode The left hand side.
+   * @param rightNode The right hand side.
+   */
   public OperatorNode(TerminalNode operator, ExpressionNode leftNode,
                       ExpressionNode rightNode) {
     super(rightNode, leftNode);
     this.operator = operator;
   }
-
+  
+  /**
+   * Constructs a unary operation.
+   * @param operator The operator the the unary operation.
+   * @param exprNode The expression node to apply the operation to.
+   */
+  public OperatorNode(TerminalNode operator, ExpressionNode exprNode) {
+    this(operator, new NullNode(), exprNode);
+  }
+  
+  /**
+   * Returns the operator of this operation.
+   * @return The string value of the operator.
+   */
   public String getOperator() {
     return this.operator.getValue();
   }
-
+  
+  /**
+   * Returns the operator seperated by brackets. This is done for the string
+   * representation of this operation.
+   * @return The operator seperated by brackets.
+   */
   @Override
   public String dataAsString() {
-    return "[" + operator.toString() + "]";
+    return "[" + this.getOperator() + "]";
   }
 }

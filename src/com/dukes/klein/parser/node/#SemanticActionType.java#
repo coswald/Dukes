@@ -27,7 +27,11 @@ import java.util.Stack;
 
 /**
  * Describes actions to be taken on a semantic stack from a table-driven
- * parser. 
+ * parser. This can be one of 11 make actions: program, function, body, formal,
+ * print, declared, if, call, parameterized, operator, and unaryoperator.
+ * Notice that every make action corresponds to a {@code Node}, with the 
+ * nodicable (joke) exception of the unaryoperator and operator actions. These
+ * will both make an {@code OperatorNode}.
  * @author Daniel J. Holland
  * @version 1.0
  * @since 0.3.0
@@ -47,7 +51,7 @@ public enum SemanticActionType {
 
   private final int id;
 
-  SemanticActionType(int id) {
+  public SemanticActionType(int id) {
     this.id = id;
   }
 

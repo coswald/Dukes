@@ -20,11 +20,23 @@ package com.dukes.klein.parser.node;
 import com.dukes.lang.parser.node.ExpressionNode;
 
 /**
+ * Shows an if statement within Klein. An if statement consists of three
+ * expressions: the test expression, the expression executed if the test is
+ * true, and the expression that is executed if the test is false. That means
+ * the first expression must be a boolean value. As long as the if expression
+ * is not in a print statement, the return types of the two following
+ * expressions must match.
  * @author Coved W Oswald
  * @version 1.0
- * @since 0.2.0
+ * @since 0.3.0
  */
 public class IfNode extends ExpressionNode {
+  /**
+   * Constructs an if expression.
+   * @param testExpression
+   * @param ifExpression
+   * @param elseExpression
+   */
   public IfNode(ExpressionNode testExpression, ExpressionNode ifExpression,
                 ExpressionNode elseExpression) {
     super(testExpression, ifExpression, elseExpression);
