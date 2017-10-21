@@ -54,7 +54,7 @@ public class KleinParser
             scannerToken.getTokenType().equals(KleinTokenType.ENDCOMMENT)) {
           continue;
         }
-        if(stackTop == scannerToken.getTerminal()) {
+        if(stackTop == TerminalType.getTerminal(scannerToken)) {
           this.stack.pop();
           if(scannerToken.getTokenType() == KleinTokenType.BOOLEAN ||
               scannerToken.getTokenType() == KleinTokenType.INTEGER ||
@@ -69,7 +69,7 @@ public class KleinParser
           throw new ParsingException(String.format(
               "Token mismatch! Expected %s but got %s: %s",
               stackTop.name(), scannerToken.getTokenType().name(),
-              scannerToken.getTerminal().name()));
+              TerminalType.getTerminal(scannerToken).name()));
         }
       }
       else if(stackTop instanceof NonTerminalType) {
@@ -79,8 +79,8 @@ public class KleinParser
           this.scanner.next();
           continue;
         }
-        kRule = (KleinRule)this.PARSETABLE.getRule((NonTerminalType) stackTop,
-            scannerToken.getTerminal());
+        kRule = this.PARSETABLE.getRule((NonTerminalType) stackTop,
+            TerminalType.getTerminal(scannerToken));
         if(kRule.exists()) {
           this.stack.pop();
           kRule.pushRule(this.stack);
@@ -89,7 +89,7 @@ public class KleinParser
           throw new ParsingException(String.format(
               "Invalid item '%s' found on the stack when handling %s: %s",
               stackTop.name(), scannerToken.getTokenType().name(),
-              scannerToken.getTerminal().name()));
+              TerminalType.getTerminal(scannerToken).name()));
         }
       }
       else if(stackTop instanceof SemanticActionType) {
@@ -109,5 +109,4 @@ public class KleinParser
     }
     return this.semanticStack.pop();
   }
-
 }

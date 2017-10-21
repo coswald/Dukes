@@ -17,6 +17,8 @@
  */
 package com.dukes.klein.parser;
 
+import com.dukes.klein.scanner.KleinToken;
+
 /**
  * @author Daniel J. Holland
  * @version 1.0
@@ -58,5 +60,85 @@ public enum TerminalType {
 
   public int getId() {
     return id;
+  }
+
+  public static TerminalType getTerminal(KleinToken kt) {
+    switch(kt.getTokenType()) {
+      case BOOLEAN:
+        return TerminalType.BOOLEAN;
+      case INTEGER:
+        return TerminalType.NUMBER;
+      case IDENTIFIER:
+        return TerminalType.STRING;
+      case LEFTPARENTHESIS:
+        return TerminalType.LEFTPAREN;
+      case RIGHTPARENTHESIS:
+        return TerminalType.RIGHTPAREN;
+      case SEPARATOR:
+        switch(kt.getTokenValue()) {
+          case ":":
+            return TerminalType.COLON;
+          case ",":
+            return TerminalType.COMMA;
+          default:
+            //ERROR
+        }
+      case KEYWORD:
+        switch(kt.getTokenValue()) {
+          case "function":
+            return TerminalType.FUNCTION;
+          case "main":
+            return TerminalType.STRING;
+          case "print":
+            return TerminalType.PRINT;
+          case "if":
+            return TerminalType.IF;
+          case "then":
+            return TerminalType.THEN;
+          case "else":
+            return TerminalType.ELSE;
+          default:
+            // ERROR
+        }
+      case TYPE:
+        switch(kt.getTokenValue()) {
+          case "boolean":
+            return TerminalType.BOOLEAN_STR;
+          case "integer":
+            return TerminalType.INTEGER_STR;
+          default:
+            //ERROR?
+        }
+      case SYMBOL:
+        switch(kt.getTokenValue()) {
+          //+, -, <, =, *, /, and, or, not
+          case "+":
+            return TerminalType.PLUS;
+          case "-":
+            return TerminalType.MINUS;
+          case "<":
+            return TerminalType.LESSTHAN;
+          case "=":
+            return TerminalType.EQUAL;
+          case "*":
+            return TerminalType.PRODUCT;
+          case "/":
+            return TerminalType.DIVIDE;
+          case "and":
+            return TerminalType.AND;
+          case "or":
+            return TerminalType.OR;
+          case "not":
+            return TerminalType.NOT;
+          default:
+            // ERROR
+        }
+      case EOF:
+        return TerminalType.EOF;
+      case STARTCOMMENT:
+      case ENDCOMMENT:
+      default:
+        return TerminalType.EMPTY;
+    }
   }
 }
