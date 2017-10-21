@@ -28,10 +28,30 @@ package com.dukes.lang.parser.node;
 public abstract class AbstractSyntaxNode extends Object {
 
   /**
+   * Tells the compiler that this is an identifier.
+   */
+  public static final int IDENTIFIER_TYPE = 1;
+
+  /**
+   * Tells the compiler that this is a boolean.
+   */
+  public static final int BOOLEAN_TYPE = 2;
+
+  /**
+   * Tells the compiler that this is an integer.
+   */
+  public static final int INTEGER_TYPE = 4;
+
+  /**
    * The children of the tree node. This doesn't have a predetermined size, so
    * the implementing class can have as many children as needed.
    */
   protected AbstractSyntaxNode[] children;
+
+  /**
+   * The node data type to be defined my a semantic checker
+   */
+  protected int type;
 
   /**
    * Constructs a node with the following children.
@@ -119,4 +139,13 @@ public abstract class AbstractSyntaxNode extends Object {
       return ret;
     }
   }
+
+  /**
+   * Gets the type of the syntax node.
+   * @return The type of this syntax node.
+   */
+  public int getType() {
+    return this.type;
+  }
+
 }

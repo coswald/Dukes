@@ -35,7 +35,7 @@ public class FunctionNode extends AbstractSyntaxNode {
    * @param name The name of the function.
    * @param returnType The return type of the function.
    * @param bodyNode The body of the function.
-   * @param formals The paramaters of the function.
+   * @param formals The parameters of the function.
    */
   public FunctionNode(TerminalNode name, TerminalNode returnType,
                       BodyNode bodyNode, FormalNode... formals) {
@@ -43,10 +43,10 @@ public class FunctionNode extends AbstractSyntaxNode {
     this.name = name;
     this.returnType = returnType;
   }
-  
+
   /**
    * Returns the identifier of the function. Also known as the name of the
-   * function. 
+   * function.
    * @return The name of the function.
    */
   public TerminalNode getName() {
@@ -60,14 +60,32 @@ public class FunctionNode extends AbstractSyntaxNode {
   @Override
   public String dataAsString() {
     return "[Name: " + this.getName() +
-        ", Return Type: " + this.getReturnType() + "]";
+        ", Return Type: " + this.getTypeString() + "]";
+  }
+
+  /**
+   * Gets the return type as string.
+   * @return The return type as String.
+   */
+  public String getTypeString() {
+    return this.returnType.getValue();
   }
 
   /**
    * Gets the return type.
    * @return The return type.
    */
-  public String getReturnType() {
-    return this.returnType.getValue();
+  @Override
+  public int getType() {
+    switch(this.returnType.getValue()){
+      case "integer":
+        return AbstractSyntaxNode.INTEGER_TYPE;
+      case "boolean":
+        return AbstractSyntaxNode.BOOLEAN_TYPE;
+      default:
+        return 0; //ERROR?
+    }
   }
+
+
 }

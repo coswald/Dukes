@@ -176,13 +176,13 @@ public enum SemanticActionType {
     int type;
 
     if(KleinScanner.isDigit(tn.getValue().charAt(0))) {
-      type = DeclaredNode.INTEGER_TYPE;
+      type = AbstractSyntaxNode.INTEGER_TYPE;
     }
     else if(tn.getValue().equals("true") || tn.getValue().equals("false")) {
-      type = DeclaredNode.BOOLEAN_TYPE;
+      type = AbstractSyntaxNode.BOOLEAN_TYPE;
     }
     else {
-      type = DeclaredNode.IDENTIFIER_TYPE;
+      type = AbstractSyntaxNode.IDENTIFIER_TYPE;
     }
 
     return new DeclaredNode(tn, type);

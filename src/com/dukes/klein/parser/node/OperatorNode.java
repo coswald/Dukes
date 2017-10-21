@@ -17,6 +17,7 @@
  */
 package com.dukes.klein.parser.node;
 
+import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.parser.node.ExpressionNode;
 import com.dukes.lang.parser.node.NullNode;
 
@@ -31,7 +32,9 @@ import com.dukes.lang.parser.node.NullNode;
  * @since 0.3.0
  */
 public class OperatorNode extends ExpressionNode {
+
   private TerminalNode operator;
+  private Integer expectedType;
 
   /**
    * Constructs an operation withe the given operator, left hand side, and
@@ -44,6 +47,23 @@ public class OperatorNode extends ExpressionNode {
   public OperatorNode(TerminalNode operator, ExpressionNode leftNode,
                       ExpressionNode rightNode) {
     super(rightNode, leftNode);
+    // Assign expectedType
+    switch(operator.getValue()) {
+      case "+":
+      case "-":
+      case "<":
+      case "=":
+      case "*":
+      case "/":
+        this.expectedType = AbstractSyntaxNode.INTEGER_TYPE;
+        break;
+      case "and":
+      case "or":
+        this.expectedType = AbstractSyntaxNode.BOOLEAN_TYPE;
+        break;
+      default:
+        this.expectedType = 0; //ERROR
+  }
     this.operator = operator;
   }
   
@@ -54,6 +74,17 @@ public class OperatorNode extends ExpressionNode {
    */
   public OperatorNode(TerminalNode operator, ExpressionNode exprNode) {
     this(operator, new NullNode(), exprNode);
+    // Assign expectedType
+    switch(operator.getValue()) {
+      case "-":
+        this.expectedType = AbstractSyntaxNode.INTEGER_TYPE;
+        break;
+      case "not":
+        this.expectedType = AbstractSyntaxNode.BOOLEAN_TYPE;
+        break;
+      default:
+        this.expectedType = 0; //ERROR
+    }
   }
   
   /**

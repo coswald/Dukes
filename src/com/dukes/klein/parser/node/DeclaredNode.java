@@ -27,21 +27,6 @@ import com.dukes.lang.parser.node.ExpressionNode;
  * @since 0.3.0
  */
 public class DeclaredNode extends ExpressionNode {
-  
-  /**
-   * Tells the compiler that this is an identifier.
-   */
-  public static final int IDENTIFIER_TYPE = 1;
-  
-  /**
-   * Tells the compiler that this is a boolean.
-   */
-  public static final int BOOLEAN_TYPE = 2;
-
-  /**
-   * Tells the compiler that this is an integer.
-   */
-  public static final int INTEGER_TYPE = 4;
 
   private TerminalNode declared;
   private int type;
@@ -50,7 +35,7 @@ public class DeclaredNode extends ExpressionNode {
    * Constructs a declared value in Klein.
    * @param declared The value that is declared.
    * @param type The type of the declared value.
-   * @throws IllegalArumentException If the given value isn't a valid value. 
+   * @throws IllegalArgumentException If the given value isn't a valid value.
    */
   public DeclaredNode(TerminalNode declared, int type)
       throws IllegalArgumentException {

@@ -50,13 +50,28 @@ public class FormalNode extends AbstractSyntaxNode {
   }
 
   /**
-   * Returns the type.
-   * @return The type.
+   * Returns the type as a string.
+   * @return The type as a string.
    */
-  public String getType() {
+  public String getTypeString() {
     return this.type.getValue();
   }
-  
+
+  /**
+   * Gets the type.
+   * @return The type.
+   */
+  public int getType() {
+    switch(this.type.getValue()){
+      case "integer":
+        return AbstractSyntaxNode.INTEGER_TYPE;
+      case "boolean":
+        return AbstractSyntaxNode.BOOLEAN_TYPE;
+      default:
+        return 0; //ERROR?
+    }
+  }
+
   /**
    * Returns the data seperated by two brackets.
    * @return The identifier and type of the formal.
@@ -64,6 +79,6 @@ public class FormalNode extends AbstractSyntaxNode {
   @Override
   public String dataAsString() {
     return "[Identifier: " + this.getIdentifier() +
-        ", Type: " + this.getType() + "]";
+        ", Type: " + this.getTypeString() + "]";
   }
 }

@@ -231,17 +231,6 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
     }
   }
 
-  private boolean endOfFile() {
-    if(!this.input.hasNext()) {
-      if(this.inComment) {
-        throw new LexicalAnalysisException("Comment started but not ended!");
-      }
-      this.atEOF = true;
-      return true;
-    }
-    return false;
-  }
-
   private static boolean isSymbol(String s) {
     switch(s) {
       case "and":
@@ -251,6 +240,17 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
       default:
         return false;
     }
+  }
+
+  private boolean endOfFile() {
+    if(!this.input.hasNext()) {
+      if(this.inComment) {
+        throw new LexicalAnalysisException("Comment started but not ended!");
+      }
+      this.atEOF = true;
+      return true;
+    }
+    return false;
   }
 
   private static boolean isSeparator(char c) {
@@ -297,13 +297,6 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
   private String getNumber() {
     //this still allows for negative zero to be a thing.
     String s = "";
-    /*
-    if(this.input.currentChar() == '-')
-    {
-      s += Character.toString(this.input.currentChar());
-      this.input.next();
-    }
-    */
     if(this.input.currentChar() == '0' && !this.endOfFile() &&
         KleinScanner.isDigit(this.input.lookAhead())) {
       throw new LexicalAnalysisException("Number cannot start with 0!");
