@@ -43,8 +43,10 @@ public class FunctionNode extends AbstractSyntaxNode {
     switch(returnType.getValue()){
       case "integer":
         this.type = AbstractSyntaxNode.INTEGER_TYPE;
+        break;
       case "boolean":
         this.type = AbstractSyntaxNode.BOOLEAN_TYPE;
+        break;
     }
   }
 

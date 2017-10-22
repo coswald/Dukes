@@ -17,7 +17,6 @@
  */
 package com.dukes.klein.parser.node;
 
-import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.parser.node.ExpressionNode;
 
 /**
@@ -73,7 +72,7 @@ public class DeclaredNode extends ExpressionNode {
   }
   
   /**
-   * Returns the comma seperated value and type between two brackets.
+   * Returns the comma separated value and type between two brackets.
    * @return The value and type.
    */
   @Override

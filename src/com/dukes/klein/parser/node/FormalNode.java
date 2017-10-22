@@ -32,16 +32,18 @@ public class FormalNode extends AbstractSyntaxNode {
   /**
    * Constructs a formal node.
    * @param identifier The identifier.
-   * @param formalType The type of the identifier.
+   * @param type The type of the identifier.
    */
-  public FormalNode(TerminalNode identifier, TerminalNode formalType) {
+  public FormalNode(TerminalNode identifier, TerminalNode type) {
     super();
     this.identifier = identifier;
-    switch(formalType.getValue()){
+    switch(type.getValue()){
       case "integer":
         this.type = AbstractSyntaxNode.INTEGER_TYPE;
+        break;
       case "boolean":
         this.type = AbstractSyntaxNode.BOOLEAN_TYPE;
+        break;
     }
   }
 
@@ -54,7 +56,7 @@ public class FormalNode extends AbstractSyntaxNode {
   }
 
   /**
-   * Returns the data seperated by two brackets.
+   * Returns the data separated by two brackets.
    * @return The identifier and type of the formal.
    */
   @Override

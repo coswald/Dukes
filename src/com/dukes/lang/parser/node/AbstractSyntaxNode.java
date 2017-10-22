@@ -74,9 +74,9 @@ public abstract class AbstractSyntaxNode extends Object {
 
   /**
    * Returns specific data as a string representation. This can be used to
-   * print the tree very pretty. Each sublcass should if possible override this
+   * print the tree very pretty. Each subclass should if possible override this
    * method to return the string representations of each of it's data,
-   * seperated by commas. Preferably, they should be enclosed with brackets.
+   * separated by commas. Preferably, they should be enclosed with brackets.
    * @return An empty string.
    */
   public String dataAsString() {
@@ -97,7 +97,7 @@ public abstract class AbstractSyntaxNode extends Object {
   
   /**
    * Returns a pretty printed version of the node.
-   * @return A pretty strnig representaton.
+   * @return A pretty string representation.
    */
   protected String prettyPrint()
   {
@@ -165,9 +165,9 @@ public abstract class AbstractSyntaxNode extends Object {
       case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.INTEGER_TYPE:
         return "Integer Identifier";
       default:
-        throw new IllegalArgumentException(
-            "Invalid type given to typeToString!");
+        return "";
+        // throw new IllegalArgumentException(
+        //    "Invalid type given to typeToString!");
     }
   }
-
 }
