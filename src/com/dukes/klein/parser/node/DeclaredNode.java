@@ -17,6 +17,7 @@
  */
 package com.dukes.klein.parser.node;
 
+import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.parser.node.ExpressionNode;
 
 /**
@@ -29,8 +30,7 @@ import com.dukes.lang.parser.node.ExpressionNode;
 public class DeclaredNode extends ExpressionNode {
 
   private TerminalNode declared;
-  private int type;
-  
+
   /**
    * Constructs a declared value in Klein.
    * @param declared The value that is declared.
@@ -79,29 +79,7 @@ public class DeclaredNode extends ExpressionNode {
   @Override
   public String dataAsString() {
     return "[Value: " + this.declared.toString() +
-        ", Type: " + DeclaredNode.typeToString(this.type) + "]";
+        ", Type: " + this.typeToString() + "]";
   }
-  
-  /**
-   * Returns a string representation of the type.
-   * @param type The type to convert to a string.
-   * @return A string that represents the type.
-   */
-  public static String typeToString(int type) {
-    switch(type) {
-      case DeclaredNode.IDENTIFIER_TYPE:
-        return "Identifier";
-      case DeclaredNode.BOOLEAN_TYPE:
-        return "Boolean";
-      case DeclaredNode.INTEGER_TYPE:
-        return "Integer";
-      case DeclaredNode.IDENTIFIER_TYPE | DeclaredNode.BOOLEAN_TYPE:
-	return "Boolean Identifier";
-      case DeclaredNode.IDENTIFIER_TYPE | DeclaredNode.INTEGER_TYPE:
-	return "Integer Identifier";
-      default:
-        throw new IllegalArgumentException(
-            "Invalid type given to typeToString!");
-    }
-  }
+
 }

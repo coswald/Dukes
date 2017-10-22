@@ -28,7 +28,6 @@ import com.dukes.lang.parser.node.AbstractSyntaxNode;
  */
 public class FunctionNode extends AbstractSyntaxNode {
   private TerminalNode name;
-  private TerminalNode returnType;
 
   /**
    * Constructs a function.
@@ -41,8 +40,7 @@ public class FunctionNode extends AbstractSyntaxNode {
                       BodyNode bodyNode, FormalNode... formals) {
     super(AbstractSyntaxNode.concat(bodyNode, formals));
     this.name = name;
-    this.returnType = returnType;
-    switch(this.returnType.getValue()){
+    switch(returnType.getValue()){
       case "integer":
         this.type = AbstractSyntaxNode.INTEGER_TYPE;
       case "boolean":
@@ -66,14 +64,6 @@ public class FunctionNode extends AbstractSyntaxNode {
   @Override
   public String dataAsString() {
     return "[Name: " + this.getName() +
-        ", Return Type: " + this.getTypeString() + "]";
-  }
-
-  /**
-   * Gets the return type as string.
-   * @return The return type as String.
-   */
-  public String getTypeString() {
-    return this.returnType.getValue();
+        ", Return Type: " + this.typeToString() + "]";
   }
 }

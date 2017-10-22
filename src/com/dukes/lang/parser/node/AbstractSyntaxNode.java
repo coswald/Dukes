@@ -148,4 +148,26 @@ public abstract class AbstractSyntaxNode extends Object {
     return this.type;
   }
 
+  /**
+   * Returns a string representation of the type.
+   * @return A string that represents the type.
+   */
+  protected String typeToString() {
+    switch(this.type) {
+      case AbstractSyntaxNode.IDENTIFIER_TYPE:
+        return "Identifier";
+      case AbstractSyntaxNode.BOOLEAN_TYPE:
+        return "Boolean";
+      case AbstractSyntaxNode.INTEGER_TYPE:
+        return "Integer";
+      case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.BOOLEAN_TYPE:
+        return "Boolean Identifier";
+      case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.INTEGER_TYPE:
+        return "Integer Identifier";
+      default:
+        throw new IllegalArgumentException(
+            "Invalid type given to typeToString!");
+    }
+  }
+
 }
