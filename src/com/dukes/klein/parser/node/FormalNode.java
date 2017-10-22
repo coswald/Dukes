@@ -28,17 +28,23 @@ import com.dukes.lang.parser.node.AbstractSyntaxNode;
  */
 public class FormalNode extends AbstractSyntaxNode {
   private TerminalNode identifier;
-  private TerminalNode type;
+  private TerminalNode formalType;
   
   /**
    * Constructs a formal node.
    * @param identifier The identifier.
-   * @param type The type of the identifier.
+   * @param formalType The type of the identifier.
    */
-  public FormalNode(TerminalNode identifier, TerminalNode type) {
+  public FormalNode(TerminalNode identifier, TerminalNode formalType) {
     super();
     this.identifier = identifier;
-    this.type = type;
+    this.formalType = formalType;
+    switch(this.formalType.getValue()){
+      case "integer":
+        this.type = AbstractSyntaxNode.INTEGER_TYPE;
+      case "boolean":
+        this.type = AbstractSyntaxNode.BOOLEAN_TYPE;
+    }
   }
 
   /**
@@ -54,22 +60,7 @@ public class FormalNode extends AbstractSyntaxNode {
    * @return The type as a string.
    */
   public String getTypeString() {
-    return this.type.getValue();
-  }
-
-  /**
-   * Gets the type.
-   * @return The type.
-   */
-  public int getType() {
-    switch(this.type.getValue()){
-      case "integer":
-        return AbstractSyntaxNode.INTEGER_TYPE;
-      case "boolean":
-        return AbstractSyntaxNode.BOOLEAN_TYPE;
-      default:
-        return 0; //ERROR?
-    }
+    return this.formalType.getValue();
   }
 
   /**

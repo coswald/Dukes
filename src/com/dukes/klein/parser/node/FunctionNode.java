@@ -42,6 +42,12 @@ public class FunctionNode extends AbstractSyntaxNode {
     super(AbstractSyntaxNode.concat(bodyNode, formals));
     this.name = name;
     this.returnType = returnType;
+    switch(this.returnType.getValue()){
+      case "integer":
+        this.type = AbstractSyntaxNode.INTEGER_TYPE;
+      case "boolean":
+        this.type = AbstractSyntaxNode.BOOLEAN_TYPE;
+    }
   }
 
   /**
@@ -70,22 +76,4 @@ public class FunctionNode extends AbstractSyntaxNode {
   public String getTypeString() {
     return this.returnType.getValue();
   }
-
-  /**
-   * Gets the return type.
-   * @return The return type.
-   */
-  @Override
-  public int getType() {
-    switch(this.returnType.getValue()){
-      case "integer":
-        return AbstractSyntaxNode.INTEGER_TYPE;
-      case "boolean":
-        return AbstractSyntaxNode.BOOLEAN_TYPE;
-      default:
-        return 0; //ERROR?
-    }
-  }
-
-
 }
