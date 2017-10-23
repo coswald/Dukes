@@ -1,8 +1,0 @@
-(*A tip calculator*)
-(*by Patrick Sedlacek*)
-(* Will Fail*)
-
-function tipMore(bill : integer, tip : integer) : integer
-	print(bill * integer//100)
-function main(a : integer, b : integer) : integer
-	tipMore(a,b)
