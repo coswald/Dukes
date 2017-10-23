@@ -1,0 +1,8 @@
+(* code as seen on 
+http://cs.uni.edu/~wallingf/teaching/cs4550/
+compiler/klein-programs/print-one.kln
+*)
+
+function main() : integer
+  print(1)
+  1

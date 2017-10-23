@@ -13,5 +13,5 @@ public abstract class AbstractTreeTraverser extends Object {
   }
 
   public void semanticCheck(){}
-
+  
 }
