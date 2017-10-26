@@ -141,6 +141,7 @@ public abstract class Test extends Object implements Runnable
       if(fnfe instanceof FileNotFoundException)
         System.err.println(fileName + " not found.\n" + HELP);
       else
+        fnfe.printStackTrace();
         System.err.println(
             fnfe.getClass().getSimpleName().replaceAll(
             "Exception", "Error") + ": " +

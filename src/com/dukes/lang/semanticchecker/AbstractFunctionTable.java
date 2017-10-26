@@ -1,6 +1,6 @@
 package com.dukes.lang.semanticchecker;
 
-import com.dukes.lang.parser.node.AbstractTreeTraverser;
+import com.dukes.lang.parser.node.AbstractSyntaxNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,20 +11,20 @@ import java.util.HashMap;
  */
 public abstract class AbstractFunctionTable extends Object {
 
-  private HashMap<String, HashMap<String, Integer>> table;
+  protected HashMap<String, HashMap<String, Integer>> table =
+      new HashMap<String, HashMap<String, Integer>>();
 
-  public void AbstractFunctionTable(AbstractTreeTraverser astt) {
-  }
+  public void AbstractFunctionTable(AbstractSyntaxNode top) {}
 
-  public int getReturnType(String functionName) {
+  public int getFunctionReturnType(String functionName) {
     return 0;
   }
 
-  public ArrayList<String> getParameterNames(String functionName) {
+  public ArrayList<String> getFunctionParameterNames(String functionName) {
     return new ArrayList<String>();
   }
 
-  public ArrayList<Integer> getAllParameterTypes(String functionName) {
+  public ArrayList<Integer> getFunctionParameterTypes(String functionName) {
     return new ArrayList<Integer>();
   }
 
