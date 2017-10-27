@@ -58,11 +58,24 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       }
       else if(node instanceof OperatorNode) {
         // Check to see that Operators children match types
+        if(((OperatorNode) node).isUnary()) {
+          if(!(((OperatorNode) node).getChildren()[1].getType() ==
+              ((OperatorNode) node).getType())) {
+            throw new SemanticException(
+                "Type Mismatch for unary operator '" +
+                    ((OperatorNode) node).getOperator() + "' in '" +
+                    functionName + "', expected '" +
+                    node.typeToString() + "' but got '" +
+                    node.getChildren()[1].typeToString() + "'.");
+
+          }
+        }
         if(!((((OperatorNode) node).getChildren()[0].getType() &
             ((OperatorNode) node).getChildren()[1].getType()) ==
             ((OperatorNode) node).getType())) {
           throw new SemanticException(
-              "Type Mismatch for operator '" + ((OperatorNode) node).getOperator() + "' in '" +
+              "Type Mismatch for operator '" +
+                  ((OperatorNode) node).getOperator() + "' in '" +
                   functionName + "', expected '" +
                   node.typeToString() + "' but got '" +
                   node.getChildren()[0].typeToString() + "', and '" +

@@ -34,7 +34,7 @@ import com.dukes.lang.parser.node.NullNode;
 public class OperatorNode extends ExpressionNode {
 
   private TerminalNode operator;
-  private Integer expectedType;
+  private Boolean isUnary;
 
   /**
    * Constructs an operation withe the given operator, left hand side, and
@@ -65,6 +65,7 @@ public class OperatorNode extends ExpressionNode {
         this.type = 0; //ERROR
   }
     this.operator = operator;
+    this.isUnary = false;
   }
   
   /**
@@ -77,14 +78,15 @@ public class OperatorNode extends ExpressionNode {
     // Assign expectedType
     switch(operator.getValue()) {
       case "-":
-        this.expectedType = AbstractSyntaxNode.INTEGER_TYPE;
+        this.type = AbstractSyntaxNode.INTEGER_TYPE;
         break;
       case "not":
-        this.expectedType = AbstractSyntaxNode.BOOLEAN_TYPE;
+        this.type = AbstractSyntaxNode.BOOLEAN_TYPE;
         break;
       default:
-        this.expectedType = 0; //ERROR
+        this.type = 0; //ERROR
     }
+    this.isUnary = true;
   }
   
   /**
@@ -103,5 +105,9 @@ public class OperatorNode extends ExpressionNode {
   @Override
   public String dataAsString() {
     return "[" + this.getOperator() + ", " + this.typeToString() + "]";
+  }
+
+  public Boolean isUnary(){
+    return this.isUnary;
   }
 }
