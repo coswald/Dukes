@@ -102,6 +102,6 @@ public class OperatorNode extends ExpressionNode {
    */
   @Override
   public String dataAsString() {
-    return "[" + this.getOperator() + "]";
+    return "[" + this.getOperator() + ", " + this.typeToString() + "]";
   }
 }

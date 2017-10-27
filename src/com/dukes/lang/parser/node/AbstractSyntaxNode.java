@@ -148,6 +148,10 @@ public abstract class AbstractSyntaxNode extends Object {
     return this.type;
   }
 
+  public void setType(int type){
+    this.type = type;
+  }
+
   /**
    * Returns a string representation of the type.
    * @return A string that represents the type.

@@ -24,6 +24,10 @@ public abstract class AbstractFunctionTable extends Object {
     return new ArrayList<String>();
   }
 
+  public ArrayList<String> getFunctionNames() {
+    return new ArrayList<String>();
+  }
+
   public ArrayList<Integer> getFunctionParameterTypes(String functionName) {
     return new ArrayList<Integer>();
   }

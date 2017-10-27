@@ -14,18 +14,18 @@ import java.util.HashMap;
  */
 public class KleinFunctionTable extends AbstractFunctionTable {
 
-  public KleinFunctionTable(AbstractSyntaxNode top){
+  public KleinFunctionTable(AbstractSyntaxNode top) {
     HashMap<String, Integer> functionValues;
-    for (AbstractSyntaxNode functionNode : top.getChildren()){
+    for(AbstractSyntaxNode functionNode : top.getChildren()) {
       functionValues = new HashMap<String, Integer>();
       functionValues.put("", functionNode.getType());
-      for (AbstractSyntaxNode node : functionNode.getChildren()){
-        if (node instanceof FormalNode){
-          functionValues.put(((FormalNode)node).getIdentifier(),
-              ((FormalNode)node).getType());
+      for(AbstractSyntaxNode node : functionNode.getChildren()) {
+        if(node instanceof FormalNode) {
+          functionValues.put(((FormalNode) node).getIdentifier(),
+              ((FormalNode) node).getType());
         }
       }
-      this.table.put(((FunctionNode)functionNode).getName().getValue(),
+      this.table.put(((FunctionNode) functionNode).getName().getValue(),
           functionValues);
       System.out.print("test");
     }
@@ -39,17 +39,30 @@ public class KleinFunctionTable extends AbstractFunctionTable {
   @Override
   public ArrayList<String> getFunctionParameterNames(String functionName) {
     ArrayList<String> returnList = new ArrayList<String>();
-    for (String name : this.table.get(functionName).keySet()){
-      if (!name.equals("")){ returnList.add(name); }
+    if(functionName == null || functionName.equals("")) {
+      returnList.add("");
     }
+    else {
+      for(String name : this.table.get(functionName).keySet()) {
+        if(!name.equals("")) {
+          returnList.add(name);
+        }
+      }
+    }
+
     return returnList;
+  }
+
+  @Override
+  public ArrayList<String> getFunctionNames() {
+    return new ArrayList<String>(this.table.keySet());
   }
 
   @Override
   public ArrayList<Integer> getFunctionParameterTypes(String functionName) {
     ArrayList<Integer> returnList = new ArrayList<Integer>();
-    for (String name : this.table.get(functionName).keySet()){
-      if (!name.equals("")){
+    for(String name : this.table.get(functionName).keySet()) {
+      if(!name.equals("")) {
         returnList.add(this.table.get(functionName).get(name));
       }
     }
