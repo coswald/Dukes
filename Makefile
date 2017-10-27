@@ -33,6 +33,7 @@ tools:
 	@cp compiler-tools/kleins .
 	@cp compiler-tools/kleinf .
 	@cp compiler-tools/kleinp .
+	@cp compiler-tools/kleinv .
 
 docs: sources
 	@echo "Making docs..."
