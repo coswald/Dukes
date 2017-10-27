@@ -49,17 +49,18 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
               AbstractSyntaxNode.IDENTIFIER_TYPE) {
         // Check to see that the identifier is defined in
         //  the function parameter set.
-        for(String parameterName :
-            this.table.getFunctionParameterNames(functionName)) {
-          // Parameter was found, setting Declared node type.
-          if(parameterName.equals(((DeclaredNode) node).getDeclared())) {
-            node.setType(this.table.getParameterType(
-                functionName, parameterName));
-            return;
-          }
+        if(this.table.getFunctionParameterNames(functionName).contains(
+            ((DeclaredNode) node).getDeclared())) {
+          node.setType(this.table.getParameterType(
+              functionName, ((DeclaredNode) node).getDeclared()));
         }
-        // If we make it to here then the Identifier was not found.
-        // DECLARED NODE IDENTIFIER NOT A VALID FUNCTION PARAMETER
+        else {
+          // If we make it to here then the Identifier was not found.
+          throw new SemanticException(
+              "Identifier '" + ((DeclaredNode) node).getDeclared() +
+                  "' not defined as a parameter in function '" +
+                  functionName + "'.");
+        }
       }
       else if(node instanceof OperatorNode) {
         // Check to see that Operators children match types
@@ -132,7 +133,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       }
       else if(node instanceof BodyNode || node instanceof IfNode ||
           node instanceof ParameterizedExpressionNode) {
-        node.setType(node.getChildren()[node.getChildren().length - 1].getType());
+        node.setType(
+            node.getChildren()[node.getChildren().length - 1].getType());
       }
       // Check body node type against function return type
       if(node instanceof BodyNode &&
