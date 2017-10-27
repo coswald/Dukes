@@ -21,7 +21,9 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     // Create table of funtion names/return types, parameters names/types
     KleinFunctionTable functionTable = new KleinFunctionTable(this.top);
     // Check for presence of main function here?
-
+    if(!functionTable.getFunctionNames().contains("main")) {
+      System.out.println("Function 'main' not found in program.");
+    }
     // Traverse AST and determine and check types for each node
     this.traversePreOrder(this.top, new TypeCheck(functionTable), "");
   }
@@ -67,7 +69,6 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
                     functionName + "', expected '" +
                     node.typeToString() + "' but got '" +
                     node.getChildren()[1].typeToString() + "'.");
-
           }
         }
         if(!((((OperatorNode) node).getChildren()[0].getType() &
@@ -88,6 +89,50 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         node.setType(
             this.table.getFunctionReturnType(
                 ((CallNode) node).getIdentifier()));
+        // Check to see that the correct number of parameters are in the call
+        if(node.getChildren().length !=
+            this.table.getFunctionParameterNames(
+                ((CallNode) node).getIdentifier()).size()) {
+          throw new SemanticException(
+              "Invalid number of parameters in call to '" +
+                  ((CallNode) node).getIdentifier() +
+                  "' in function '" + functionName + "'.");
+        }
+        // If there are the correct number of parameters then check their types
+        else {
+          for(int i = 0; i < node.getChildren().length; i++) {
+            String pNameActual = this.table.getFunctionParameterNames(
+                ((CallNode) node).getIdentifier()).get(i);
+            int pTypeActual = this.table.getFunctionParameterTypes(
+                ((CallNode) node).getIdentifier()).get(i);
+            int pType = node.getChildren()[i].getType();
+            // If the parameter type in the call doesn't match the function
+            //  declaration throw and error
+            if(pType != pTypeActual) {
+              throw new SemanticException(
+                  "For call to function '" +
+                      ((CallNode) node).getIdentifier() + "' in function '" +
+                      functionName + "' expected type '" +
+                      AbstractSyntaxNode.typeToString(pTypeActual) +
+                      "' for parameter '" + pNameActual +
+                      "' but got type '" +
+                      AbstractSyntaxNode.typeToString(pType) + "'."
+              );
+            }
+          }
+        }
+      }
+      else if(node instanceof BodyNode || node instanceof IfNode) {
+        node.setType(node.getChildren()[node.getChildren().length - 1].getType());
+      }
+      // Check body node type against function return type
+      if(node instanceof BodyNode &&
+          node.getType() != this.table.getFunctionReturnType(functionName)) {
+        throw new SemanticException("Expected return type '" +
+            AbstractSyntaxNode.typeToString(
+                this.table.getFunctionReturnType(functionName)) +
+            "' for function '" + functionName +
+            "' but got type '" + node.typeToString() + "'.");
       }
     }
   }

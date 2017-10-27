@@ -26,20 +26,24 @@ public class KleinFunctionTable extends AbstractFunctionTable {
               ((FormalNode) node).getType());
         }
       }
-      this.table.put(((FunctionNode) functionNode).getName().getValue(),
-          functionValues);
-      //System.out.print("test");
+      if(this.table.containsKey(((FunctionNode) functionNode).getName())) {
+        // ERROR duplicate function names!
+      }
+      else {
+        this.table.put(((FunctionNode) functionNode).getName().getValue(),
+            functionValues);
+      }
     }
   }
 
   @Override
   public int getFunctionReturnType(String functionName)
       throws SemanticException {
-    if (this.table.containsKey(functionName)){
+    if(this.table.containsKey(functionName)) {
       return this.table.get(functionName).get("");
     }
     throw new SemanticException(
-        "Function Named '" + functionName + "' Not Found in Table");
+        "Function Named '" + functionName + "' Not Found in program");
   }
 
   @Override
