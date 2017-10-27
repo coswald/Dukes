@@ -41,4 +41,14 @@ public class IfNode extends ExpressionNode {
                 ExpressionNode elseExpression) {
     super(testExpression, ifExpression, elseExpression);
   }
+
+  /**
+   * Gets the type between two brackets.
+   * @return The {@link #typeToString()} function.
+   */
+  @Override
+  public String dataAsString() {
+    return "[Type: " + this.typeToString() +"]";
+  }
+
 }

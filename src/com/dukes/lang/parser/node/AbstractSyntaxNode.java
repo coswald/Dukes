@@ -169,9 +169,7 @@ public abstract class AbstractSyntaxNode extends Object {
       case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.INTEGER_TYPE:
         return "Integer Identifier";
       default:
-        return "INVALID TYPE";
-        // throw new IllegalArgumentException(
-        //    "Invalid type given to typeToString!");
+        return "Not Defined";
     }
   }
 

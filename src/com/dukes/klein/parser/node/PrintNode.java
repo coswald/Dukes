@@ -38,4 +38,13 @@ public class PrintNode extends AbstractSyntaxNode {
   public PrintNode(ExpressionNode exprNode) {
     super(exprNode);
   }
+
+  /**
+   * Gets the type between two brackets.
+   * @return The {@link #typeToString()} function.
+   */
+  @Override
+  public String dataAsString() {
+    return "[Type: Boolean or Integer]";
+  }
 }

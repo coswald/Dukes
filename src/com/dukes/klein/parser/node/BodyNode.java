@@ -38,6 +38,15 @@ public class BodyNode extends AbstractSyntaxNode {
   }
 
   /**
+   * Gets the type between two brackets.
+   * @return The {@link #typeToString()} function.
+   */
+  @Override
+  public String dataAsString() {
+    return "[Type: " + this.typeToString() +"]";
+  }
+
+  /**
    * Gets the expression node of the body.
    * @return The expression Node.
    */

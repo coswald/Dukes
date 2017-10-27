@@ -98,13 +98,13 @@ public class OperatorNode extends ExpressionNode {
   }
   
   /**
-   * Returns the operator seperated by brackets. This is done for the string
-   * representation of this operation.
-   * @return The operator seperated by brackets.
+   * Returns the operator separated and type by brackets.
+   * @return The operator separated and type by brackets.
    */
   @Override
   public String dataAsString() {
-    return "[" + this.getOperator() + ", " + this.typeToString() + "]";
+    return "[Operator: " + this.getOperator() + "" +
+        ", Type: " + this.typeToString() + "]";
   }
 
   public Boolean isUnary(){
