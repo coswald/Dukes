@@ -5,6 +5,16 @@ at the University of Northern Iowa. Our task as a team is to develop a compiler 
 Walllingford, called Klein. This compiler will take Klein code as input, and produce TM (developed by [Kenneth Louden](http://www.cs.sjsu.edu/faculty/louden/)) assembly as output. We chose Java as our implementing language, and an Object-Oriented design
 principle.
 
+## Known Issues
+#### Scanner:
+* Treats negative integers as if they were positive when doing range check.
+#### Parser:
+* AST is binding operator nodes in wrong order (e.g.  Klein grammar calls for the '/' to bind before the '*').
+#### Semantic Checker:
+* Function calls that are within a function and not being stored.
+* IfNode and PrintNode type checks are not functioning.
+
+
 ## Getting Started
 
 To get started, clone the git repository by entering the following string to a command-line with git installed:
