@@ -26,10 +26,6 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     this.traversePreOrder(this.top, new TypeCheck(functionTable), "");
   }
 
-  private interface NodeOperation {
-    public void execute(Object... objects);
-  }
-
   private class TypeCheck implements NodeOperation {
 
     KleinFunctionTable table;
@@ -66,8 +62,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
             ((OperatorNode) node).getChildren()[1].getType()) ==
             ((OperatorNode) node).getType())) {
           throw new SemanticException(
-              "Operator '" + ((OperatorNode) node).getOperator() + "' in '" +
-                  functionName + "' Type Mismatch, expected '" +
+              "Type Mismatch for operator '" + ((OperatorNode) node).getOperator() + "' in '" +
+                  functionName + "', expected '" +
                   node.typeToString() + "' but got '" +
                   node.getChildren()[0].typeToString() + "', and '" +
                   node.getChildren()[1].typeToString() + "'.");

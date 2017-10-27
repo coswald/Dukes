@@ -55,14 +55,14 @@ public class OperatorNode extends ExpressionNode {
       case "=":
       case "*":
       case "/":
-        this.expectedType = AbstractSyntaxNode.INTEGER_TYPE;
+        this.type = AbstractSyntaxNode.INTEGER_TYPE;
         break;
       case "and":
       case "or":
-        this.expectedType = AbstractSyntaxNode.BOOLEAN_TYPE;
+        this.type = AbstractSyntaxNode.BOOLEAN_TYPE;
         break;
       default:
-        this.expectedType = 0; //ERROR
+        this.type = 0; //ERROR
   }
     this.operator = operator;
   }

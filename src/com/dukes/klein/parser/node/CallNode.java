@@ -53,6 +53,7 @@ public class CallNode extends ExpressionNode {
    */
   @Override
   public String dataAsString() {
-    return "[" + this.getIdentifier() + "]";
+    return "[Identifier: " + this.getIdentifier() + ", Type: " +
+        this.typeToString() +"]";
   }
 }
