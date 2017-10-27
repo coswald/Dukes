@@ -22,5 +22,7 @@ public abstract class AbstractTreeTraverser extends Object {
 
   public AbstractSyntaxNode getTop(){return this.top;}
 
+  protected void traversePreOrder(AbstractSyntaxNode node, NodeOperation op,
+                                  Object... objects){}
 
 }

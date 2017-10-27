@@ -28,7 +28,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       System.out.println("User defined function named 'print' not allowed!");
     }
     // Traverse AST and determine and check types for each node
-    this.traversePreOrder(this.top, new TypeCheck(functionTable), "");
+    this.traversePreOrder(this.top, new TypeCheck(functionTable));
   }
 
   private class TypeCheck implements NodeOperation {
@@ -45,17 +45,16 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       String functionName = (String) objects[1];
       // If the Declared node is an Identifier
       if(node instanceof DeclaredNode &&
-          node.getType() ==
-              AbstractSyntaxNode.IDENTIFIER_TYPE) {
+          node.getType() == AbstractSyntaxNode.IDENTIFIER_TYPE) {
         // Check to see that the identifier is defined in
-        //  the function parameter set.
+        //  the functions parameter set.
         if(this.table.getFunctionParameterNames(functionName).contains(
             ((DeclaredNode) node).getDeclared())) {
           node.setType(this.table.getParameterType(
               functionName, ((DeclaredNode) node).getDeclared()));
         }
         else {
-          // If we make it to here then the Identifier was not found.
+          // Otherwise the Identifier was not found and is undefined.
           throw new SemanticException(
               "Identifier '" + ((DeclaredNode) node).getDeclared() +
                   "' not defined as a parameter in function '" +
@@ -65,6 +64,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       }
       else if(node instanceof OperatorNode) {
         // Check to see that Operators children match types
+        // If it is a unary operator
         if(((OperatorNode) node).isUnary()) {
           if(!(node.getChildren()[1].getType() == node.getType())) {
             throw new SemanticException(
@@ -76,7 +76,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
             );
           }
         }
-        else { // If a binary operator
+        else { // Or if it is a binary operator
           if(!((node.getChildren()[0].getType() &
               node.getChildren()[1].getType()) ==
               node.getType())) {
@@ -161,9 +161,13 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     }
   }
 
-  private void traversePreOrder(AbstractSyntaxNode node, NodeOperation op,
-                                String name) {
-    String functionName = name;
+  @Override
+  protected void traversePreOrder(AbstractSyntaxNode node, NodeOperation op,
+                                  Object... objects) {
+    String functionName = "";
+    if (objects.length > 0){
+      functionName = (String) objects[0];
+    }
     if(node instanceof NullNode) {
       return;
     }
@@ -173,7 +177,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     for(AbstractSyntaxNode child : node.getChildren()) {
       this.traversePreOrder(child, op, functionName);
     }
-    // Catching errors thrown here...
+    // Catching semantic errors here...
     //  need to decide how to package them for display
     try {
       op.execute(node, functionName);
