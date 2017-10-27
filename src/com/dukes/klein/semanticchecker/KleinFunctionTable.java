@@ -26,13 +26,9 @@ public class KleinFunctionTable extends AbstractFunctionTable {
               ((FormalNode) node).getType());
         }
       }
-      if(this.table.containsKey(((FunctionNode) functionNode).getName())) {
-        // ERROR duplicate function names!
-      }
-      else {
-        this.table.put(((FunctionNode) functionNode).getName().getValue(),
-            functionValues);
-      }
+      // ******* Need to check for duplicate function names error ....
+      this.table.put(((FunctionNode) functionNode).getName().getValue(),
+          functionValues);
     }
   }
 

@@ -24,6 +24,9 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     if(!functionTable.getFunctionNames().contains("main")) {
       System.out.println("Function 'main' not found in program.");
     }
+    if(functionTable.getFunctionNames().contains("print")) {
+      System.out.println("User defined function named 'print' not allowed!");
+    }
     // Traverse AST and determine and check types for each node
     this.traversePreOrder(this.top, new TypeCheck(functionTable), "");
   }
@@ -42,7 +45,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       String functionName = (String) objects[1];
       // If the Declared node is an Identifier
       if(node instanceof DeclaredNode &&
-          ((DeclaredNode) node).getType() ==
+          node.getType() ==
               AbstractSyntaxNode.IDENTIFIER_TYPE) {
         // Check to see that the identifier is defined in
         //  the function parameter set.
@@ -50,7 +53,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
             this.table.getFunctionParameterNames(functionName)) {
           // Parameter was found, setting Declared node type.
           if(parameterName.equals(((DeclaredNode) node).getDeclared())) {
-            ((DeclaredNode) node).setType(this.table.getParameterType(
+            node.setType(this.table.getParameterType(
                 functionName, parameterName));
             return;
           }
@@ -61,8 +64,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       else if(node instanceof OperatorNode) {
         // Check to see that Operators children match types
         if(((OperatorNode) node).isUnary()) {
-          if(!(((OperatorNode) node).getChildren()[1].getType() ==
-              ((OperatorNode) node).getType())) {
+          if(!(node.getChildren()[1].getType() == node.getType())) {
             throw new SemanticException(
                 "Type Mismatch for unary operator '" +
                     ((OperatorNode) node).getOperator() + "' in '" +
@@ -71,16 +73,22 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
                     node.getChildren()[1].typeToString() + "'.");
           }
         }
-        if(!((((OperatorNode) node).getChildren()[0].getType() &
-            ((OperatorNode) node).getChildren()[1].getType()) ==
-            ((OperatorNode) node).getType())) {
-          throw new SemanticException(
-              "Type Mismatch for operator '" +
-                  ((OperatorNode) node).getOperator() + "' in '" +
-                  functionName + "', expected '" +
-                  node.typeToString() + "' but got '" +
-                  node.getChildren()[0].typeToString() + "', and '" +
-                  node.getChildren()[1].typeToString() + "'.");
+        else { // If a binary operator
+          if(!((node.getChildren()[0].getType() &
+              node.getChildren()[1].getType()) ==
+              node.getType())) {
+            throw new SemanticException(
+                "Type Mismatch for operator '" +
+                    ((OperatorNode) node).getOperator() + "' in '" +
+                    functionName + "', expected '" +
+                    node.typeToString() + "' but got '" +
+                    node.getChildren()[0].typeToString() + "', and '" +
+                    node.getChildren()[1].typeToString() + "'.");
+          }
+          // Everything good we can set her to boolean
+          if(((OperatorNode) node).getOperator().equals("=")) {
+            node.setType(AbstractSyntaxNode.BOOLEAN_TYPE);
+          }
         }
       }
       // If a CallNode then set type equal to that of the return type of
@@ -122,7 +130,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           }
         }
       }
-      else if(node instanceof BodyNode || node instanceof IfNode) {
+      else if(node instanceof BodyNode || node instanceof IfNode ||
+          node instanceof ParameterizedExpressionNode) {
         node.setType(node.getChildren()[node.getChildren().length - 1].getType());
       }
       // Check body node type against function return type
