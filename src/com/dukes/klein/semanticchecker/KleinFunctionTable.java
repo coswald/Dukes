@@ -27,6 +27,13 @@ public class KleinFunctionTable extends AbstractFunctionTable {
         }
       }
       // ******* Need to check for duplicate function names error ....
+      if(this.table.containsKey(
+          ((FunctionNode) functionNode).getName().getValue())){
+        System.out.println(//throw new SemanticException(
+            "Multiple functions with name '" +
+            ((FunctionNode) functionNode).getName().getValue() +
+                "' found. Function names must be unique.");
+      }
       this.table.put(((FunctionNode) functionNode).getName().getValue(),
           functionValues);
     }
@@ -39,7 +46,7 @@ public class KleinFunctionTable extends AbstractFunctionTable {
       return this.table.get(functionName).get("");
     }
     throw new SemanticException(
-        "Function Named '" + functionName + "' Not Found in program");
+        "Function Named '" + functionName + "' Not Found in the Table");
   }
 
   @Override

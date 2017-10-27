@@ -18,7 +18,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
 
   @Override
   public void semanticCheck() {
-    // Create table of funtion names/return types, parameters names/types
+    // Create table of function names/return types, parameters names/types
     KleinFunctionTable functionTable = new KleinFunctionTable(this.top);
     // Check for presence of main function here?
     if(!functionTable.getFunctionNames().contains("main")) {
@@ -59,7 +59,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           throw new SemanticException(
               "Identifier '" + ((DeclaredNode) node).getDeclared() +
                   "' not defined as a parameter in function '" +
-                  functionName + "'.");
+                  functionName + "'."
+          );
         }
       }
       else if(node instanceof OperatorNode) {
@@ -71,7 +72,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
                     ((OperatorNode) node).getOperator() + "' in '" +
                     functionName + "', expected '" +
                     node.typeToString() + "' but got '" +
-                    node.getChildren()[1].typeToString() + "'.");
+                    node.getChildren()[1].typeToString() + "'."
+            );
           }
         }
         else { // If a binary operator
@@ -84,7 +86,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
                     functionName + "', expected '" +
                     node.typeToString() + "' but got '" +
                     node.getChildren()[0].typeToString() + "', and '" +
-                    node.getChildren()[1].typeToString() + "'.");
+                    node.getChildren()[1].typeToString() + "'."
+            );
           }
           // Everything good we can set her to boolean
           if(((OperatorNode) node).getOperator().equals("=")) {
@@ -95,9 +98,17 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       // If a CallNode then set type equal to that of the return type of
       //  the function being called.
       else if(node instanceof CallNode) {
-        node.setType(
-            this.table.getFunctionReturnType(
-                ((CallNode) node).getIdentifier()));
+        try {
+          node.setType(
+              this.table.getFunctionReturnType(
+                  ((CallNode) node).getIdentifier()));
+        }
+        catch(SemanticException e){
+          throw new SemanticException(
+              "Undefined function '" + ((CallNode) node).getIdentifier() +
+                  "' called in function '" + functionName + "'."
+          );
+        }
         // Check to see that the correct number of parameters are in the call
         if(node.getChildren().length !=
             this.table.getFunctionParameterNames(
@@ -105,7 +116,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           throw new SemanticException(
               "Invalid number of parameters in call to '" +
                   ((CallNode) node).getIdentifier() +
-                  "' in function '" + functionName + "'.");
+                  "' in function '" + functionName + "'."
+          );
         }
         // If there are the correct number of parameters then check their types
         else {
@@ -143,7 +155,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
             AbstractSyntaxNode.typeToString(
                 this.table.getFunctionReturnType(functionName)) +
             "' for function '" + functionName +
-            "' but got type '" + node.typeToString() + "'.");
+            "' but got type '" + node.typeToString() + "'."
+        );
       }
     }
   }
