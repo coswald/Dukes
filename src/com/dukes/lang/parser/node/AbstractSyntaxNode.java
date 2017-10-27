@@ -156,7 +156,7 @@ public abstract class AbstractSyntaxNode extends Object {
    * Returns a string representation of the type.
    * @return A string that represents the type.
    */
-  protected String typeToString() {
+  public String typeToString() {
     switch(this.type) {
       case AbstractSyntaxNode.IDENTIFIER_TYPE:
         return "Identifier";
@@ -169,7 +169,7 @@ public abstract class AbstractSyntaxNode extends Object {
       case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.INTEGER_TYPE:
         return "Integer Identifier";
       default:
-        return "";
+        return "INVALID TYPE";
         // throw new IllegalArgumentException(
         //    "Invalid type given to typeToString!");
     }

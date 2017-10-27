@@ -4,6 +4,7 @@ import com.dukes.klein.parser.node.FormalNode;
 import com.dukes.klein.parser.node.FunctionNode;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.semanticchecker.AbstractFunctionTable;
+import com.dukes.lang.semanticchecker.SemanticException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,13 +28,18 @@ public class KleinFunctionTable extends AbstractFunctionTable {
       }
       this.table.put(((FunctionNode) functionNode).getName().getValue(),
           functionValues);
-      System.out.print("test");
+      //System.out.print("test");
     }
   }
 
   @Override
-  public int getFunctionReturnType(String functionName) {
-    return this.table.get(functionName).get("");
+  public int getFunctionReturnType(String functionName)
+      throws SemanticException {
+    if (this.table.containsKey(functionName)){
+      return this.table.get(functionName).get("");
+    }
+    throw new SemanticException(
+        "Function Named '" + functionName + "' Not Found in Table");
   }
 
   @Override

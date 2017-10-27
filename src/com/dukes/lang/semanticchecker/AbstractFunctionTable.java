@@ -16,7 +16,8 @@ public abstract class AbstractFunctionTable extends Object {
 
   public void AbstractFunctionTable(AbstractSyntaxNode top) {}
 
-  public int getFunctionReturnType(String functionName) {
+  public int getFunctionReturnType(String functionName)
+      throws SemanticException {
     return 0;
   }
 
