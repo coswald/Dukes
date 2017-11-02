@@ -42,6 +42,12 @@ public abstract class AbstractSyntaxNode extends Object {
    */
   public static final int INTEGER_TYPE = 4;
 
+
+  /**
+   * Tells the compiler that this is a boolean or an integer.
+   */
+  public static final int BOOL_OR_INT_TYPE = 6;
+
   /**
    * The children of the tree node. This doesn't have a predetermined size, so
    * the implementing class can have as many children as needed.
@@ -164,6 +170,8 @@ public abstract class AbstractSyntaxNode extends Object {
         return "Boolean";
       case AbstractSyntaxNode.INTEGER_TYPE:
         return "Integer";
+      case AbstractSyntaxNode.BOOL_OR_INT_TYPE:
+        return "Boolean or Integer";
       case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.BOOLEAN_TYPE:
         return "Boolean Identifier";
       case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.INTEGER_TYPE:
@@ -181,14 +189,14 @@ public abstract class AbstractSyntaxNode extends Object {
         return "Boolean";
       case AbstractSyntaxNode.INTEGER_TYPE:
         return "Integer";
+      case AbstractSyntaxNode.BOOL_OR_INT_TYPE:
+        return "Boolean or Integer";
       case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.BOOLEAN_TYPE:
         return "Boolean Identifier";
       case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.INTEGER_TYPE:
         return "Integer Identifier";
       default:
-        return "INVALID TYPE";
-      // throw new IllegalArgumentException(
-      //    "Invalid type given to typeToString!");
+        return "Not Defined";
     }
   }
 

@@ -26,12 +26,12 @@ public class KleinFunctionTable extends AbstractFunctionTable {
               ((FormalNode) node).getType());
         }
       }
-      // ******* Need to check for duplicate function names error ....
+      // Check for duplicate errors
       if(this.table.containsKey(
-          ((FunctionNode) functionNode).getName().getValue())){
+          ((FunctionNode) functionNode).getName().getValue())) {
         System.out.println(//throw new SemanticException(
             "Multiple functions with name '" +
-            ((FunctionNode) functionNode).getName().getValue() +
+                ((FunctionNode) functionNode).getName().getValue() +
                 "' found. Function names must be unique.");
       }
       this.table.put(((FunctionNode) functionNode).getName().getValue(),
@@ -62,7 +62,6 @@ public class KleinFunctionTable extends AbstractFunctionTable {
         }
       }
     }
-
     return returnList;
   }
 

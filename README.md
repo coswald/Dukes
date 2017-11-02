@@ -12,8 +12,6 @@ principle.
 * AST is binding operator nodes in wrong order (e.g.  Klein grammar calls for the '/' to bind before the '*').
 #### Semantic Checker:
 * Function calls that are within a function and not being stored.
-* IfNode and PrintNode type checks are not functioning.
-
 
 ## Getting Started
 

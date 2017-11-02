@@ -37,6 +37,7 @@ public class PrintNode extends AbstractSyntaxNode {
    */
   public PrintNode(ExpressionNode exprNode) {
     super(exprNode);
+    this.type = AbstractSyntaxNode.BOOL_OR_INT_TYPE;
   }
 
   /**
@@ -45,6 +46,6 @@ public class PrintNode extends AbstractSyntaxNode {
    */
   @Override
   public String dataAsString() {
-    return "[Type: Boolean or Integer]";
+    return "[Type: " + this.typeToString() +"]";
   }
 }

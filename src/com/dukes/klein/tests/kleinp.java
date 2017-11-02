@@ -20,7 +20,6 @@ package com.dukes.klein.tests;
 import com.dukes.klein.parser.KleinParser;
 import com.dukes.klein.scanner.KleinScanner;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
-import com.dukes.lang.parser.node.NullNode;
 import com.dukes.lang.scanner.FileInputter;
 import com.dukes.lang.tests.Test;
 

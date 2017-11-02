@@ -63,8 +63,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         }
       }
       else if(node instanceof OperatorNode) {
-        // Check to see that Operators children match types
-        // If it is a unary operator
+        // Check to see that Operators children match types.
         if(((OperatorNode) node).isUnary()) {
           if(!(node.getChildren()[1].getType() == node.getType())) {
             throw new SemanticException(
@@ -102,8 +101,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           node.setType(
               this.table.getFunctionReturnType(
                   ((CallNode) node).getIdentifier()));
-        }
-        catch(SemanticException e){
+        } catch(SemanticException e) {
           throw new SemanticException(
               "Undefined function '" + ((CallNode) node).getIdentifier() +
                   "' called in function '" + functionName + "'."
@@ -143,11 +141,23 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           }
         }
       }
-      else if(node instanceof BodyNode || node instanceof IfNode ||
+      else if(node instanceof IfNode){
+        node.setType(
+            node.getChildren()[1].getType() | node.getChildren()[2].getType());
+      }
+      else if(node instanceof PrintNode){
+        if ((node.getType() | node.getChildren()[0].getType()) !=
+            AbstractSyntaxNode.BOOL_OR_INT_TYPE){
+          throw new SemanticException("For call to print in function '" +
+              functionName + "', arg is not of type Boolean or Integer");
+        }
+      }
+      else if(node instanceof BodyNode ||
           node instanceof ParameterizedExpressionNode) {
         node.setType(
             node.getChildren()[node.getChildren().length - 1].getType());
       }
+
       // Check body node type against function return type
       if(node instanceof BodyNode &&
           node.getType() != this.table.getFunctionReturnType(functionName)) {
@@ -165,7 +175,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
   protected void traversePreOrder(AbstractSyntaxNode node, NodeOperation op,
                                   Object... objects) {
     String functionName = "";
-    if (objects.length > 0){
+    if(objects.length > 0) {
       functionName = (String) objects[0];
     }
     if(node instanceof NullNode) {
