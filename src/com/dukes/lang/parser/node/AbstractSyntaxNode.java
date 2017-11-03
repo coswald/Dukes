@@ -42,11 +42,10 @@ public abstract class AbstractSyntaxNode extends Object {
    */
   public static final int INTEGER_TYPE = 4;
 
-
   /**
-   * Tells the compiler that this is a boolean or an integer.
+   * Tells the compiler that this is either a boolean or an integer.
    */
-  public static final int BOOL_OR_INT_TYPE = 6;
+  public static final int BOOL_OR_INT_TYPE = BOOLEAN_TYPE | INTEGER_TYPE;
 
   /**
    * The children of the tree node. This doesn't have a predetermined size, so
@@ -92,7 +91,7 @@ public abstract class AbstractSyntaxNode extends Object {
   /**
    * Returns a string representation of this node. Does some pretty cool
    * formatting, and assumes that the name of a subclass ends with "Node" and
-   * doesn't contain it anywhere else. To change how this is pretty printed, 
+   * doesn't contain it anywhere else. To change how this is pretty printed,
    * change the {@link #prettyPrint()} method.
    * @return A string representation of this node.
    */
@@ -100,7 +99,7 @@ public abstract class AbstractSyntaxNode extends Object {
   public String toString() {
     return this.prettyPrint();
   }
-  
+
   /**
    * Returns a pretty printed version of the node.
    * @return A pretty string representation.
@@ -109,10 +108,10 @@ public abstract class AbstractSyntaxNode extends Object {
   {
     return AbstractSyntaxNode.prettyPrint(this, 0);
   }
-  
+
   /**
    * Concatenates the front node given to the front of the list provided.
-   * @param frontNode The node to add to the front. 
+   * @param frontNode The node to add to the front.
    * @param end The list to add to.
    */
   public static AbstractSyntaxNode[] concat(AbstractSyntaxNode frontNode,
@@ -122,7 +121,7 @@ public abstract class AbstractSyntaxNode extends Object {
     System.arraycopy(end, 0, ret, 1, end.length);
     return ret;
   }
-  
+
   private static String prettyPrint(AbstractSyntaxNode ast, int indent) {
     String ret = "";
     //System.out.println(ast.getClass().getSimpleName() + " " + indent);
@@ -131,7 +130,7 @@ public abstract class AbstractSyntaxNode extends Object {
     }
     ret += (ast.getClass().getSimpleName()).replaceAll("Node", "") + " " +
         ast.dataAsString() + "\n";
-    
+
     if(ast.getChildren().length == 0) {
       if(ast instanceof NullNode) {
         return "";
@@ -159,28 +158,18 @@ public abstract class AbstractSyntaxNode extends Object {
   }
 
   /**
-   * Returns a string representation of the type.
-   * @return A string that represents the type.
+   * Returns a string representation of this nodes type.
+   * @return A string that represents this nodes type.
    */
   public String typeToString() {
-    switch(this.type) {
-      case AbstractSyntaxNode.IDENTIFIER_TYPE:
-        return "Identifier";
-      case AbstractSyntaxNode.BOOLEAN_TYPE:
-        return "Boolean";
-      case AbstractSyntaxNode.INTEGER_TYPE:
-        return "Integer";
-      case AbstractSyntaxNode.BOOL_OR_INT_TYPE:
-        return "Boolean or Integer";
-      case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.BOOLEAN_TYPE:
-        return "Boolean Identifier";
-      case AbstractSyntaxNode.IDENTIFIER_TYPE | AbstractSyntaxNode.INTEGER_TYPE:
-        return "Integer Identifier";
-      default:
-        return "Not Defined";
-    }
+    return typeToString(this.type);
   }
 
+  /**
+   * Returns a string representation of the input type.
+   * @param type An int that represent the type.
+   * @return A string representation of the type.
+   */
   public static String typeToString(int type) {
     switch(type) {
       case AbstractSyntaxNode.IDENTIFIER_TYPE:
@@ -199,5 +188,4 @@ public abstract class AbstractSyntaxNode extends Object {
         return "Not Defined";
     }
   }
-
 }

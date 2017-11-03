@@ -16,8 +16,6 @@ public abstract class AbstractTreeTraverser extends Object {
     public void execute(Object... objects);
   }
 
-  //protected void traversePreOrder(NodeOperation operation, Object... objects){}
-
   public void semanticCheck(){}
 
   public AbstractSyntaxNode getTop(){return this.top;}

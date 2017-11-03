@@ -20,14 +20,15 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
   public void semanticCheck() {
     // Create table of function names/return types, parameters names/types
     KleinFunctionTable functionTable = new KleinFunctionTable(this.top);
-    // Check for presence of main function here?
+    // Check for the presence of function "main"
     if(!functionTable.getFunctionNames().contains("main")) {
       System.out.println("Function 'main' not found in program.");
     }
+    // Verify that there are no user defined functions named "print"
     if(functionTable.getFunctionNames().contains("print")) {
       System.out.println("User defined function named 'print' not allowed!");
     }
-    // Traverse AST and determine and check types for each node
+    // Traverse AST and set and verify types for each node
     this.traversePreOrder(this.top, new TypeCheck(functionTable));
   }
 
@@ -94,10 +95,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           }
         }
       }
-      // If a CallNode then set type equal to that of the return type of
-      //  the function being called.
       else if(node instanceof CallNode) {
-        try {
+        try { // Setting the type equal to the return type of the called func.
           node.setType(
               this.table.getFunctionReturnType(
                   ((CallNode) node).getIdentifier()));
@@ -107,7 +106,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
                   "' called in function '" + functionName + "'."
           );
         }
-        // Check to see that the correct number of parameters are in the call
+        // Verify that the correct number of parameters are in the call
         if(node.getChildren().length !=
             this.table.getFunctionParameterNames(
                 ((CallNode) node).getIdentifier()).size()) {
@@ -117,7 +116,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
                   "' in function '" + functionName + "'."
           );
         }
-        // If there are the correct number of parameters then check their types
+        // If call has the correct number of parameters then verify their types
         else {
           for(int i = 0; i < node.getChildren().length; i++) {
             String pNameActual = this.table.getFunctionParameterNames(
@@ -141,13 +140,14 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           }
         }
       }
-      else if(node instanceof IfNode){
+      else if(node instanceof IfNode) {
         node.setType(
             node.getChildren()[1].getType() | node.getChildren()[2].getType());
       }
-      else if(node instanceof PrintNode){
-        if ((node.getType() | node.getChildren()[0].getType()) !=
-            AbstractSyntaxNode.BOOL_OR_INT_TYPE){
+      else if(node instanceof PrintNode) {
+        // Verify that the arg for print is either of type bool or int.
+        if((node.getType() | node.getChildren()[0].getType()) !=
+            AbstractSyntaxNode.BOOL_OR_INT_TYPE) {
           throw new SemanticException("For call to print in function '" +
               functionName + "', arg is not of type Boolean or Integer");
         }
