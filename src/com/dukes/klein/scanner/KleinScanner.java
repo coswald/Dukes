@@ -36,7 +36,7 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
    * The max value that an integer can be in Klein. This corresponds to
    * 2<sup>32</sup> - 1.
    */
-  public static final long MAX_VALUE = (1L << 32) - 1;
+  public static final long MAX_VALUE = (1L << 32);
 
   /**
    * The min value that an integer can be in Klein. This corresponds to

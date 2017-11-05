@@ -98,7 +98,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
             );
           }
           // Everything good we can set her to boolean
-          if(((OperatorNode) node).getOperator().equals("=")) {
+          if(((OperatorNode) node).getOperator().equals("=") ||
+              ((OperatorNode) node).getOperator().equals("<")) {
             node.setType(AbstractSyntaxNode.BOOLEAN_TYPE);
           }
         }

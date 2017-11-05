@@ -6,8 +6,6 @@ Walllingford, called Klein. This compiler will take Klein code as input, and pro
 principle.
 
 ## Known Issues
-#### Scanner:
-* Treats negative integers as if they were positive when doing range check.
 #### Parser:
 * AST is binding operator nodes in wrong order (e.g.  Klein grammar calls for the '/' to bind before the '*').
 
