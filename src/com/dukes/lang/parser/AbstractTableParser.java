@@ -26,7 +26,7 @@ import com.dukes.lang.scanner.AbstractToken;
 import java.util.Stack;
 
 /**
- * Represents an parser that works on a table. This is not in stark constrast
+ * Represents an parser that works on a functionParamTable. This is not in stark constrast
  * to a recursive decent algorithm, as this type uses a stack to construct the
  * necessary AST. However, this algorithm works by manually containing a stack
  * and pushing values to it as a {@code AbstractScanner} works through a
@@ -41,7 +41,7 @@ public abstract class AbstractTableParser<E extends AbstractScanner<F>,
     implements Parser {
   
   /**
-   * The parse table for the language grammar. This is constructed using the
+   * The parse functionParamTable for the language grammar. This is constructed using the
    * first and follow sets of a grammar, and is final as it should not be
    * reassigned after it is created.
    */
@@ -68,9 +68,9 @@ public abstract class AbstractTableParser<E extends AbstractScanner<F>,
   private boolean isValidProgram;
   
   /**
-   * Constructs the table parser with the given parse table and the scanner
+   * Constructs the functionParamTable parser with the given parse functionParamTable and the scanner
    * given.
-   * @param apt The abstract parse table.
+   * @param apt The abstract parse functionParamTable.
    * @param scanner The scanner.
    */
   protected AbstractTableParser(G apt, E scanner) {
@@ -81,9 +81,9 @@ public abstract class AbstractTableParser<E extends AbstractScanner<F>,
   }
   
   /**
-   * Parses the table and creates an abstract syntax tree. This is
+   * Parses the functionParamTable and creates an abstract syntax tree. This is
    * implementation dependend, but should be done in an LL(1) fashion if
-   * possible. It is unclear to us if our understanding of a table driven
+   * possible. It is unclear to us if our understanding of a functionParamTable driven
    * parser would work for LL(2) or any other types of parsers. Therefore, this
    * method would allow the programmer to expirement with a language grammar
    * and try it out! <b>NOTE: This method should not be called more than

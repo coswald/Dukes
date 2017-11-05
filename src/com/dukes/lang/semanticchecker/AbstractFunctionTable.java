@@ -11,8 +11,11 @@ import java.util.HashMap;
  */
 public abstract class AbstractFunctionTable extends Object {
 
-  protected HashMap<String, HashMap<String, Integer>> table =
+  protected HashMap<String, HashMap<String, Integer>> functionParamTable =
       new HashMap<String, HashMap<String, Integer>>();
+
+  protected HashMap<String, ArrayList<String>> functionCallTable =
+      new HashMap<String, ArrayList<String>>();
 
   public void AbstractFunctionTable(AbstractSyntaxNode top) {}
 
@@ -36,4 +39,7 @@ public abstract class AbstractFunctionTable extends Object {
   public int getParameterType(String functionName, String formalName) {
     return 0;
   }
+
+  public void addFunctionCall(String parentFunction, String calledFunction){}
+
 }

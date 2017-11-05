@@ -27,23 +27,26 @@ public class KleinFunctionTable extends AbstractFunctionTable {
         }
       }
       // Check for duplicate errors
-      if(this.table.containsKey(
+      if(this.functionParamTable.containsKey(
           ((FunctionNode) functionNode).getName().getValue())) {
         System.out.println(//throw new SemanticException(
-            "Multiple functions with name '" +
+            "Semantic Error: Multiple functions with name '" +
                 ((FunctionNode) functionNode).getName().getValue() +
                 "' found. Function names must be unique.");
       }
-      this.table.put(((FunctionNode) functionNode).getName().getValue(),
-          functionValues);
+      this.functionParamTable.put(
+          ((FunctionNode) functionNode).getName().getValue(), functionValues);
+      this.functionCallTable.put(
+          ((FunctionNode) functionNode).getName().getValue(),
+          new ArrayList<String>());
     }
   }
 
   @Override
   public int getFunctionReturnType(String functionName)
       throws SemanticException {
-    if(this.table.containsKey(functionName)) {
-      return this.table.get(functionName).get("");
+    if(this.functionParamTable.containsKey(functionName)) {
+      return this.functionParamTable.get(functionName).get("");
     }
     throw new SemanticException(
         "Function Named '" + functionName + "' Not Found in the Table");
@@ -56,7 +59,7 @@ public class KleinFunctionTable extends AbstractFunctionTable {
       returnList.add("");
     }
     else {
-      for(String name : this.table.get(functionName).keySet()) {
+      for(String name : this.functionParamTable.get(functionName).keySet()) {
         if(!name.equals("")) {
           returnList.add(name);
         }
@@ -67,15 +70,15 @@ public class KleinFunctionTable extends AbstractFunctionTable {
 
   @Override
   public ArrayList<String> getFunctionNames() {
-    return new ArrayList<String>(this.table.keySet());
+    return new ArrayList<String>(this.functionParamTable.keySet());
   }
 
   @Override
   public ArrayList<Integer> getFunctionParameterTypes(String functionName) {
     ArrayList<Integer> returnList = new ArrayList<Integer>();
-    for(String name : this.table.get(functionName).keySet()) {
+    for(String name : this.functionParamTable.get(functionName).keySet()) {
       if(!name.equals("")) {
-        returnList.add(this.table.get(functionName).get(name));
+        returnList.add(this.functionParamTable.get(functionName).get(name));
       }
     }
     return returnList;
@@ -83,7 +86,33 @@ public class KleinFunctionTable extends AbstractFunctionTable {
 
   @Override
   public int getParameterType(String functionName, String formalName) {
-    return this.table.get(functionName).get(formalName);
+    return this.functionParamTable.get(functionName).get(formalName);
   }
 
+  /**
+   * Will add the name of the function from which a function call is being
+   * made to the listing of the called function.
+   *
+   * @param parentFunction The function in which the call is made.
+   * @param calledFunction The function being called.
+   */
+  @Override
+  public void addFunctionCall(String parentFunction, String calledFunction) {
+    this.functionCallTable.get(calledFunction).add(parentFunction);
+  }
+
+  /**
+   * Get the names of all functions that are never called.
+   *
+   * @return List of function names as Strings
+   */
+  public ArrayList<String> getUncalledFunctions() {
+    ArrayList<String> retList = new ArrayList<String>();
+    for(String functionName : this.functionCallTable.keySet()) {
+      if(this.functionCallTable.get(functionName).size() == 0) {
+        retList.add(functionName);
+      }
+    }
+    return retList;
+  }
 }

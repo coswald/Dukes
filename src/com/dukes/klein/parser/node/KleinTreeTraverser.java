@@ -18,18 +18,26 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
 
   @Override
   public void semanticCheck() {
-    // Create table of function names/return types, parameters names/types
+    // Create functionParamTable of function names/return types, parameters names/types
     KleinFunctionTable functionTable = new KleinFunctionTable(this.top);
     // Check for the presence of function "main"
     if(!functionTable.getFunctionNames().contains("main")) {
-      System.out.println("Function 'main' not found in program.");
+      System.out.println(
+          "Semantic Error: Function 'main' not found in program.");
     }
     // Verify that there are no user defined functions named "print"
     if(functionTable.getFunctionNames().contains("print")) {
-      System.out.println("User defined function named 'print' not allowed!");
+      System.out.println(
+          "Semantic Error: User defined function named 'print' not allowed!");
     }
     // Traverse AST and set and verify types for each node
     this.traversePreOrder(this.top, new TypeCheck(functionTable));
+    // Semantic Warning: Check for uncalled functions
+    for(String functionName : functionTable.getUncalledFunctions()) {
+      System.out.println(
+          "Semantic Warning: The function '" + functionName +
+              "' is never called.");
+    }
   }
 
   private class TypeCheck implements NodeOperation {
@@ -96,10 +104,14 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         }
       }
       else if(node instanceof CallNode) {
-        try { // Setting the type equal to the return type of the called func.
+        try {
+          // Setting the type equal to the return type of the called func.
           node.setType(
               this.table.getFunctionReturnType(
                   ((CallNode) node).getIdentifier()));
+          // Add this function call to this functions call list
+          this.table.addFunctionCall(
+              functionName, ((CallNode) node).getIdentifier());
         } catch(SemanticException e) {
           throw new SemanticException(
               "Undefined function '" + ((CallNode) node).getIdentifier() +
@@ -193,7 +205,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       op.execute(node, functionName);
     } catch(Exception err) {
       if(err instanceof SemanticException) {
-        System.out.println(err.getMessage());
+        System.out.println("Semantic Error: " + err.getMessage());
       }
       else {
         err.printStackTrace();

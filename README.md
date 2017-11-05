@@ -10,8 +10,6 @@ principle.
 * Treats negative integers as if they were positive when doing range check.
 #### Parser:
 * AST is binding operator nodes in wrong order (e.g.  Klein grammar calls for the '/' to bind before the '*').
-#### Semantic Checker:
-* Function calls that are within a function and not being stored.
 
 ## Getting Started
 

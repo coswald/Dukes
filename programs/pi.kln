@@ -13,14 +13,13 @@ function calcPiHelper(counter: integer, limit : integer, q : integer,
                       l : integer) : integer
   if not(counter = decimal + 1) then
     if 4 * q + r - t < n * t then
-      reportDigit(n)
+      reportPi(n, counter, limit, q, r, t, k, l)
     else
-      calcPiHelper(count, limit, q * k, (2 * q + r) * l, t * l, k + 1,
+      calcPiHelper(counter, limit, q * k, (2 * q + r) * l, t * l, k + 1,
                    (q * (7 * k) + 2 + (r * l)) / (t * l), l + 2)
   else
     1
     
-
 function reportPi(counter: integer, limit : integer, q : integer, r : integer,
                   t : integer, k : integer, n : integer, l : integer) : integer
   print(n)

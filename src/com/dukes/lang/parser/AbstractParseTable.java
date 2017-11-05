@@ -20,10 +20,10 @@ package com.dukes.lang.parser;
 import java.util.List;
 
 /**
- * <p>Constructs a parse table with defined rules. A parse table is accessed by
+ * <p>Constructs a parse functionParamTable with defined rules. A parse functionParamTable is accessed by
  * two enums, one being non-terminal types and the other being terminal values.
  * That is why the first two generics exist; the third is for describing what
- * type of rules are stored in the parse table.</p>
+ * type of rules are stored in the parse functionParamTable.</p>
  * @author Coved W Oswald
  * @version 1.0
  * @since 0.2.0
@@ -32,7 +32,7 @@ public abstract class AbstractParseTable<K1 extends Enum<K1>,
     K2 extends Enum<K2>, V extends AbstractRule> {
   
   /**
-   * Describes the table as a two-dimensional list.
+   * Describes the functionParamTable as a two-dimensional list.
    */
   protected List<List<V>> table;
   
@@ -51,7 +51,7 @@ public abstract class AbstractParseTable<K1 extends Enum<K1>,
   protected abstract V getRule(K1 nonTerminal, K2 terminalType);
   
   /**
-   * Adds a rule to the parse table.
+   * Adds a rule to the parse functionParamTable.
    * @param nonTerminal The non terminal value to look up.
    * @param terminalType The terminal found to compare to the non terminal.
    * @param value The new rule to add.
