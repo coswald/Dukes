@@ -5,9 +5,11 @@ import com.dukes.klein.parser.node.FunctionNode;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.semanticchecker.AbstractFunctionTable;
 import com.dukes.lang.semanticchecker.SemanticException;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * @author Daniel J. Holland
@@ -16,9 +18,9 @@ import java.util.HashMap;
 public class KleinFunctionTable extends AbstractFunctionTable {
 
   public KleinFunctionTable(AbstractSyntaxNode top) {
-    HashMap<String, Integer> functionValues;
+    LinkedHashMap<String, Integer> functionValues;
     for(AbstractSyntaxNode functionNode : top.getChildren()) {
-      functionValues = new HashMap<String, Integer>();
+      functionValues = new LinkedHashMap<String, Integer>();
       functionValues.put("", functionNode.getType());
       for(AbstractSyntaxNode node : functionNode.getChildren()) {
         if(node instanceof FormalNode) {
@@ -93,12 +95,12 @@ public class KleinFunctionTable extends AbstractFunctionTable {
    * Will add the name of the function from which a function call is being
    * made to the listing of the called function.
    *
-   * @param parentFunction The function in which the call is made.
+   * @param calledFromFunction The function in which the call is made.
    * @param calledFunction The function being called.
    */
   @Override
-  public void addFunctionCall(String parentFunction, String calledFunction) {
-    this.functionCallTable.get(calledFunction).add(parentFunction);
+  public void addFunctionCall(String calledFromFunction, String calledFunction) {
+    this.functionCallTable.get(calledFunction).add(calledFromFunction);
   }
 
   /**
@@ -114,5 +116,10 @@ public class KleinFunctionTable extends AbstractFunctionTable {
       }
     }
     return retList;
+  }
+
+  @Override
+  public Boolean containsFunction(String functionName){
+    return this.functionParamTable.containsKey(functionName);
   }
 }

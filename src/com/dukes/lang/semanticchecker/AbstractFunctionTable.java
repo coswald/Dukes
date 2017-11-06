@@ -4,6 +4,7 @@ import com.dukes.lang.parser.node.AbstractSyntaxNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * @author Daniel J. Holland
@@ -11,8 +12,8 @@ import java.util.HashMap;
  */
 public abstract class AbstractFunctionTable extends Object {
 
-  protected HashMap<String, HashMap<String, Integer>> functionParamTable =
-      new HashMap<String, HashMap<String, Integer>>();
+  protected HashMap<String, LinkedHashMap<String, Integer>> functionParamTable =
+      new HashMap<String, LinkedHashMap<String, Integer>>();
 
   protected HashMap<String, ArrayList<String>> functionCallTable =
       new HashMap<String, ArrayList<String>>();
@@ -40,6 +41,9 @@ public abstract class AbstractFunctionTable extends Object {
     return 0;
   }
 
-  public void addFunctionCall(String parentFunction, String calledFunction){}
+  public void addFunctionCall(String calledFromFunction, String calledFunction){}
 
+  public Boolean containsFunction(String functionName){
+    return false;
+  }
 }

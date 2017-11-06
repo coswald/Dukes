@@ -50,6 +50,10 @@ function run(a : integer) : integer
 function onNegative() : boolean
   negativeExample(1, 1) = 0
 
+(* semantic error: wrong types for parameters in function call *)
+function test() : integer
+  negativeExample(true, false, 10, 89)
+
 (* semantic error: operator applied to wrong type, 17 times *)
 (* semantic error: incorrect return type. *)
 function negativeExample(i : integer, j : integer, a : boolean, b : boolean) :

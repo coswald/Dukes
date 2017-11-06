@@ -85,9 +85,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           }
         }
         else { // Or if it is a binary operator
-          if(!((node.getChildren()[0].getType() &
-              node.getChildren()[1].getType()) ==
-              node.getType())) {
+          if((node.getChildren()[0].getType() &
+              node.getChildren()[1].getType()) != node.getType()) {
             throw new SemanticException(
                 "Type Mismatch for operator '" +
                     ((OperatorNode) node).getOperator() + "' in '" +
@@ -97,7 +96,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
                     node.getChildren()[1].typeToString() + "'."
             );
           }
-          // Everything good we can set her to boolean
+          // If the child types are correct then we need to set special cases
+          //  to boolean.
           if(((OperatorNode) node).getOperator().equals("=") ||
               ((OperatorNode) node).getOperator().equals("<")) {
             node.setType(AbstractSyntaxNode.BOOLEAN_TYPE);
@@ -105,15 +105,16 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         }
       }
       else if(node instanceof CallNode) {
-        try {
-          // Setting the type equal to the return type of the called func.
+        // Set the type equal to the return type of the called function
+        if (this.table.containsFunction(((CallNode) node).getIdentifier())){
           node.setType(
               this.table.getFunctionReturnType(
                   ((CallNode) node).getIdentifier()));
-          // Add this function call to this functions call list
-          this.table.addFunctionCall(
-              functionName, ((CallNode) node).getIdentifier());
-        } catch(SemanticException e) {
+          // Add called function name to this functions call list
+          this.table.addFunctionCall(functionName,
+              ((CallNode) node).getIdentifier());
+        }
+        else {
           throw new SemanticException(
               "Undefined function '" + ((CallNode) node).getIdentifier() +
                   "' called in function '" + functionName + "'."
@@ -131,6 +132,10 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         }
         // If call has the correct number of parameters then verify their types
         else {
+          String errStart = "For call to function '" +
+              ((CallNode) node).getIdentifier() + "' in function '" +
+              functionName + "':\n";
+          String semanticErrors = errStart;
           for(int i = 0; i < node.getChildren().length; i++) {
             String pNameActual = this.table.getFunctionParameterNames(
                 ((CallNode) node).getIdentifier()).get(i);
@@ -140,16 +145,18 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
             // If the parameter type in the call doesn't match the function
             //  declaration throw and error
             if(pType != pTypeActual) {
-              throw new SemanticException(
-                  "For call to function '" +
-                      ((CallNode) node).getIdentifier() + "' in function '" +
-                      functionName + "' expected type '" +
+              semanticErrors += (
+                  "                expected type '" +
                       AbstractSyntaxNode.typeToString(pTypeActual) +
                       "' for parameter '" + pNameActual +
                       "' but got type '" +
-                      AbstractSyntaxNode.typeToString(pType) + "'."
+                      AbstractSyntaxNode.typeToString(pType) + "'.\n"
               );
             }
+          }
+          if (!(semanticErrors.equals(errStart))){
+            throw new SemanticException(
+                semanticErrors.trim());
           }
         }
       }
