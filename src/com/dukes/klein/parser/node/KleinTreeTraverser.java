@@ -6,6 +6,8 @@ import com.dukes.lang.parser.node.AbstractTreeTraverser;
 import com.dukes.lang.parser.node.NullNode;
 import com.dukes.lang.semanticchecker.SemanticException;
 
+import java.util.ArrayList;
+
 /**
  * @author Daniel J. Holland
  * @version 1.0
@@ -18,40 +20,62 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
 
   @Override
   public void semanticCheck() {
-    // Create functionParamTable of function names/return types, parameters names/types
+    ArrayList<SemanticException> semanticExceptions =
+        new ArrayList<SemanticException>();
     KleinFunctionTable functionTable = new KleinFunctionTable(this.top);
     // Check for the presence of function "main"
     if(!functionTable.getFunctionNames().contains("main")) {
-      System.out.println(
-          "Semantic Error: Function 'main' not found in program.");
+      semanticExceptions.add(new SemanticException(
+          "Function 'main' not found in program.")
+      );
     }
     // Verify that there are no user defined functions named "print"
     if(functionTable.getFunctionNames().contains("print")) {
-      System.out.println(
-          "Semantic Error: User defined function named 'print' not allowed!");
+      semanticExceptions.add(new SemanticException(
+          "User defined function named 'print' not allowed!")
+      );
     }
     // Traverse AST and set and verify types for each node
-    this.traversePreOrder(this.top, new TypeCheck(functionTable));
+    this.traversePreOrder(this.top, new TypeCheck(functionTable),
+        semanticExceptions);
     // Semantic Warning: Check for uncalled functions
     for(String functionName : functionTable.getUncalledFunctions()) {
       System.out.println(
           "Semantic Warning: The function '" + functionName +
               "' is never called.");
     }
+    String errMsg = "";
+    for(SemanticException error : semanticExceptions) {
+      errMsg += "Semantic Error: " + error.getMessage() + "\n";
+    }
+    throw new SemanticException(errMsg);
   }
 
   private class TypeCheck implements NodeOperation {
 
     KleinFunctionTable table;
+    String functionName;
 
     public TypeCheck(Object table) {
       this.table = (KleinFunctionTable) table;
+      this.functionName = "";
+    }
+
+    @Override
+    public void traversed(AbstractSyntaxNode node) {
+      if(node instanceof FunctionNode) {
+        this.functionName = ((FunctionNode) node).getName().getValue();
+      }
     }
 
     @Override
     public void execute(Object... objects) {
       AbstractSyntaxNode node = (AbstractSyntaxNode) objects[0];
-      String functionName = (String) objects[1];
+      ArrayList<SemanticException> semanticExceptions =
+          (ArrayList<SemanticException>) ((Object[]) objects[1])[0];
+      if(node instanceof NullNode) {
+        return;
+      }
       // If the Declared node is an Identifier
       if(node instanceof DeclaredNode &&
           node.getType() == AbstractSyntaxNode.IDENTIFIER_TYPE) {
@@ -64,37 +88,40 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         }
         else {
           // Otherwise the Identifier was not found and is undefined.
-          throw new SemanticException(
+          semanticExceptions.add(new SemanticException(
               "Identifier '" + ((DeclaredNode) node).getDeclared() +
                   "' not defined as a parameter in function '" +
-                  functionName + "'."
+                  functionName + "'.")
           );
+          return;
         }
       }
       else if(node instanceof OperatorNode) {
         // Check to see that Operators children match types.
         if(((OperatorNode) node).isUnary()) {
           if(!(node.getChildren()[1].getType() == node.getType())) {
-            throw new SemanticException(
+            semanticExceptions.add(new SemanticException(
                 "Type Mismatch for unary operator '" +
                     ((OperatorNode) node).getOperator() + "' in '" +
                     functionName + "', expected '" +
                     node.typeToString() + "' but got '" +
-                    node.getChildren()[1].typeToString() + "'."
+                    node.getChildren()[1].typeToString() + "'.")
             );
+            return;
           }
         }
         else { // Or if it is a binary operator
           if((node.getChildren()[0].getType() &
               node.getChildren()[1].getType()) != node.getType()) {
-            throw new SemanticException(
+            semanticExceptions.add(new SemanticException(
                 "Type Mismatch for operator '" +
                     ((OperatorNode) node).getOperator() + "' in '" +
                     functionName + "', expected '" +
                     node.typeToString() + "' but got '" +
                     node.getChildren()[0].typeToString() + "', and '" +
-                    node.getChildren()[1].typeToString() + "'."
+                    node.getChildren()[1].typeToString() + "'.")
             );
+            return;
           }
           // If the child types are correct then we need to set special cases
           //  to boolean.
@@ -106,7 +133,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       }
       else if(node instanceof CallNode) {
         // Set the type equal to the return type of the called function
-        if (this.table.containsFunction(((CallNode) node).getIdentifier())){
+        if(this.table.containsFunction(((CallNode) node).getIdentifier())) {
           node.setType(
               this.table.getFunctionReturnType(
                   ((CallNode) node).getIdentifier()));
@@ -115,20 +142,22 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
               ((CallNode) node).getIdentifier());
         }
         else {
-          throw new SemanticException(
+          semanticExceptions.add(new SemanticException(
               "Undefined function '" + ((CallNode) node).getIdentifier() +
-                  "' called in function '" + functionName + "'."
+                  "' called in function '" + functionName + "'.")
           );
+          return;
         }
         // Verify that the correct number of parameters are in the call
         if(node.getChildren().length !=
             this.table.getFunctionParameterNames(
                 ((CallNode) node).getIdentifier()).size()) {
-          throw new SemanticException(
+          semanticExceptions.add(new SemanticException(
               "Invalid number of parameters in call to '" +
                   ((CallNode) node).getIdentifier() +
-                  "' in function '" + functionName + "'."
+                  "' in function '" + functionName + "'.")
           );
+          return;
         }
         // If call has the correct number of parameters then verify their types
         else {
@@ -142,8 +171,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
             int pTypeActual = this.table.getFunctionParameterTypes(
                 ((CallNode) node).getIdentifier()).get(i);
             int pType = node.getChildren()[i].getType();
-            // If the parameter type in the call doesn't match the function
-            //  declaration throw and error
+            // Verify that the parameter type in the call matches the function
+            //  declaration
             if(pType != pTypeActual) {
               semanticErrors += (
                   "                expected type '" +
@@ -154,9 +183,11 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
               );
             }
           }
-          if (!(semanticErrors.equals(errStart))){
-            throw new SemanticException(
-                semanticErrors.trim());
+          if(!(semanticErrors.equals(errStart))) {
+            semanticExceptions.add(new SemanticException(
+                semanticErrors.trim())
+            );
+            return;
           }
         }
       }
@@ -165,11 +196,13 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
             node.getChildren()[1].getType() | node.getChildren()[2].getType());
       }
       else if(node instanceof PrintNode) {
-        // Verify that the arg for print is either of type bool or int.
+        // Verify that the arg for print is either of type boolean or integer.
         if((node.getType() | node.getChildren()[0].getType()) !=
             AbstractSyntaxNode.BOOL_OR_INT_TYPE) {
-          throw new SemanticException("For call to print in function '" +
-              functionName + "', arg is not of type Boolean or Integer");
+          semanticExceptions.add(new SemanticException("For call to print in function '" +
+              functionName + "', arg is not of type Boolean or Integer")
+          );
+          return;
         }
       }
       else if(node instanceof BodyNode ||
@@ -181,42 +214,13 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       // Check body node type against function return type
       if(node instanceof BodyNode &&
           node.getType() != this.table.getFunctionReturnType(functionName)) {
-        throw new SemanticException("Expected return type '" +
+        semanticExceptions.add(new SemanticException("Expected return type '" +
             AbstractSyntaxNode.typeToString(
                 this.table.getFunctionReturnType(functionName)) +
             "' for function '" + functionName +
-            "' but got type '" + node.typeToString() + "'."
+            "' but got type '" + node.typeToString() + "'.")
         );
-      }
-    }
-  }
-
-  @Override
-  protected void traversePreOrder(AbstractSyntaxNode node, NodeOperation op,
-                                  Object... objects) {
-    String functionName = "";
-    if(objects.length > 0) {
-      functionName = (String) objects[0];
-    }
-    if(node instanceof NullNode) {
-      return;
-    }
-    if(node instanceof FunctionNode) {
-      functionName = ((FunctionNode) node).getName().getValue();
-    }
-    for(AbstractSyntaxNode child : node.getChildren()) {
-      this.traversePreOrder(child, op, functionName);
-    }
-    // Catching semantic errors here...
-    //  need to decide how to package them for display
-    try {
-      op.execute(node, functionName);
-    } catch(Exception err) {
-      if(err instanceof SemanticException) {
-        System.out.println("Semantic Error: " + err.getMessage());
-      }
-      else {
-        err.printStackTrace();
+        return;
       }
     }
   }

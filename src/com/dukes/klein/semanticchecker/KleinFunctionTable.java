@@ -103,6 +103,11 @@ public class KleinFunctionTable extends AbstractFunctionTable {
     this.functionCallTable.get(calledFunction).add(calledFromFunction);
   }
 
+  @Override
+  public Boolean containsFunction(String functionName){
+    return this.functionParamTable.containsKey(functionName);
+  }
+
   /**
    * Get the names of all functions that are never called.
    *
@@ -116,10 +121,5 @@ public class KleinFunctionTable extends AbstractFunctionTable {
       }
     }
     return retList;
-  }
-
-  @Override
-  public Boolean containsFunction(String functionName){
-    return this.functionParamTable.containsKey(functionName);
   }
 }
