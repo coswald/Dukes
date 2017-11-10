@@ -44,11 +44,14 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           "Semantic Warning: The function '" + functionName +
               "' is never called.");
     }
+    // Throwing captured Semantic Errors
     String errMsg = "";
     for(SemanticException error : semanticExceptions) {
       errMsg += "Semantic Error: " + error.getMessage() + "\n";
     }
-    throw new SemanticException(errMsg);
+    if (!errMsg.equals("")){
+      throw new SemanticException(errMsg);
+    }
   }
 
   private class TypeCheck implements NodeOperation {

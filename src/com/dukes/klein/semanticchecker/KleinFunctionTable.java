@@ -116,7 +116,8 @@ public class KleinFunctionTable extends AbstractFunctionTable {
   public ArrayList<String> getUncalledFunctions() {
     ArrayList<String> retList = new ArrayList<String>();
     for(String functionName : this.functionCallTable.keySet()) {
-      if(this.functionCallTable.get(functionName).size() == 0) {
+      if(this.functionCallTable.get(functionName).size() == 0 &&
+          !functionName.equals("main")) {
         retList.add(functionName);
       }
     }
