@@ -13,16 +13,20 @@ public abstract class AbstractTreeTraverser extends Object {
   }
 
   protected interface NodeOperation {
-    public void traversed(AbstractSyntaxNode node);
-    public void execute(Object... objects);
+    void traversed(AbstractSyntaxNode node);
+
+    void execute(AbstractSyntaxNode node, Object... objects);
   }
 
-  public void semanticCheck(){}
+  public void semanticCheck() {
+  }
 
-  public AbstractSyntaxNode getTop(){return this.top;}
+  public AbstractSyntaxNode getTop() {
+    return this.top;
+  }
 
   protected void traversePreOrder(AbstractSyntaxNode node, NodeOperation op,
-                                  Object... objects){
+                                  Object... objects) {
     op.traversed(node);
     for(AbstractSyntaxNode child : node.getChildren()) {
       this.traversePreOrder(child, op, objects);

@@ -69,10 +69,9 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     }
 
     @Override
-    public void execute(Object... objects) {
-      AbstractSyntaxNode node = (AbstractSyntaxNode) objects[0];
+    public void execute(AbstractSyntaxNode node, Object... objects) {
       ArrayList<SemanticException> semanticExceptions =
-          (ArrayList<SemanticException>) ((Object[]) objects[1])[0];
+          (ArrayList<SemanticException>) objects[0];
       if(node instanceof NullNode) {
         return;
       }
