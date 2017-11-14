@@ -13,7 +13,7 @@ public abstract class AbstractTreeTraverser extends Object {
   }
 
   protected interface NodeOperation {
-    void traversed(AbstractSyntaxNode node);
+    void traversed(AbstractSyntaxNode node, Object... objects);
 
     void execute(AbstractSyntaxNode node, Object... objects);
   }
@@ -33,5 +33,4 @@ public abstract class AbstractTreeTraverser extends Object {
     }
     op.execute(node, objects);
   }
-
 }

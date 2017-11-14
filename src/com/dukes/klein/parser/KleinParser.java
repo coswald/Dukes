@@ -50,8 +50,8 @@ public class KleinParser
       stackTop = this.stack.peek();
       if(stackTop instanceof TerminalType) {
         scannerToken = this.scanner.next();
-        if(scannerToken.getTokenType().equals(KleinTokenType.STARTCOMMENT) ||
-            scannerToken.getTokenType().equals(KleinTokenType.ENDCOMMENT)) {
+        if(scannerToken.getTokenType() == KleinTokenType.STARTCOMMENT ||
+            scannerToken.getTokenType() == KleinTokenType.ENDCOMMENT) {
           continue;
         }
         if(stackTop == TerminalType.getTerminal(scannerToken)) {

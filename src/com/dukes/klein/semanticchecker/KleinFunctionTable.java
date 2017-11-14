@@ -5,10 +5,8 @@ import com.dukes.klein.parser.node.FunctionNode;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.semanticchecker.AbstractFunctionTable;
 import com.dukes.lang.semanticchecker.SemanticException;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
@@ -96,15 +94,16 @@ public class KleinFunctionTable extends AbstractFunctionTable {
    * made to the listing of the called function.
    *
    * @param calledFromFunction The function in which the call is made.
-   * @param calledFunction The function being called.
+   * @param calledFunction     The function being called.
    */
   @Override
-  public void addFunctionCall(String calledFromFunction, String calledFunction) {
+  public void addFunctionCall(String calledFromFunction,
+                              String calledFunction) {
     this.functionCallTable.get(calledFunction).add(calledFromFunction);
   }
 
   @Override
-  public Boolean containsFunction(String functionName){
+  public Boolean containsFunction(String functionName) {
     return this.functionParamTable.containsKey(functionName);
   }
 

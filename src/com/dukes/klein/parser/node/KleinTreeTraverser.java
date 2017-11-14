@@ -30,26 +30,27 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       );
     }
     // Verify that there are no user defined functions named "print"
+    /* Parser currently handles this error check.
     if(functionTable.getFunctionNames().contains("print")) {
       semanticExceptions.add(new SemanticException(
           "User defined function named 'print' not allowed!")
       );
-    }
+    }*/
     // Traverse AST and set and verify types for each node
     this.traversePreOrder(this.top, new TypeCheck(functionTable),
         semanticExceptions);
     // Semantic Warning: Check for uncalled functions
     for(String functionName : functionTable.getUncalledFunctions()) {
-      System.out.println(
-          "Semantic Warning: The function '" + functionName +
-              "' is never called.");
+      System.out.println(String.format(
+          "Semantic Warning: The function '%s' is never called.", functionName)
+      );
     }
     // Throwing captured Semantic Errors
     String errMsg = "";
     for(SemanticException error : semanticExceptions) {
       errMsg += "Semantic Error: " + error.getMessage() + "\n";
     }
-    if (!errMsg.equals("")){
+    if(!errMsg.equals("")) {
       throw new SemanticException(errMsg);
     }
   }
@@ -65,7 +66,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     }
 
     @Override
-    public void traversed(AbstractSyntaxNode node) {
+    public void traversed(AbstractSyntaxNode node, Object... objects) {
       if(node instanceof FunctionNode) {
         this.functionName = ((FunctionNode) node).getName().getValue();
       }
@@ -90,10 +91,10 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         }
         else {
           // Otherwise the Identifier was not found and is undefined.
-          semanticExceptions.add(new SemanticException(
-              "Identifier '" + ((DeclaredNode) node).getDeclared() +
-                  "' not defined as a parameter in function '" +
-                  functionName + "'.")
+          semanticExceptions.add(new SemanticException(String.format(
+              "Identifier '%s' not defined as a parameter in function '%s'.",
+              ((DeclaredNode) node).getDeclared(), functionName)
+              )
           );
           return;
         }
@@ -102,12 +103,11 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         // Check to see that Operators children match types.
         if(((OperatorNode) node).isUnary()) {
           if(!(node.getChildren()[1].getType() == node.getType())) {
-            semanticExceptions.add(new SemanticException(
-                "Type Mismatch for unary operator '" +
-                    ((OperatorNode) node).getOperator() + "' in '" +
-                    functionName + "', expected '" +
-                    node.typeToString() + "' but got '" +
-                    node.getChildren()[1].typeToString() + "'.")
+            semanticExceptions.add(new SemanticException(String.format(
+                "Type Mismatch for unary operator '%s' in '%s', " +
+                    "expected '%s' but got '%s'.",
+                ((OperatorNode) node).getOperator(), functionName,
+                node.typeToString(), node.getChildren()[1].typeToString()))
             );
             return;
           }
@@ -115,13 +115,12 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         else { // Or if it is a binary operator
           if((node.getChildren()[0].getType() &
               node.getChildren()[1].getType()) != node.getType()) {
-            semanticExceptions.add(new SemanticException(
-                "Type Mismatch for operator '" +
-                    ((OperatorNode) node).getOperator() + "' in '" +
-                    functionName + "', expected '" +
-                    node.typeToString() + "' but got '" +
-                    node.getChildren()[0].typeToString() + "', and '" +
-                    node.getChildren()[1].typeToString() + "'.")
+            semanticExceptions.add(new SemanticException(String.format(
+                "Type Mismatch for operator '%s' in '%s', " +
+                    "expected '%s' but got '%s' and '%s'.",
+                ((OperatorNode) node).getOperator(), functionName,
+                node.typeToString(), node.getChildren()[0].typeToString(),
+                node.getChildren()[1].typeToString()))
             );
             return;
           }
@@ -144,9 +143,10 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
               ((CallNode) node).getIdentifier());
         }
         else {
-          semanticExceptions.add(new SemanticException(
-              "Undefined function '" + ((CallNode) node).getIdentifier() +
-                  "' called in function '" + functionName + "'.")
+          semanticExceptions.add(new SemanticException(String.format(
+              "Undefined function '%s' called in function '%s'.",
+              ((CallNode) node).getIdentifier(), functionName)
+              )
           );
           return;
         }
@@ -154,10 +154,10 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         if(node.getChildren().length !=
             this.table.getFunctionParameterNames(
                 ((CallNode) node).getIdentifier()).size()) {
-          semanticExceptions.add(new SemanticException(
-              "Invalid number of parameters in call to '" +
-                  ((CallNode) node).getIdentifier() +
-                  "' in function '" + functionName + "'.")
+          semanticExceptions.add(new SemanticException(String.format(
+              "Invalid number of parameters in call to '%s' in function '%s'.",
+              ((CallNode) node).getIdentifier(), functionName)
+              )
           );
           return;
         }
@@ -176,12 +176,11 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
             // Verify that the parameter type in the call matches the function
             //  declaration
             if(pType != pTypeActual) {
-              semanticErrors += (
-                  "                expected type '" +
-                      AbstractSyntaxNode.typeToString(pTypeActual) +
-                      "' for parameter '" + pNameActual +
-                      "' but got type '" +
-                      AbstractSyntaxNode.typeToString(pType) + "'.\n"
+              semanticErrors += (String.format(
+                  "                expected type '%s for parameter '%s' " +
+                      "but got type '%s'.\n",
+                  AbstractSyntaxNode.typeToString(pTypeActual), pNameActual,
+                  AbstractSyntaxNode.typeToString(pType))
               );
             }
           }
@@ -201,8 +200,9 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
         // Verify that the arg for print is either of type boolean or integer.
         if((node.getType() | node.getChildren()[0].getType()) !=
             AbstractSyntaxNode.BOOL_OR_INT_TYPE) {
-          semanticExceptions.add(new SemanticException("For call to print in function '" +
-              functionName + "', arg is not of type Boolean or Integer")
+          semanticExceptions.add(new SemanticException(String.format(
+              "For call to print in function '%s', " +
+                  "arg is not of type Boolean or Integer", functionName))
           );
           return;
         }
@@ -216,11 +216,12 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       // Check body node type against function return type
       if(node instanceof BodyNode &&
           node.getType() != this.table.getFunctionReturnType(functionName)) {
-        semanticExceptions.add(new SemanticException("Expected return type '" +
+        semanticExceptions.add(new SemanticException(String.format(
+            "Expected return type '%s' for function '%s' but got type '%s'.",
             AbstractSyntaxNode.typeToString(
-                this.table.getFunctionReturnType(functionName)) +
-            "' for function '" + functionName +
-            "' but got type '" + node.typeToString() + "'.")
+                this.table.getFunctionReturnType(functionName)),
+            functionName, node.typeToString())
+            )
         );
         return;
       }
