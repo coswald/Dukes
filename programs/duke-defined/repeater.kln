@@ -1,0 +1,7 @@
+(* Repeats the commands entered*)
+(*Meant to fail*)
+(*by Patrick Sedlacek*)
+
+function repeat(a : integer) : integer
+	print(a *)
+

@@ -31,8 +31,8 @@ public class CallNode extends ExpressionNode {
 
   /**
    * Creates a call node.
-   * @return identifier The identifier
-   * @return exprNodes The expression list within the calling node.
+   * @param identifier The identifier
+   * @param exprNodes The expression list within the calling node.
    */
   public CallNode(TerminalNode identifier, ExpressionNode... exprNodes) {
     super(exprNodes);

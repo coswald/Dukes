@@ -124,7 +124,7 @@ public abstract class Test extends Object implements Runnable
         else if(args[i].contains("w"))
           System.out.println(WARRANTY);
         else if(args[i].contains("h"))
-          System.out.println(this.HELP);
+          System.out.println(this.INTRO + "\n" + this.HELP);
         else
           System.out.println("Ignoring option: " + this.args[i]);
       }
@@ -132,7 +132,7 @@ public abstract class Test extends Object implements Runnable
 
     try {
       if(this.fileName != null) {
-        System.out.println(this.INTRO);
+        //System.out.println(this.INTRO);
         this.doRun();
         this.exitStatus = 0;
       }

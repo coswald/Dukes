@@ -72,6 +72,7 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void execute(AbstractSyntaxNode node, Object... objects) {
       ArrayList<SemanticException> semanticExceptions =
