@@ -29,29 +29,24 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           "Function 'main' not found in program.")
       );
     }
-    // Verify that there are no user defined functions named "print"
-    /* Parser currently handles this error check.
-    if(functionTable.getFunctionNames().contains("print")) {
-      semanticExceptions.add(new SemanticException(
-          "User defined function named 'print' not allowed!")
-      );
-    }*/
+    // Parser verifies that there are no user defined functions named "print"
+
     // Traverse AST and set and verify types for each node
     this.traversePreOrder(this.top, new TypeCheck(functionTable),
         semanticExceptions);
     // Semantic Warning: Check for uncalled functions
     for(String functionName : functionTable.getUncalledFunctions()) {
       System.out.println(String.format(
-          "Semantic Warning: The function '%s' is never called.", functionName)
+          "SemanticWarning: The function '%s' is never called.", functionName)
       );
     }
-    // Throwing captured Semantic Errors
+    // Throwing captured Semantic Errors.. This is ugly
     String errMsg = "";
     for(SemanticException error : semanticExceptions) {
-      errMsg += "Semantic Error: " + error.getMessage() + "\n";
+      errMsg += "SemanticError: " + error.getMessage() + "\n";
     }
     if(!errMsg.equals("")) {
-      throw new SemanticException(errMsg);
+      throw new SemanticException(errMsg.replaceFirst("SemanticError: ", ""));
     }
   }
 
@@ -60,8 +55,8 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     KleinFunctionTable table;
     String functionName;
 
-    public TypeCheck(Object table) {
-      this.table = (KleinFunctionTable) table;
+    public TypeCheck(KleinFunctionTable table) {
+      this.table = table;
       this.functionName = "";
     }
 
@@ -97,7 +92,6 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
               ((DeclaredNode) node).getDeclared(), functionName)
               )
           );
-          return;
         }
       }
       else if(node instanceof OperatorNode) {
@@ -110,7 +104,6 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
                 ((OperatorNode) node).getOperator(), functionName,
                 node.typeToString(), node.getChildren()[1].typeToString()))
             );
-            return;
           }
         }
         else { // Or if it is a binary operator
@@ -139,58 +132,61 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           node.setType(
               this.table.getFunctionReturnType(
                   ((CallNode) node).getIdentifier()));
+
           // Add called function name to this functions call list
           this.table.addFunctionCall(functionName,
               ((CallNode) node).getIdentifier());
+
+          // Verify that the correct number of parameters are in the call
+          if(node.getChildren().length !=
+              this.table.getFunctionParameterNames(
+                  ((CallNode) node).getIdentifier()).size()) {
+            semanticExceptions.add(new SemanticException(String.format(
+                "Invalid number of parameters in call to '%s' " +
+                    "in function '%s'.",
+                ((CallNode) node).getIdentifier(), functionName)
+                )
+            );
+          }
+          // Else the call has the correct number of parameters
+          //  so verify their types
+          else {
+            String errStart = "For call to function '" +
+                ((CallNode) node).getIdentifier() + "' in function '" +
+                functionName + "':\n";
+            String semanticErrors = errStart;
+            for(int i = 0; i < node.getChildren().length; i++) {
+              String pNameActual = this.table.getFunctionParameterNames(
+                  ((CallNode) node).getIdentifier()).get(i);
+              int pTypeActual = this.table.getFunctionParameterTypes(
+                  ((CallNode) node).getIdentifier()).get(i);
+              int pType = node.getChildren()[i].getType();
+              // Verify that the parameter type in the call matches
+              //  the function declaration
+              if(pType != pTypeActual) {
+                semanticErrors += (String.format(
+                    "                expected type '%s for parameter '%s' " +
+                        "but got type '%s'.\n",
+                    AbstractSyntaxNode.typeToString(pTypeActual), pNameActual,
+                    AbstractSyntaxNode.typeToString(pType))
+                );
+              }
+            }
+            // If any semantic errors were caught add them to the list.
+            if(!(semanticErrors.equals(errStart))) {
+              semanticExceptions.add(new SemanticException(
+                  semanticErrors.trim())
+              );
+            }
+          }
         }
+        // Otherwise the function being called is not defined
         else {
           semanticExceptions.add(new SemanticException(String.format(
               "Undefined function '%s' called in function '%s'.",
               ((CallNode) node).getIdentifier(), functionName)
               )
           );
-          return;
-        }
-        // Verify that the correct number of parameters are in the call
-        if(node.getChildren().length !=
-            this.table.getFunctionParameterNames(
-                ((CallNode) node).getIdentifier()).size()) {
-          semanticExceptions.add(new SemanticException(String.format(
-              "Invalid number of parameters in call to '%s' in function '%s'.",
-              ((CallNode) node).getIdentifier(), functionName)
-              )
-          );
-          return;
-        }
-        // If call has the correct number of parameters then verify their types
-        else {
-          String errStart = "For call to function '" +
-              ((CallNode) node).getIdentifier() + "' in function '" +
-              functionName + "':\n";
-          String semanticErrors = errStart;
-          for(int i = 0; i < node.getChildren().length; i++) {
-            String pNameActual = this.table.getFunctionParameterNames(
-                ((CallNode) node).getIdentifier()).get(i);
-            int pTypeActual = this.table.getFunctionParameterTypes(
-                ((CallNode) node).getIdentifier()).get(i);
-            int pType = node.getChildren()[i].getType();
-            // Verify that the parameter type in the call matches the function
-            //  declaration
-            if(pType != pTypeActual) {
-              semanticErrors += (String.format(
-                  "                expected type '%s for parameter '%s' " +
-                      "but got type '%s'.\n",
-                  AbstractSyntaxNode.typeToString(pTypeActual), pNameActual,
-                  AbstractSyntaxNode.typeToString(pType))
-              );
-            }
-          }
-          if(!(semanticErrors.equals(errStart))) {
-            semanticExceptions.add(new SemanticException(
-                semanticErrors.trim())
-            );
-            return;
-          }
         }
       }
       else if(node instanceof IfNode) {
@@ -205,26 +201,24 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
               "For call to print in function '%s', " +
                   "arg is not of type Boolean or Integer", functionName))
           );
-          return;
         }
       }
       else if(node instanceof BodyNode ||
           node instanceof ParameterizedExpressionNode) {
         node.setType(
             node.getChildren()[node.getChildren().length - 1].getType());
-      }
 
-      // Check body node type against function return type
-      if(node instanceof BodyNode &&
-          node.getType() != this.table.getFunctionReturnType(functionName)) {
-        semanticExceptions.add(new SemanticException(String.format(
-            "Expected return type '%s' for function '%s' but got type '%s'.",
-            AbstractSyntaxNode.typeToString(
-                this.table.getFunctionReturnType(functionName)),
-            functionName, node.typeToString())
-            )
-        );
-        return;
+        // Check body node type against function return type
+        if(node instanceof BodyNode &&
+            node.getType() != this.table.getFunctionReturnType(functionName)) {
+          semanticExceptions.add(new SemanticException(String.format(
+              "Expected return type '%s' for function '%s' but got type '%s'.",
+              AbstractSyntaxNode.typeToString(
+                  this.table.getFunctionReturnType(functionName)),
+              functionName, node.typeToString())
+              )
+          );
+        }
       }
     }
   }

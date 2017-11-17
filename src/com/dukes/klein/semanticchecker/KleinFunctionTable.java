@@ -23,16 +23,17 @@ public class KleinFunctionTable extends AbstractFunctionTable {
       for(AbstractSyntaxNode node : functionNode.getChildren()) {
         if(node instanceof FormalNode) {
           functionValues.put(((FormalNode) node).getIdentifier(),
-              ((FormalNode) node).getType());
+              node.getType());
         }
       }
       // Check for duplicate errors
       if(this.functionParamTable.containsKey(
           ((FunctionNode) functionNode).getName().getValue())) {
-        System.out.println(//throw new SemanticException(
-            "Semantic Error: Multiple functions with name '" +
-                ((FunctionNode) functionNode).getName().getValue() +
-                "' found. Function names must be unique.");
+        System.out.println(String.format(
+            "SemanticError: Multiple functions with the name '%s' found. " +
+                "Function names must be unique.",
+            ((FunctionNode) functionNode).getName().getValue())
+        );
       }
       this.functionParamTable.put(
           ((FunctionNode) functionNode).getName().getValue(), functionValues);
@@ -48,8 +49,9 @@ public class KleinFunctionTable extends AbstractFunctionTable {
     if(this.functionParamTable.containsKey(functionName)) {
       return this.functionParamTable.get(functionName).get("");
     }
-    throw new SemanticException(
-        "Function Named '" + functionName + "' Not Found in the Table");
+    throw new SemanticException(String.format(
+        "Function Named '%s' Not Found in the Table", functionName)
+    );
   }
 
   @Override

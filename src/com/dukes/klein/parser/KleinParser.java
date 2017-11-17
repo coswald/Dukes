@@ -25,10 +25,6 @@ import com.dukes.klein.scanner.KleinTokenType;
 import com.dukes.lang.parser.AbstractTableParser;
 import com.dukes.lang.parser.ParsingException;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
-import com.dukes.lang.parser.node.NullNode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
 
 
 public class KleinParser
@@ -74,8 +70,8 @@ public class KleinParser
       }
       else if(stackTop instanceof NonTerminalType) {
         scannerToken = this.scanner.peek();
-        if(scannerToken.getTokenType().equals(KleinTokenType.STARTCOMMENT) ||
-            scannerToken.getTokenType().equals(KleinTokenType.ENDCOMMENT)) {
+        if(scannerToken.getTokenType() == KleinTokenType.STARTCOMMENT ||
+            scannerToken.getTokenType() == KleinTokenType.ENDCOMMENT) {
           this.scanner.next();
           continue;
         }
