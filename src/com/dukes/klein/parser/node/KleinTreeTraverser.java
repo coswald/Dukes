@@ -70,11 +70,11 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     @SuppressWarnings("unchecked")
     @Override
     public void execute(AbstractSyntaxNode node, Object... objects) {
-      ArrayList<SemanticException> semanticExceptions =
-          (ArrayList<SemanticException>) objects[0];
       if(node instanceof NullNode) {
         return;
       }
+      ArrayList<SemanticException> semanticExceptions =
+          (ArrayList<SemanticException>) objects[0];
       // If the Declared node is an Identifier
       if(node instanceof DeclaredNode &&
           node.getType() == AbstractSyntaxNode.IDENTIFIER_TYPE) {
@@ -116,11 +116,10 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
                 node.typeToString(), node.getChildren()[0].typeToString(),
                 node.getChildren()[1].typeToString()))
             );
-            return;
           }
           // If the child types are correct then we need to set special cases
           //  to boolean.
-          if(((OperatorNode) node).getOperator().equals("=") ||
+          else if(((OperatorNode) node).getOperator().equals("=") ||
               ((OperatorNode) node).getOperator().equals("<")) {
             node.setType(AbstractSyntaxNode.BOOLEAN_TYPE);
           }
@@ -129,18 +128,14 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
       else if(node instanceof CallNode) {
         // Set the type equal to the return type of the called function
         if(this.table.containsFunction(((CallNode) node).getIdentifier())) {
-          node.setType(
-              this.table.getFunctionReturnType(
-                  ((CallNode) node).getIdentifier()));
-
+          node.setType(this.table.getFunctionReturnType(
+              ((CallNode) node).getIdentifier()));
           // Add called function name to this functions call list
           this.table.addFunctionCall(functionName,
               ((CallNode) node).getIdentifier());
-
           // Verify that the correct number of parameters are in the call
-          if(node.getChildren().length !=
-              this.table.getFunctionParameterNames(
-                  ((CallNode) node).getIdentifier()).size()) {
+          if(node.getChildren().length != this.table.getFunctionParameterNames(
+              ((CallNode) node).getIdentifier()).size()) {
             semanticExceptions.add(new SemanticException(String.format(
                 "Invalid number of parameters in call to '%s' " +
                     "in function '%s'.",
@@ -151,21 +146,18 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           // Else the call has the correct number of parameters
           //  so verify their types
           else {
-            String errStart = "For call to function '" +
-                ((CallNode) node).getIdentifier() + "' in function '" +
-                functionName + "':\n";
-            String semanticErrors = errStart;
+            String semanticErrors = "";
             for(int i = 0; i < node.getChildren().length; i++) {
               String pNameActual = this.table.getFunctionParameterNames(
                   ((CallNode) node).getIdentifier()).get(i);
               int pTypeActual = this.table.getFunctionParameterTypes(
                   ((CallNode) node).getIdentifier()).get(i);
               int pType = node.getChildren()[i].getType();
-              // Verify that the parameter type in the call matches
-              //  the function declaration
+              // Verify that the parameter type in the call matches that of
+              //   the corresponding parameter in the function declaration
               if(pType != pTypeActual) {
                 semanticErrors += (String.format(
-                    "                expected type '%s for parameter '%s' " +
+                    "\texpected type '%s' for parameter '%s' " +
                         "but got type '%s'.\n",
                     AbstractSyntaxNode.typeToString(pTypeActual), pNameActual,
                     AbstractSyntaxNode.typeToString(pType))
@@ -173,9 +165,12 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
               }
             }
             // If any semantic errors were caught add them to the list.
-            if(!(semanticErrors.equals(errStart))) {
-              semanticExceptions.add(new SemanticException(
-                  semanticErrors.trim())
+            if(!(semanticErrors.equals(""))) {
+              semanticExceptions.add(new SemanticException(String.format(
+                  "For call to function '%s' in function '%s':\n%s",
+                  ((CallNode) node).getIdentifier(), functionName,
+                  semanticErrors.substring(0, semanticErrors.length() - 2)
+                  ))
               );
             }
           }
@@ -207,7 +202,6 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
           node instanceof ParameterizedExpressionNode) {
         node.setType(
             node.getChildren()[node.getChildren().length - 1].getType());
-
         // Check body node type against function return type
         if(node instanceof BodyNode &&
             node.getType() != this.table.getFunctionReturnType(functionName)) {
