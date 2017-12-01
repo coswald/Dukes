@@ -64,4 +64,9 @@ public class FormalNode extends AbstractSyntaxNode {
     return "[Identifier: " + this.getIdentifier() +
         ", Type: " + this.typeToString() + "]";
   }
+  
+  @Override
+  public String toTargetCode() {
+    return "";
+  }
 }

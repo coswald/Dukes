@@ -53,4 +53,9 @@ public class BodyNode extends AbstractSyntaxNode {
   public AbstractSyntaxNode getExpression() {
     return this.children[this.children.length - 1];
   }
+  
+  @Override
+  public String toTargetCode() {
+    return "";
+  }
 }

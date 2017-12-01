@@ -20,6 +20,7 @@ package com.dukes.klein.parser.node;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.parser.node.ExpressionNode;
 import com.dukes.lang.parser.node.NullNode;
+import com.dukes.klein.generator.KleinCodeGenerator;
 
 /**
  * This class describes an operation in Klein. This can be either a binary or
@@ -109,5 +110,63 @@ public class OperatorNode extends ExpressionNode {
 
   public Boolean isUnary(){
     return this.isUnary;
+  }
+  
+  @Override
+  public String toTargetCode() {
+    String s = "*\n* Operator\n*\n";
+    if(this.isUnary) {
+      switch(this.operator.getValue()) {
+        case "-":
+          s += KleinCodeGenerator.emitCode("SUB", "A", "0", "B");
+          break;
+        case "not":
+          s += KleinCodeGenerator.emitCode("LDC", "D", "-1", "0");
+          s += KleinCodeGenerator.emitCode("ADD", "A", "B", "D");
+          s += KleinCodeGenerator.emitCode("MUL", "A", "B", "D");
+          break;
+      }
+    }
+    else {
+      switch(this.operator.getValue()) {
+        case "+":
+          s += KleinCodeGenerator.emitCode("ADD", "A", "B", "C");
+          break;
+        case "-":
+          s += KleinCodeGenerator.emitCode("SUB", "A", "B", "C");
+          break;
+        case "<":
+          s += KleinCodeGenerator.emitCode("SUB", "A", "B", "C");
+          s += KleinCodeGenerator.emitCode("LDC", "D", "1", "0");
+          s += KleinCodeGenerator.emitCode("JLT", "A", "1", "7");
+          s += KleinCodeGenerator.emitCode("LDC", "D", "0", "0");
+          s += KleinCodeGenerator.emitCode("ADD", "A", "0", "D");
+          break;
+        case "=":
+          s += KleinCodeGenerator.emitCode("SUB", "A", "B", "C");
+          s += KleinCodeGenerator.emitCode("JNE", "A", "2", "7");
+          s += KleinCodeGenerator.emitCode("LDC", "D", "1", "0");
+          s += KleinCodeGenerator.emitCode("ADD", "A", "A", "D");
+          //final value in A
+          break;
+        case "*":
+          s += KleinCodeGenerator.emitCode("MUL", "A", "B", "C");
+          break;
+        case "/":
+          s += KleinCodeGenerator.emitCode("DIV", "A", "B", "C");
+          break;
+        case "and":
+          s += KleinCodeGenerator.emitCode("MUL", "A", "B", "C");
+          break;
+        case "or":
+          s += KleinCodeGenerator.emitCode("ADD", "A", "B", "C");
+          s += KleinCodeGenerator.emitCode("JEQ", "A", "1", "7");
+          s += KleinCodeGenerator.emitCode("DIV", "A", "A", "A");
+          break;
+        default:
+          s = "BLAH"; //ERROR
+      }
+    }
+    return s;
   }
 }

@@ -18,6 +18,7 @@
 package com.dukes.klein.parser.node;
 
 import com.dukes.lang.parser.node.ExpressionNode;
+import com.dukes.klein.generator.KleinCodeGenerator;
 
 /**
  * Describes any declared value, such as an identifier, an integer, and a
@@ -63,7 +64,7 @@ public class DeclaredNode extends ExpressionNode {
    * @throws IllegalArgumentException If the type lies outside the type range.
    */
   public boolean isType(int type) throws IllegalArgumentException {
-    if(type > 5) {
+    if(type > 7) {
       throw new IllegalArgumentException("Invalid type asked of declared " +
           "node!");
     }
@@ -80,5 +81,26 @@ public class DeclaredNode extends ExpressionNode {
     return "[Value: " + this.declared.toString() +
         ", Type: " + this.typeToString() + "]";
   }
-
+  
+  @Override
+  public String toTargetCode() {
+    String s = "";
+    String value = "";
+    if(this.isType(1) || this.isType(3) || this.isType(5) || this.isType(7))
+    {
+      //TO IMPLEMENT, using LD and memory addressing.
+      return s;
+    }
+    else if(this.isType(2))
+    {
+      value = (this.getDeclared().equals("true") ? "1" : "0");
+    }
+    else
+    {
+      value = this.getDeclared();
+    }
+    s += KleinCodeGenerator.emitCode("LDC", null, value, "0");
+    s += KleinCodeGenerator.emitCode("ST", null, null, "0");
+    return s;
+  }
 }

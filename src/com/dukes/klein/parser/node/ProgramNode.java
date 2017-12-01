@@ -18,6 +18,7 @@
 package com.dukes.klein.parser.node;
 
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
+import com.dukes.klein.generator.KleinCodeGenerator;
 
 /**
  * This class describes the top most level of a Klein program. A Klein program
@@ -37,5 +38,19 @@ public class ProgramNode extends AbstractSyntaxNode {
    */
   public ProgramNode(FunctionNode... functions) {
     super(functions);
+  }
+  
+  @Override
+  public String toTargetCode() {
+    String s = "*\n* PROGRAM\n*\n";
+    //TODO add arguments to memory by looking up Main.
+    s += KleinCodeGenerator.emitCode("LDA", "6", "1", "7");
+    s += KleinCodeGenerator.emitCode("LDA", "7", "main", "0");
+    s += KleinCodeGenerator.emitCode("HALT", "0", "0", "0");
+    
+    s += "*\n* PRINT\n*\n";
+    s += KleinCodeGenerator.emitCode("OUT", "5", "0", "0");
+    s += KleinCodeGenerator.emitCode("LDA", "7", "0", "6");
+    return s;
   }
 }

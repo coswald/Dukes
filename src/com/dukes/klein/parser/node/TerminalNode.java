@@ -66,4 +66,9 @@ public class TerminalNode extends ExpressionNode {
   public String prettyPrint() {
     return this.dataAsString();
   }
+  
+  @Override
+  public String toTargetCode() {
+    return "";
+  }
 }

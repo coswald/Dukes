@@ -19,6 +19,7 @@ package com.dukes.klein.parser.node;
 
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.parser.node.ExpressionNode;
+import com.dukes.klein.generator.KleinCodeGenerator;
 
 /**
  * A node representing a print statement in Klein. This is more than a function
@@ -47,5 +48,14 @@ public class PrintNode extends AbstractSyntaxNode {
   @Override
   public String dataAsString() {
     return "[Type: " + this.typeToString() +"]";
+  }
+  
+  @Override
+  public String toTargetCode() {
+    String s = "* CALL PRINT \n";
+    s += KleinCodeGenerator.emitCode("ST", "6", null, "0");
+    s += KleinCodeGenerator.emitCode("LDA", "6", "1", "7");
+    s += KleinCodeGenerator.emitCode("LDA", "7", "print", "0");
+    return s;
   }
 }

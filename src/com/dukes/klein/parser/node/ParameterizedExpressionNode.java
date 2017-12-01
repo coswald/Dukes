@@ -36,4 +36,9 @@ public class ParameterizedExpressionNode extends ExpressionNode {
   public ParameterizedExpressionNode(ExpressionNode exprNode) {
     super(exprNode);
   }
+  
+  @Override
+  public String toTargetCode() {
+    return "";
+  }
 }

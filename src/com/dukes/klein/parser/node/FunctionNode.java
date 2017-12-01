@@ -18,6 +18,7 @@
 package com.dukes.klein.parser.node;
 
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
+import com.dukes.klein.generator.KleinCodeGenerator;
 
 /**
  * Discerns a function in Klein. This contains an identifier, a return type, a
@@ -67,5 +68,12 @@ public class FunctionNode extends AbstractSyntaxNode {
   public String dataAsString() {
     return "[Name: " + this.getName() +
         ", Return Type: " + this.typeToString() + "]";
+  }
+  
+  @Override
+  public String toTargetCode() {
+    String s = "";
+    s += KleinCodeGenerator.emitCode("LD", "7", null, "0");
+    return s;
   }
 }

@@ -18,6 +18,7 @@
 package com.dukes.klein.parser.node;
 
 import com.dukes.lang.parser.node.ExpressionNode;
+import com.dukes.klein.generator.KleinCodeGenerator;
 
 /**
  * Defines a function call in Klein. This contains the identifier and a number
@@ -55,5 +56,15 @@ public class CallNode extends ExpressionNode {
   public String dataAsString() {
     return "[Identifier: " + this.getIdentifier() + ", Type: " +
         this.typeToString() +"]";
+  }
+  
+  @Override
+  public String toTargetCode() {
+    //template
+    String s = "* CALL " + this.identifier.getValue() + "\n";
+    s += KleinCodeGenerator.emitCode("ST", "6", null, "0");
+    s += KleinCodeGenerator.emitCode("LDA", "6", "1", "7");
+    s += KleinCodeGenerator.emitCode("LDA", "7", this.identifier.getValue(), "0");
+    return s;
   }
 }

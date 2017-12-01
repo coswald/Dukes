@@ -76,7 +76,9 @@ public abstract class AbstractSyntaxNode extends Object {
   public AbstractSyntaxNode[] getChildren() {
     return this.children;
   }
-
+  
+  public abstract String toTargetCode();
+  
   /**
    * Returns specific data as a string representation. This can be used to
    * print the tree very pretty. Each subclass should if possible override this

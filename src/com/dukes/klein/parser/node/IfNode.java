@@ -18,6 +18,7 @@
 package com.dukes.klein.parser.node;
 
 import com.dukes.lang.parser.node.ExpressionNode;
+import com.dukes.klein.generator.KleinCodeGenerator;
 
 /**
  * Shows an if statement within Klein. An if statement consists of three
@@ -50,5 +51,9 @@ public class IfNode extends ExpressionNode {
   public String dataAsString() {
     return "[Type: " + this.typeToString() +"]";
   }
-
+  
+  @Override
+  public String toTargetCode() {
+    return "";
+  }
 }
