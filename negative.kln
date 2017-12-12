@@ -1,0 +1,6 @@
+function square(a : integer) : integer
+  a * (a + 1)
+
+function main(a : integer) : integer
+  square(a)
+
