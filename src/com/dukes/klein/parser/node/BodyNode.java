@@ -58,4 +58,9 @@ public class BodyNode extends AbstractSyntaxNode {
   public String toTargetCode() {
     return "";
   }
+  
+  @Override
+  public String getReturnRegister() {
+    return this.children[this.children.length - 1].getReturnRegister();
+  }
 }

@@ -40,7 +40,7 @@ public class kleinc extends Test {
     KleinTreeTraverser ktt = new KleinTreeTraverser(ast);
     ktt.semanticCheck();
     
-    KleinCodeGenerator kcg = new KleinCodeGenerator(null);
+    KleinCodeGenerator kcg = new KleinCodeGenerator(ktt.getFunctionTable());
     String tm = kcg.generateCode(ast);
     System.out.println(tm);
     

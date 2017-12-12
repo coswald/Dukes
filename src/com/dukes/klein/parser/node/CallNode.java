@@ -29,7 +29,7 @@ import com.dukes.klein.generator.KleinCodeGenerator;
  */
 public class CallNode extends ExpressionNode {
   private TerminalNode identifier;
-
+  private String returnRegister;
   /**
    * Creates a call node.
    * @param identifier The identifier
@@ -38,6 +38,7 @@ public class CallNode extends ExpressionNode {
   public CallNode(TerminalNode identifier, ExpressionNode... exprNodes) {
     super(exprNodes);
     this.identifier = identifier;
+    this.returnRegister = KleinCodeGenerator.getMemoryHolder();
   }
   
   /**
@@ -61,10 +62,17 @@ public class CallNode extends ExpressionNode {
   @Override
   public String toTargetCode() {
     //template
-    String s = "* CALL " + this.identifier.getValue() + "\n";
-    s += KleinCodeGenerator.emitCode("ST", "6", null, "0");
+    String s = "";
+    s += KleinCodeGenerator.emitCode("ST", "6", returnRegister, "0");
     s += KleinCodeGenerator.emitCode("LDA", "6", "1", "7");
     s += KleinCodeGenerator.emitCode("LDA", "7", this.identifier.getValue(), "0");
+    s += KleinCodeGenerator.emitCode("LD", "6", returnRegister, "0");
+    s += "* END Call to " + this.identifier.getValue().toUpperCase() + "\n";
     return s;
+  }
+  
+  @Override
+  public String getReturnRegister() {
+    return this.returnRegister;
   }
 }

@@ -45,4 +45,9 @@ public class NullNode extends ExpressionNode {
   public String toTargetCode() {
     return "";
   }
+  
+  @Override
+  public String getReturnRegister() {
+    return "";
+  }
 }

@@ -20,6 +20,7 @@ package com.dukes.klein.parser.node;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.parser.node.ExpressionNode;
 import com.dukes.lang.parser.node.NullNode;
+import com.dukes.klein.parser.node.DeclaredNode;
 import com.dukes.klein.generator.KleinCodeGenerator;
 
 /**
@@ -36,7 +37,7 @@ public class OperatorNode extends ExpressionNode {
 
   private TerminalNode operator;
   private Boolean isUnary;
-
+  private String returnRegister;
   /**
    * Constructs an operation withe the given operator, left hand side, and
    * right hand side. Note that this operation is unary if the left side is a
@@ -67,6 +68,7 @@ public class OperatorNode extends ExpressionNode {
   }
     this.operator = operator;
     this.isUnary = false;
+    this.returnRegister = KleinCodeGenerator.getMemoryHolder();
   }
   
   /**
@@ -114,59 +116,86 @@ public class OperatorNode extends ExpressionNode {
   
   @Override
   public String toTargetCode() {
-    String s = "*\n* Operator\n*\n";
+    String s = "*\n* Operator " + this.getOperator() + "\n*\n";
+    //String a = KleinCodeGenerator.getPlaceHolder(); //lefthand-side
+    //String b = KleinCodeGenerator.getPlaceHolder(); //righthand-side
+    String a = this.children[0].getReturnRegister(); //if not declaredNode, then it is a memory location.
+    String b = this.children[1].getReturnRegister();
+    
+    if(!(this.children[0] instanceof DeclaredNode)) {
+      String temp = a;
+      a = KleinCodeGenerator.getPlaceHolder();
+      s += KleinCodeGenerator.emitCode("LD", a, temp, "0");
+    }
+    
+    if(!(this.children[1] instanceof DeclaredNode)) {
+      String temp = b;
+      b = KleinCodeGenerator.getPlaceHolder();
+      s += KleinCodeGenerator.emitCode("LD", b, temp, "0");
+    }
+    
+    String c = KleinCodeGenerator.getPlaceHolder(); //temps
+    String d = KleinCodeGenerator.getPlaceHolder();
+    
     if(this.isUnary) {
       switch(this.operator.getValue()) {
         case "-":
-          s += KleinCodeGenerator.emitCode("SUB", "A", "0", "B");
+          s += KleinCodeGenerator.emitCode("SUB", a, "0", a);
           break;
         case "not":
-          s += KleinCodeGenerator.emitCode("LDC", "D", "-1", "0");
-          s += KleinCodeGenerator.emitCode("ADD", "A", "B", "D");
-          s += KleinCodeGenerator.emitCode("MUL", "A", "B", "D");
+          s += KleinCodeGenerator.emitCode("LDC", c, "-1", "0");
+          s += KleinCodeGenerator.emitCode("ADD", a, b, c);
+          s += KleinCodeGenerator.emitCode("MUL", a, b, c);
           break;
       }
     }
     else {
       switch(this.operator.getValue()) {
         case "+":
-          s += KleinCodeGenerator.emitCode("ADD", "A", "B", "C");
+          s += KleinCodeGenerator.emitCode("ADD", a, b, a);
           break;
         case "-":
-          s += KleinCodeGenerator.emitCode("SUB", "A", "B", "C");
+          s += KleinCodeGenerator.emitCode("SUB", a, b, a);
           break;
         case "<":
-          s += KleinCodeGenerator.emitCode("SUB", "A", "B", "C");
-          s += KleinCodeGenerator.emitCode("LDC", "D", "1", "0");
-          s += KleinCodeGenerator.emitCode("JLT", "A", "1", "7");
-          s += KleinCodeGenerator.emitCode("LDC", "D", "0", "0");
-          s += KleinCodeGenerator.emitCode("ADD", "A", "0", "D");
+          s += KleinCodeGenerator.emitCode("SUB", a, b, a);
+          s += KleinCodeGenerator.emitCode("LDC", c, "1", "0");
+          s += KleinCodeGenerator.emitCode("JLT", a, "1", "7");
+          s += KleinCodeGenerator.emitCode("LDC", c, "0", "0");
+          s += KleinCodeGenerator.emitCode("ADD", a, "0", c);
           break;
         case "=":
-          s += KleinCodeGenerator.emitCode("SUB", "A", "B", "C");
-          s += KleinCodeGenerator.emitCode("JNE", "A", "2", "7");
-          s += KleinCodeGenerator.emitCode("LDC", "D", "1", "0");
-          s += KleinCodeGenerator.emitCode("ADD", "A", "A", "D");
+          s += KleinCodeGenerator.emitCode("SUB", a, b, a);
+          s += KleinCodeGenerator.emitCode("JNE", a, "2", "7");
+          s += KleinCodeGenerator.emitCode("LDC", c, "1", "0");
+          s += KleinCodeGenerator.emitCode("ADD", a, a, c);
           //final value in A
           break;
         case "*":
-          s += KleinCodeGenerator.emitCode("MUL", "A", "B", "C");
+          s += KleinCodeGenerator.emitCode("MUL", a, b, a);
           break;
         case "/":
-          s += KleinCodeGenerator.emitCode("DIV", "A", "B", "C");
+          s += KleinCodeGenerator.emitCode("DIV", a, b, a);
           break;
         case "and":
-          s += KleinCodeGenerator.emitCode("MUL", "A", "B", "C");
+          s += KleinCodeGenerator.emitCode("MUL", a, b, a);
           break;
         case "or":
-          s += KleinCodeGenerator.emitCode("ADD", "A", "B", "C");
-          s += KleinCodeGenerator.emitCode("JEQ", "A", "1", "7");
-          s += KleinCodeGenerator.emitCode("DIV", "A", "A", "A");
+          s += KleinCodeGenerator.emitCode("ADD", a, b, a);
+          s += KleinCodeGenerator.emitCode("JEQ", a, "1", "7");
+          s += KleinCodeGenerator.emitCode("DIV", a, a, a);
           break;
         default:
           s = "BLAH"; //ERROR
       }
     }
+    s += KleinCodeGenerator.emitCode("ST", a, this.returnRegister, "0");
+    s += "* END Operator " + this.getOperator() + "\n";
     return s;
+  }
+  
+  @Override
+  public String getReturnRegister() {
+    return this.returnRegister;
   }
 }

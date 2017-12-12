@@ -28,7 +28,6 @@ import com.dukes.lang.parser.node.AbstractSyntaxNode;
  */
 public class FormalNode extends AbstractSyntaxNode {
   private TerminalNode identifier;
-
   /**
    * Constructs a formal node.
    * @param identifier The identifier.
@@ -67,6 +66,11 @@ public class FormalNode extends AbstractSyntaxNode {
   
   @Override
   public String toTargetCode() {
+    return "";
+  }
+  
+  @Override
+  public String getReturnRegister() {
     return "";
   }
 }

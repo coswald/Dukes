@@ -13,16 +13,21 @@ import java.util.ArrayList;
  * @version 1.0
  */
 public final class KleinTreeTraverser extends AbstractTreeTraverser {
-
+  private KleinFunctionTable functionTable;
+  
   public KleinTreeTraverser(AbstractSyntaxNode top) {
     super(top);
+    this.functionTable = new KleinFunctionTable(this.top);
   }
-
+  
+  public KleinFunctionTable getFunctionTable() {
+    return this.functionTable;
+  }
+  
   @Override
   public void semanticCheck() {
     ArrayList<SemanticException> semanticExceptions =
         new ArrayList<SemanticException>();
-    KleinFunctionTable functionTable = new KleinFunctionTable(this.top);
     // Check for the presence of function "main"
     if(!functionTable.getFunctionNames().contains("main")) {
       semanticExceptions.add(new SemanticException(

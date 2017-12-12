@@ -32,6 +32,8 @@ import com.dukes.klein.generator.KleinCodeGenerator;
  * @since 0.3.0
  */
 public class PrintNode extends AbstractSyntaxNode {
+  private String returnRegister;
+  
   /**
    * Creates a print statement with the given expression.
    * @param exprNode The expression to print.
@@ -39,6 +41,7 @@ public class PrintNode extends AbstractSyntaxNode {
   public PrintNode(ExpressionNode exprNode) {
     super(exprNode);
     this.type = AbstractSyntaxNode.BOOL_OR_INT_TYPE;
+    returnRegister = KleinCodeGenerator.getMemoryHolder();
   }
 
   /**
@@ -52,10 +55,17 @@ public class PrintNode extends AbstractSyntaxNode {
   
   @Override
   public String toTargetCode() {
-    String s = "* CALL PRINT \n";
-    s += KleinCodeGenerator.emitCode("ST", "6", null, "0");
+    String s = "";
+    s += KleinCodeGenerator.emitCode("ST", "6", returnRegister, "0");
     s += KleinCodeGenerator.emitCode("LDA", "6", "1", "7");
     s += KleinCodeGenerator.emitCode("LDA", "7", "print", "0");
+    s += KleinCodeGenerator.emitCode("LD", "6", returnRegister, "0");
+    s += "* END Call to PRINT \n";
     return s;
+  }
+  
+  @Override
+  public String getReturnRegister() {
+    return this.returnRegister;
   }
 }

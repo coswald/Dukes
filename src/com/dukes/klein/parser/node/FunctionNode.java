@@ -29,7 +29,9 @@ import com.dukes.klein.generator.KleinCodeGenerator;
  */
 public class FunctionNode extends AbstractSyntaxNode {
   private TerminalNode name;
-
+  private String returnRegister;
+  private int[] paramMemory;
+  
   /**
    * Constructs a function.
    * @param name The name of the function.
@@ -48,6 +50,11 @@ public class FunctionNode extends AbstractSyntaxNode {
       case "boolean":
         this.type = AbstractSyntaxNode.BOOLEAN_TYPE;
         break;
+    }
+    this.returnRegister = KleinCodeGenerator.getMemoryHolder();
+    this.paramMemory = new int[formals.length];
+    for(int i = 0; i < paramMemory.length; i++) {
+      paramMemory[i] = KleinCodeGenerator.getStackInstance();
     }
   }
 
@@ -73,7 +80,18 @@ public class FunctionNode extends AbstractSyntaxNode {
   @Override
   public String toTargetCode() {
     String s = "";
-    s += KleinCodeGenerator.emitCode("LD", "7", null, "0");
+    s += KleinCodeGenerator.emitCode("LD", "5", this.children[this.children.length - 1].getReturnRegister(), "0"); //return value
+    s += KleinCodeGenerator.emitCode("LDA", "7", "0", "6"); //change 6 to load address from dmem
+    s += "* END Funtion " + this.getName().getValue().toUpperCase() + "\n";
     return s;
+  }
+   
+  @Override
+  public String getReturnRegister() {
+    return this.returnRegister;
+  }
+  
+  public int[] getParamMemory() {
+    return this.paramMemory;
   }
 }

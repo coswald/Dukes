@@ -2,11 +2,13 @@ package com.dukes.klein.semanticchecker;
 
 import com.dukes.klein.parser.node.FormalNode;
 import com.dukes.klein.parser.node.FunctionNode;
+import com.dukes.klein.parser.node.PrintNode;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
 import com.dukes.lang.semanticchecker.AbstractFunctionTable;
 import com.dukes.lang.semanticchecker.SemanticException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 /**
@@ -14,8 +16,20 @@ import java.util.LinkedHashMap;
  * @version 1.0
  */
 public class KleinFunctionTable extends AbstractFunctionTable {
-
+  private boolean usedPrint = false;
+  private HashMap<String, ArrayList<Integer>> paramLocations;
+  
   public KleinFunctionTable(AbstractSyntaxNode top) {
+    paramLocations = new HashMap<String, ArrayList<Integer>>();
+    for(AbstractSyntaxNode functionNode : top.getChildren()) {
+      int[] paramMemory = ((FunctionNode)functionNode).getParamMemory();
+      ArrayList<Integer> t = new ArrayList<Integer>();
+      for(int i = 0; i < paramMemory.length; i++) {
+        t.add(new Integer(paramMemory[i]));
+      }
+      paramLocations.put(((FunctionNode)functionNode).getName().getValue(), t);
+    }
+    
     LinkedHashMap<String, Integer> functionValues;
     for(AbstractSyntaxNode functionNode : top.getChildren()) {
       functionValues = new LinkedHashMap<String, Integer>();
@@ -24,6 +38,14 @@ public class KleinFunctionTable extends AbstractFunctionTable {
         if(node instanceof FormalNode) {
           functionValues.put(((FormalNode) node).getIdentifier(),
               node.getType());
+        }
+        else {
+          for(AbstractSyntaxNode n : node.getChildren()) {
+            if(n instanceof PrintNode) {
+              this.usedPrint = true;
+              break;
+            }
+          }
         }
       }
       // Check for duplicate errors
@@ -41,6 +63,14 @@ public class KleinFunctionTable extends AbstractFunctionTable {
           ((FunctionNode) functionNode).getName().getValue(),
           new ArrayList<String>());
     }
+  }
+
+  public ArrayList<Integer> getParamLocations(String functionName) {
+    return this.paramLocations.get(functionName);
+  }
+
+  public boolean hasPrint() {
+    return this.usedPrint;
   }
 
   @Override

@@ -30,7 +30,7 @@ import com.dukes.klein.generator.KleinCodeGenerator;
 public class DeclaredNode extends ExpressionNode {
 
   private TerminalNode declared;
-
+  private String returnRegister;
   /**
    * Constructs a declared value in Klein.
    * @param declared The value that is declared.
@@ -48,6 +48,7 @@ public class DeclaredNode extends ExpressionNode {
 
     this.declared = declared;
     this.type = type;
+    this.returnRegister = KleinCodeGenerator.getPlaceHolder();
   }
   
   /**
@@ -89,7 +90,7 @@ public class DeclaredNode extends ExpressionNode {
     if(this.isType(1) || this.isType(3) || this.isType(5) || this.isType(7))
     {
       //TO IMPLEMENT, using LD and memory addressing.
-      return s;
+      s += KleinCodeGenerator.emitCode("LD", this.returnRegister, "513", "0");
     }
     else if(this.isType(2))
     {
@@ -99,8 +100,13 @@ public class DeclaredNode extends ExpressionNode {
     {
       value = this.getDeclared();
     }
-    s += KleinCodeGenerator.emitCode("LDC", null, value, "0");
-    s += KleinCodeGenerator.emitCode("ST", null, null, "0");
+    s += KleinCodeGenerator.emitCode("LDC", this.returnRegister, value, "0");
+    //s += KleinCodeGenerator.emitCode("ST", "A", "Z", "0");
     return s;
+  }
+  
+  @Override
+  public String getReturnRegister() {
+    return this.returnRegister;
   }
 }

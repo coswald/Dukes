@@ -135,15 +135,6 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
       this.input.next();
       return new KleinToken(KleinTokenType.RIGHTPARENTHESIS);
     }
-    //Single-char Expression symbol
-    else if(KleinScanner.isSymbol(current)) {
-      if(endOfFile()) {
-        return new KleinToken(KleinTokenType.EOF);
-      }
-      this.input.next();
-      return new KleinToken(KleinTokenType.SYMBOL,
-          Character.toString(current));
-    }
     //Seperator
     else if(KleinScanner.isSeparator(current)) {
       if(endOfFile()) {
@@ -164,7 +155,15 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
       }
       return new KleinToken(KleinTokenType.INTEGER, num);
     }
-
+    //Single-char Expression symbol
+    else if(KleinScanner.isSymbol(current)) {
+      if(endOfFile()) {
+        return new KleinToken(KleinTokenType.EOF);
+      }
+      this.input.next();
+      return new KleinToken(KleinTokenType.SYMBOL,
+          Character.toString(current));
+    }
     //Keyword, Identifier, Type, boolean, SimpleExpression, Term, If, then,
     //not, and else
     else if(KleinScanner.isLetter(current)) {
@@ -301,7 +300,7 @@ public class KleinScanner extends AbstractScanner<KleinToken> {
         KleinScanner.isDigit(this.input.lookAhead())) {
       throw new LexicalAnalysisException("Number cannot start with 0!");
     }
-
+    
     while(KleinScanner.isDigit(this.input.currentChar())) {
       if(!KleinScanner.isDigit(this.input.currentChar()))
         throw new LexicalAnalysisException("Non-numeric character " +

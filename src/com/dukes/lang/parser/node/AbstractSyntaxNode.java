@@ -57,7 +57,9 @@ public abstract class AbstractSyntaxNode extends Object {
    * The node data type to be defined my a semantic checker
    */
   protected int type;
-
+  
+  protected String returnRegister;
+  
   /**
    * Constructs a node with the following children.
    * @param children the children of the AST.
@@ -78,6 +80,12 @@ public abstract class AbstractSyntaxNode extends Object {
   }
   
   public abstract String toTargetCode();
+  
+  public abstract String getReturnRegister();
+  
+  public void setReturnRegister(String returnRegister) {
+    this.returnRegister = returnRegister;
+  }
   
   /**
    * Returns specific data as a string representation. This can be used to

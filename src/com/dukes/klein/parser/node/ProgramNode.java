@@ -42,15 +42,11 @@ public class ProgramNode extends AbstractSyntaxNode {
   
   @Override
   public String toTargetCode() {
-    String s = "*\n* PROGRAM\n*\n";
-    //TODO add arguments to memory by looking up Main.
-    s += KleinCodeGenerator.emitCode("LDA", "6", "1", "7");
-    s += KleinCodeGenerator.emitCode("LDA", "7", "main", "0");
-    s += KleinCodeGenerator.emitCode("HALT", "0", "0", "0");
-    
-    s += "*\n* PRINT\n*\n";
-    s += KleinCodeGenerator.emitCode("OUT", "5", "0", "0");
-    s += KleinCodeGenerator.emitCode("LDA", "7", "0", "6");
-    return s;
+    return "";
+  }
+  
+  @Override
+  public String getReturnRegister() {
+    return "";
   }
 }

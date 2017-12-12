@@ -41,4 +41,10 @@ public class ParameterizedExpressionNode extends ExpressionNode {
   public String toTargetCode() {
     return "";
   }
+  
+  @Override
+  public String getReturnRegister() {
+    return this.children[0].getReturnRegister();
+  }
+  
 }

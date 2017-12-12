@@ -56,4 +56,9 @@ public class IfNode extends ExpressionNode {
   public String toTargetCode() {
     return "";
   }
+  
+  @Override
+  public String getReturnRegister() {
+    return "";
+  }
 }
