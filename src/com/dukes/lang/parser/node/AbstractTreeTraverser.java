@@ -27,7 +27,7 @@ public abstract class AbstractTreeTraverser extends Object {
 
   protected void traversePreOrder(AbstractSyntaxNode node, NodeOperation op,
                                   Object... objects) {
-    op.traversed(node);
+    op.traversed(node, objects);
     for(AbstractSyntaxNode child : node.getChildren()) {
       this.traversePreOrder(child, op, objects);
     }

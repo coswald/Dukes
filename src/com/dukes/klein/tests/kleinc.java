@@ -10,6 +10,7 @@ import com.dukes.lang.scanner.FileInputter;
 import com.dukes.lang.tests.Test;
 
 import java.io.FileInputStream;
+import java.io.PrintWriter;
 
 /**
  * @author Coved W Oswald
@@ -42,8 +43,11 @@ public class kleinc extends Test {
     
     KleinCodeGenerator kcg = new KleinCodeGenerator(ktt.getFunctionTable());
     String tm = kcg.generateCode(ast);
-    System.out.println(tm);
-    
+    String out_filename = fileName.replace(".kln", ".tm");
+    System.out.println("Succesfully compiled to '" + out_filename + "'");
+    PrintWriter file_out = new PrintWriter(out_filename);
+    file_out.println(tm);
+    file_out.close();
     /*
     PostfixGenerator pg = new PostfixGenerator();
     String tm2 = pg.generateCode(ast);
