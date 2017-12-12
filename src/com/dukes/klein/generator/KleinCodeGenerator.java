@@ -25,7 +25,7 @@ public final class KleinCodeGenerator
   
   private KleinFunctionTable kft;
   private HashMap<String, Integer> functionLocation;
-  private int tempMemoryAddress = 2;
+  private int tempMemoryAddress = 15;
   private static int tempMemoryAddress2 = 513;
   
   //false means that they are free
@@ -99,8 +99,8 @@ public final class KleinCodeGenerator
     }
     */
     for(int i = 0; i < parameters.size(); i++) {
-      s += KleinCodeGenerator.emitCode("IN", "1", "0", "0");
-      s += KleinCodeGenerator.emitCode("ST", "1", Integer.toString(tempMemoryAddress++), "0");
+	s += KleinCodeGenerator.emitCode("LD", KleinCodeGenerator.getPlaceHolder(), Integer.toString(i + 1), "0");
+	s += KleinCodeGenerator.emitCode("ST", Integer.toString(i + 1), Integer.toString(tempMemoryAddress++), "0");
     }
     
     s += KleinCodeGenerator.emitCode("LDA", "6", "1", "7");
