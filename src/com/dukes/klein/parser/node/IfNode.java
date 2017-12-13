@@ -32,6 +32,7 @@ import com.dukes.klein.generator.KleinCodeGenerator;
  * @since 0.3.0
  */
 public class IfNode extends ExpressionNode {
+  private String returnRegister;
   /**
    * Constructs an if expression.
    * @param testExpression
@@ -41,6 +42,9 @@ public class IfNode extends ExpressionNode {
   public IfNode(ExpressionNode testExpression, ExpressionNode ifExpression,
                 ExpressionNode elseExpression) {
     super(testExpression, ifExpression, elseExpression);
+    this.returnRegister = KleinCodeGenerator.getMemoryHolder();
+    this.children[1].setReturnRegister(this.returnRegister);
+    this.children[2].setReturnRegister(this.returnRegister);
   }
 
   /**
@@ -59,6 +63,17 @@ public class IfNode extends ExpressionNode {
   
   @Override
   public String getReturnRegister() {
-    return "";
+    return this.returnRegister;
+  }
+
+  @Override
+  public void setReturnRegister(String returnRegister) {
+    this.returnRegister = returnRegister;
+    if(!(children[1] instanceof DeclaredNode)) {
+      this.children[1].setReturnRegister(this.returnRegister);
+    }
+    if(!(children[2] instanceof DeclaredNode)) {
+      this.children[2].setReturnRegister(this.returnRegister);
+    }
   }
 }

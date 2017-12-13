@@ -1,18 +1,16 @@
 package com.dukes.klein.generator;
 
 import com.dukes.klein.parser.node.*;
+import com.dukes.klein.semanticchecker.KleinFunctionTable;
 import com.dukes.lang.generator.CodeGenerator;
 import com.dukes.lang.parser.node.AbstractSyntaxNode;
-import com.dukes.klein.semanticchecker.KleinFunctionTable;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
 public final class KleinCodeGenerator
-    implements CodeGenerator<AbstractSyntaxNode, String>
-{
+    implements CodeGenerator<AbstractSyntaxNode, String> {
   private static int line = 0;
   private static ArrayList<String> placeHolders = new ArrayList<String>();
   private static ArrayList<String> memHolders = new ArrayList<String>();
@@ -79,9 +77,11 @@ public final class KleinCodeGenerator
       s += KleinCodeGenerator.emitCode("ST", "1", Integer.toString(tempAddress++), "0");
     }
     */
+    ArrayList<String> params = kft.getFunctionParameterNames("main");
     for(int i = 0; i < parameters.size(); i++) {
-	s += KleinCodeGenerator.emitCode("LD", KleinCodeGenerator.getPlaceHolder(), Integer.toString(i + 1), "0");
-	s += KleinCodeGenerator.emitCode("ST", Integer.toString(i + 1), Integer.toString(tempMemoryAddress++), "0");
+      String t = KleinCodeGenerator.getPlaceHolder();
+      s += KleinCodeGenerator.emitCode("LD", t, Integer.toString(i + 1), "0");
+      s += KleinCodeGenerator.emitCode("ST", t, "<main," + params.get(i) + ">", "0");
     }
 
     s += KleinCodeGenerator.emitCode("LDA", "6", "1", "7");
@@ -115,20 +115,48 @@ public final class KleinCodeGenerator
     else if(ast instanceof IfNode) {
       AbstractSyntaxNode[] children = ast.getChildren();
       String test = "*\n* IF\n*\n";
+      String then = "";
       String s = "";
-      test += generateCodeHelper(children[2]);
-      int lnum = line++;
-      s += generateCodeHelper(children[1]);
-      int snum = line;
-      s += generateCodeHelper(children[0]);
+      String t = KleinCodeGenerator.getPlaceHolder();
+      String x = KleinCodeGenerator.getPlaceHolder();
+      String y = KleinCodeGenerator.getMemoryHolder();
+      ast.setReturnRegister(y);
 
-      test += KleinCodeGenerator.emitCode(Integer.toString(lnum), "JNE", Integer.toString(snum), "7");
-      return test + s;
+      test += generateCodeHelper(children[0]);
+
+      int lnum = line;
+      line += 2;
+      then += generateCodeHelper(children[1]);
+      if(children[1] instanceof CallNode) {
+        then += KleinCodeGenerator.emitCode("ADD", x, "5", "0");
+      }
+      else {
+        then += KleinCodeGenerator.emitCode("LD", x, children[1].getReturnRegister(), "0");
+      }
+      then += "* End then Statement\n";
+
+      int snum = line++;
+      s += generateCodeHelper(children[2]);
+      if(children[2] instanceof CallNode) {
+        s += KleinCodeGenerator.emitCode("ADD", x, "5", "0");
+      }
+      else {
+        s += KleinCodeGenerator.emitCode("LD", x, children[2].getReturnRegister(), "0");
+      }
+      s += "* End else Statement\n";
+
+      test += KleinCodeGenerator.emitCode(lnum, "LD", t, children[0].getReturnRegister(), "0");
+      test += KleinCodeGenerator.emitCode(lnum + 1, "JNE", t, Integer.toString(snum + 1), "0");
+      test += "* End test condition\n";
+      then += KleinCodeGenerator.emitCode(snum, "LDA", "7", Integer.toString(line), "0");
+
+      s += KleinCodeGenerator.emitCode("ST", x, y, "0");
+      return test + then + s;
     }
     else if(ast instanceof FunctionNode) {
       AbstractSyntaxNode[] children = ast.getChildren();
-      String s = "*\n* Function: " + ((FunctionNode)ast).getName().getValue().toUpperCase() + "\n*\n";
-      functionLocation.put(((FunctionNode)ast).getName().getValue(), new Integer(line));
+      String s = "*\n* Function: " + ((FunctionNode) ast).getName().getValue().toUpperCase() + "\n*\n";
+      functionLocation.put(((FunctionNode) ast).getName().getValue(), new Integer(line));
 
       for(AbstractSyntaxNode c : children) {
         s += generateCodeHelper(c);
@@ -153,9 +181,9 @@ public final class KleinCodeGenerator
     }
     else if(ast instanceof CallNode) {
       HashMap<String, Integer> paramLocs =
-          kft.getParamLocationValues(((CallNode)ast).getIdentifier());
+          kft.getParamLocationValues(((CallNode) ast).getIdentifier());
       String s =
-          "* CALL " + ((CallNode)ast).getIdentifier().toUpperCase() + "\n";
+          "* CALL " + ((CallNode) ast).getIdentifier().toUpperCase() + "\n";
       AbstractSyntaxNode[] children = ast.getChildren();
       AbstractSyntaxNode c;
       for(int i = 0; i < children.length; i++) {
@@ -195,7 +223,7 @@ public final class KleinCodeGenerator
     }
 
     for(String key : functionLocation.keySet()) {
-      s = s.replaceAll(key, Integer.toString(functionLocation.get(key)));
+      s = s.replaceAll("," + key + "\\(", "," + Integer.toString(functionLocation.get(key)) + "(");
     }
     for(String holder : placeHolders) {
       s = s.replaceAll(holder, Integer.toString(this.getRegister()));
@@ -217,15 +245,18 @@ public final class KleinCodeGenerator
       }
     }
 
+    for(int i = 0; i < this.usedRegisters.length; i++) {
+      this.usedRegisters[i] = false;
+    }
     //There are no available registers, so free a random one.
     //This could be smarter.
-    int free = (int)(Math.random() * this.usedRegisters.length);
+    //int free = (int)(Math.random() * this.usedRegisters.length);
 
     //TO IMPLEMENT, for now the templates will handle storing values
     //Each template should use less than 4 registers.
 
-    this.usedRegisters[free] = false;
-    return free + 1;
+    //this.usedRegisters[free] = false;
+    return this.getRegister();
   }
 
   public int getMemory() {
@@ -242,11 +273,11 @@ public final class KleinCodeGenerator
     StringBuilder salt = new StringBuilder();
     Random rnd = new Random();
     String saltStr = "";
-    while (salt.length() < 12) { // length of the random string.
-      int index = (int)(rnd.nextFloat() * SALTCHARS.length());
+    while(salt.length() < 12) { // length of the random string.
+      int index = (int) (rnd.nextFloat() * SALTCHARS.length());
       salt.append(SALTCHARS.charAt(index));
     }
-    salt.append(SALTCHARS2.charAt((int)(rnd.nextFloat() * SALTCHARS2.length())));
+    salt.append(SALTCHARS2.charAt((int) (rnd.nextFloat() * SALTCHARS2.length())));
     saltStr = salt.toString();
     return saltStr;
   }
@@ -289,24 +320,24 @@ public final class KleinCodeGenerator
 
   private static String emitCodeHelper(String instruction, String op) {
     switch(instruction) {
-      case "IN"  :
-      case "OUT" :
-      case "ADD" :
-      case "SUB" :
-      case "MUL" :
-      case "DIV" :
+      case "IN":
+      case "OUT":
+      case "ADD":
+      case "SUB":
+      case "MUL":
+      case "DIV":
       case "HALT":
         return "," + op;
-      case "LDC" :
-      case "LDA" :
-      case "LD"  :
-      case "ST"  :
-      case "JEQ" :
-      case "JNE" :
-      case "JLT" :
-      case "JLE" :
-      case "JGT" :
-      case "JGE" :
+      case "LDC":
+      case "LDA":
+      case "LD":
+      case "ST":
+      case "JEQ":
+      case "JNE":
+      case "JLT":
+      case "JLE":
+      case "JGT":
+      case "JGE":
       default:
         return "(" + op + ")";
     }

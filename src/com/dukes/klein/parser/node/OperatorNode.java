@@ -122,12 +122,14 @@ public class OperatorNode extends ExpressionNode {
     String a = this.children[0].getReturnRegister(); //if not declaredNode, then it is a memory location.
     String b = this.children[1].getReturnRegister();
     
-    if(!(this.children[0] instanceof DeclaredNode)) {
+    if(!(this.children[0] instanceof DeclaredNode) && !(this.children[0] instanceof NullNode)) {
       String temp = a;
       a = KleinCodeGenerator.getPlaceHolder();
       s += KleinCodeGenerator.emitCode("LD", a, temp, "0");
     }
-    
+    else if(this.children[0] instanceof NullNode) {
+      a = b;
+    }
     if(!(this.children[1] instanceof DeclaredNode)) {
       String temp = b;
       b = KleinCodeGenerator.getPlaceHolder();
@@ -140,12 +142,12 @@ public class OperatorNode extends ExpressionNode {
     if(this.isUnary) {
       switch(this.operator.getValue()) {
         case "-":
-          s += KleinCodeGenerator.emitCode("SUB", a, "0", a);
+          s += KleinCodeGenerator.emitCode("SUB", b, "0", b);
           break;
         case "not":
           s += KleinCodeGenerator.emitCode("LDC", c, "-1", "0");
-          s += KleinCodeGenerator.emitCode("ADD", a, b, c);
-          s += KleinCodeGenerator.emitCode("MUL", a, b, c);
+          s += KleinCodeGenerator.emitCode("ADD", b, b, c);
+          s += KleinCodeGenerator.emitCode("MUL", b, b, c);
           break;
       }
     }

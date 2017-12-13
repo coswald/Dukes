@@ -86,11 +86,13 @@ public class FunctionNode extends AbstractSyntaxNode {
   @Override
   public String toTargetCode() {
     String s = "";
-    if(this.children[this.children.length - 1] instanceof DeclaredNode) {
+    if(this.children[this.children.length - 1].getChildren()[this.children[this.children.length - 1].getChildren().length - 1] instanceof DeclaredNode) {
       s += KleinCodeGenerator.emitCode("ADD", "5", this.children[this.children.length - 1].getReturnRegister(), "0"); //return value
     }
-    else {
-      s += KleinCodeGenerator.emitCode("LD", "5", this.children[this.children.length - 1].getReturnRegister(), "0");
+    else if(!this.getName().getValue().equals("main")){
+      s += KleinCodeGenerator.emitCode("LD", "5",
+          this.children[this.children.length - 1].getChildren()[
+              this.children[this.children.length - 1].getChildren().length - 1].getReturnRegister(), "0");
     }
     s += KleinCodeGenerator.emitCode("LDA", "7", "0", "6"); //change 6 to load address from dmem
     s += "* END Funtion " + this.getName().getValue().toUpperCase() + "\n";
