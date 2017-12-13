@@ -42,9 +42,10 @@ public class kleinc extends Test {
     ktt.semanticCheck();
     
     KleinCodeGenerator kcg = new KleinCodeGenerator(ktt.getFunctionTable());
-    String tm = kcg.generateCode(ast);
+    String tm = kcg.generateCode(ktt.getTop());
     String out_filename = fileName.replace(".kln", ".tm");
     System.out.println("Succesfully compiled to '" + out_filename + "'");
+    System.out.println(tm);
     PrintWriter file_out = new PrintWriter(out_filename);
     file_out.println(tm);
     file_out.close();

@@ -17,12 +17,14 @@
  */
 package com.dukes.klein.parser.node;
 
-import com.dukes.lang.parser.node.ExpressionNode;
 import com.dukes.klein.generator.KleinCodeGenerator;
+import com.dukes.lang.parser.node.AbstractSyntaxNode;
+import com.dukes.lang.parser.node.ExpressionNode;
 
 /**
  * Describes any declared value, such as an identifier, an integer, and a
- * boolean. 
+ * boolean.
+ *
  * @author Coved W Oswald
  * @version 1.0
  * @since 0.3.0
@@ -31,10 +33,13 @@ public class DeclaredNode extends ExpressionNode {
 
   private TerminalNode declared;
   private String returnRegister;
+  private boolean isIdentifier;
+
   /**
    * Constructs a declared value in Klein.
+   *
    * @param declared The value that is declared.
-   * @param type The type of the declared value.
+   * @param type     The type of the declared value.
    * @throws IllegalArgumentException If the given value isn't a valid value.
    */
   public DeclaredNode(TerminalNode declared, int type)
@@ -48,19 +53,22 @@ public class DeclaredNode extends ExpressionNode {
 
     this.declared = declared;
     this.type = type;
+    this.isIdentifier = (this.type == AbstractSyntaxNode.IDENTIFIER_TYPE);
     this.returnRegister = KleinCodeGenerator.getPlaceHolder();
   }
-  
+
   /**
    * Returns the value of the declared node.
+   *
    * @return The value of the declared node.
    */
   public String getDeclared() {
     return this.declared.getValue();
   }
-  
+
   /**
    * Tests whether the given type is the type of this node.
+   *
    * @param type The type to test.
    * @throws IllegalArgumentException If the type lies outside the type range.
    */
@@ -72,9 +80,10 @@ public class DeclaredNode extends ExpressionNode {
 
     return this.type == type;
   }
-  
+
   /**
    * Returns the comma separated value and type between two brackets.
+   *
    * @return The value and type.
    */
   @Override
@@ -82,31 +91,38 @@ public class DeclaredNode extends ExpressionNode {
     return "[Value: " + this.declared.toString() +
         ", Type: " + this.typeToString() + "]";
   }
-  
+
   @Override
   public String toTargetCode() {
     String s = "";
     String value = "";
-    if(this.isType(1) || this.isType(3) || this.isType(5) || this.isType(7))
-    {
-      //TO IMPLEMENT, using LD and memory addressing.
-      s += KleinCodeGenerator.emitCode("LD", this.returnRegister, "513", "0");
+    if(this.isIdentifier()) {
+      System.out.println(this.getDeclared());
+      s += KleinCodeGenerator.emitCode(
+          "LD", this.returnRegister, this.getDeclared(), "0");
+      return s;
     }
-    else if(this.isType(2))
-    {
+    else if(this.isType(2)) {
       value = (this.getDeclared().equals("true") ? "1" : "0");
     }
-    else
-    {
+    else {
       value = this.getDeclared();
     }
     s += KleinCodeGenerator.emitCode("LDC", this.returnRegister, value, "0");
     //s += KleinCodeGenerator.emitCode("ST", "A", "Z", "0");
     return s;
   }
-  
+
   @Override
   public String getReturnRegister() {
     return this.returnRegister;
+  }
+
+  public void setDeclared(String name) {
+    this.declared = new TerminalNode(name);
+  }
+
+  public boolean isIdentifier() {
+    return this.isIdentifier;
   }
 }

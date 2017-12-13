@@ -73,4 +73,8 @@ public class FormalNode extends AbstractSyntaxNode {
   public String getReturnRegister() {
     return "";
   }
+
+  public void setIdentifier(String newIdentifier){
+    this.identifier = new TerminalNode(newIdentifier);
+  }
 }

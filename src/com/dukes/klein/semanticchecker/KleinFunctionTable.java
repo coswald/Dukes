@@ -17,17 +17,13 @@ import java.util.LinkedHashMap;
  */
 public class KleinFunctionTable extends AbstractFunctionTable {
   private boolean usedPrint = false;
-  private HashMap<String, ArrayList<Integer>> paramLocations;
+  private HashMap<String, HashMap<String, Integer>> paramLocations;
   
   public KleinFunctionTable(AbstractSyntaxNode top) {
-    paramLocations = new HashMap<String, ArrayList<Integer>>();
+    paramLocations = new HashMap<String, HashMap<String, Integer>>();
     for(AbstractSyntaxNode functionNode : top.getChildren()) {
-      int[] paramMemory = ((FunctionNode)functionNode).getParamMemory();
-      ArrayList<Integer> t = new ArrayList<Integer>();
-      for(int i = 0; i < paramMemory.length; i++) {
-        t.add(new Integer(paramMemory[i]));
-      }
-      paramLocations.put(((FunctionNode)functionNode).getName().getValue(), t);
+      paramLocations.put(((FunctionNode)functionNode).getName().getValue(),
+          ((FunctionNode)functionNode).getParamMemory());
     }
     
     LinkedHashMap<String, Integer> functionValues;
@@ -65,8 +61,16 @@ public class KleinFunctionTable extends AbstractFunctionTable {
     }
   }
 
-  public ArrayList<Integer> getParamLocations(String functionName) {
+  public HashMap<String, HashMap<String, Integer>> getParamLocations(){
+    return this.paramLocations;
+  }
+
+  public HashMap<String, Integer> getParamLocationValues(String functionName) {
     return this.paramLocations.get(functionName);
+  }
+
+  public Integer getParamLocationValues(String functionName, String paramName) {
+    return this.paramLocations.get(functionName).get(paramName);
   }
 
   public boolean hasPrint() {

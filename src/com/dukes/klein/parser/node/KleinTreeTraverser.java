@@ -14,16 +14,16 @@ import java.util.ArrayList;
  */
 public final class KleinTreeTraverser extends AbstractTreeTraverser {
   private KleinFunctionTable functionTable;
-  
+
   public KleinTreeTraverser(AbstractSyntaxNode top) {
     super(top);
     this.functionTable = new KleinFunctionTable(this.top);
   }
-  
+
   public KleinFunctionTable getFunctionTable() {
     return this.functionTable;
   }
-  
+
   @Override
   public void semanticCheck() {
     ArrayList<SemanticException> semanticExceptions =
@@ -52,6 +52,40 @@ public final class KleinTreeTraverser extends AbstractTreeTraverser {
     }
     if(!errMsg.equals("")) {
       throw new SemanticException(errMsg.replaceFirst("SemanticError: ", ""));
+    }
+  }
+
+  public void cheeseIt() {
+    this.traversePreOrder(this.top, new CheeseIt());
+  }
+
+  private class CheeseIt implements NodeOperation {
+
+    private String functionName;
+
+    public CheeseIt() {
+      this.functionName = "";
+    }
+
+    @Override
+    public void traversed(AbstractSyntaxNode node, Object... objects) {
+      if(node instanceof FunctionNode) {
+        this.functionName = ((FunctionNode) node).getName().getValue();
+      }
+    }
+
+    @Override
+    public void execute(AbstractSyntaxNode node, Object... objects) {
+      if(node instanceof FormalNode) {
+        ((FormalNode) node).setIdentifier("<" + this.functionName + "," +
+            ((FormalNode) node).getIdentifier() + ">");
+      }
+      else if(node instanceof DeclaredNode) {
+        if(((DeclaredNode) node).isIdentifier()) {
+          ((DeclaredNode) node).setDeclared("<" + this.functionName + "," +
+              ((DeclaredNode) node).getDeclared() + ">");
+        }
+      }
     }
   }
 
